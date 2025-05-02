@@ -1,0 +1,65 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/*
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include "../parrot-audio-qrd.dtsi"
+#include "../parrot-sec-a36xq-audio-pinctrl-common.dtsi"
+#include "../parrot-sec-a36xq-audio-common.dtsi"
+
+/ {
+	model = "Samsung A36XQ PROJECT (board-id,02)";
+	compatible = "qcom,parrot-qrd", "qcom,parrot", "qcom,qrd";
+	qcom,msm-id = <537 0x10000>, <583 0x10000>, <613 0x10000>, <631 0x10000>,
+			<633 0x10000>, <634 0x10000>, <638 0x10000>,
+			<663 0x10000>;
+	qcom,board-id = <0x1000B 2>;
+};
+
+&tfa98xx_bottom {
+	irq-gpio = <&tlmm 34 0>;
+};
+
+&tfa98xx_irq_gpio_default {
+	mux {
+		pins = "gpio34";
+	};
+	config {
+		pins = "gpio34";
+	};
+};
+
+&qupv3_se2_i2c {
+	pinctrl-0 = <&ss_qupv3_se2_i2c_sda_active>, <&ss_qupv3_se2_i2c_scl_active>;
+};
+
+&tlmm {
+	ss_qupv3_se2_i2c_sda_active: ss_qupv3_se2_i2c_sda_active {
+		mux {
+			pins = "gpio24";
+			function = "qup0_se2_l0";
+		};
+
+		config {
+			pins = "gpio24";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+
+	ss_qupv3_se2_i2c_scl_active: ss_qupv3_se2_i2c_scl_active {
+		mux {
+			pins = "gpio25";
+			function = "qup0_se2_l1";
+		};
+
+		config {
+			pins = "gpio25";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+};

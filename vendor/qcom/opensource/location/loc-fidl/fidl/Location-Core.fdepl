@@ -1,0 +1,130 @@
+/** Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+    SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+import "platform:/plugin/org.genivi.commonapi.core/deployment/CommonAPI_deployment_spec.fdepl"
+import "LocationTypes.fidl"
+
+define org.genivi.commonapi.core.deployment for typeCollection com.qualcomm.qti.location.LocationTypes {
+    enumeration LocationReportFlagMaskT {
+        EnumBackingType = UInt32
+    }
+    enumeration LocationReportExtendedFlagMaskT {
+        EnumBackingType = UInt32
+    }
+    enumeration GnssMeasurementsMultipathIndicatorT {
+        EnumBackingType = UInt16
+    }
+
+    enumeration LocOutputEngineTypeT {
+        EnumBackingType = UInt8
+    }
+
+    enumeration GnssSvTypeT {
+        EnumBackingType = UInt8
+    }
+
+    enumeration LocationStatusT {
+        EnumBackingType = UInt8
+    }
+
+    enumeration GnssSignalTypeT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration LocationReportPosDataMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration LocationReportNavSolutionMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration LocationTechnologyMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration LocationFlagsMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration GnssSvOptionsMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration LocationCapabilitiesMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration LocationReliabilityT {
+        EnumBackingType = UInt8
+    }
+
+    enumeration GnssLocSvSystemTypeT {
+        EnumBackingType = UInt8
+    }
+
+    enumeration GnssSystemTimeStructTypeFlagsT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration GnssGloTimeStructTypeFlagsT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration DrCalibrationStatusMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration LocReqEngineTypeMaskT {
+        EnumBackingType = UInt16
+    }
+
+    enumeration PositioningEngineMaskT {
+        EnumBackingType = UInt16
+    }
+
+    enumeration DrSolutionStatusMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration GnssDataMaskT {
+        EnumBackingType = UInt16
+    }
+
+    enumeration GnssMeasurementsDataFlagsMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration GnssMeasurementsStateMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration GnssMeasurementsAdrStateMaskT {
+        EnumBackingType = UInt16
+    }
+
+    enumeration GnssMeasurementsClockFlagsMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration GnssReportCbInfoMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration EngineReportCbMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration AidingDataDeletionMaskT {
+        EnumBackingType = UInt32
+    }
+
+    enumeration GnssConstellationTypeT {
+        EnumBackingType = UInt8
+    }
+
+    enumeration MapMatchingFeedbackDataValidityT {
+        EnumBackingType = UInt32
+    }
+}
+

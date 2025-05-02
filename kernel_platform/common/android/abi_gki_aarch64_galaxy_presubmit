@@ -1,0 +1,4 @@
+[abi_symbol_list]
+  snd_soc_find_dai
+  android_create_function_device
+  iio_read_channel_raw

@@ -1,0 +1,493 @@
+/** Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+   SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+package com.qualcomm.qti.location
+
+import com.qualcomm.qti.location.LocationTypes.* from "LocationTypes.fidl"
+
+/**
+    @description :
+
+**/
+interface Location {
+    version { major 1 minor 0 }
+    
+    /**
+        @description :
+        InjectMapMatchedFeedbackData is for 
+             injecting Map Matched Feedback Data
+                    
+                
+        @experimental: asil-level  : ASIL_QM
+        @experimental: periodicity : 100.0
+        @experimental: exclusion_time : 
+    **/
+    method InjectMapMatchedFeedbackData fireAndForget {
+        in {
+
+            /**
+                @description : Map Matched Feedback Data 
+                
+            **/
+            MapMatchingFeedbackDataT mmfData
+
+        }
+    }
+        
+    
+
+    /**
+        
+        @description :
+            * @brief Provides the capabilities of the system.
+            @param capsMask: Bitwise OR of LocationCapabilitiesMask
+                        
+        @experimental: asil-level  : ASIL_QM
+        
+        @experimental: exclusion_time  : 100
+    **/
+    broadcast GnssCapabilities {
+        out {
+
+            /**
+                @description : Contains the logic OR between bit position defined in LocationCapabilitiesMaskT 
+                
+            **/
+            UInt32 capabilitiesMask
+
+        }
+    }
+    /**
+        
+        @description :
+            *
+            GnssMeasurementReport is for receiving GnssMeasurementsT
+            information when Location Client is in a positioning
+            session.
+                        
+        @experimental: asil-level  : ASIL_QM
+        @experimental: periodicity  : 100.0 
+        @experimental: exclusion_time  : 
+    **/
+    broadcast GnssMeasurementReport {
+        out {
+
+            /**
+                @description : GNSS measurements information 
+                
+            **/
+            GnssMeasurementsT gnssMeasurements
+
+        }
+    }
+    /**
+        
+        @description :
+            *
+            GnssLocationReport is for receiving LocationReportT when Location Client is
+            in a positioning session.
+            When there are multiple engines running on the system, the
+            received LocationReportT is fused report from all engines.
+            When there is only standard SPE engine running on the
+            system, the received LocationReportT is from modem GNSS engine.
+                        
+        @experimental: asil-level  : ASIL_QM
+        @experimental: periodicity  : 100.0 
+        @experimental: exclusion_time  : 
+    **/
+    broadcast GnssLocationReport {
+        out {
+
+            /**
+                @description : locationReport: LocationReportT 
+                
+            **/
+            LocationReportT locationReport
+
+        }
+    }
+    /**
+        
+        @description :
+            *
+            EngineLocationsReport is for receiving LocationReportT from
+            selected position engines when Location Client is in a
+            positioning session.
+                        
+        @experimental: asil-level  : ASIL_QM
+        @experimental: periodicity  : 100.0 
+        @experimental: exclusion_time  : 
+    **/
+    broadcast GnssEngineLocationsReport {
+        out {
+
+            /**
+                @description : LocationReportT from requested position engines 
+                
+                    
+                @experimental: size: 4
+                    
+                
+            **/
+            LocationReportT [] locationReport
+
+        }
+    }
+    /**
+        
+        @description :
+            * @brief
+            GnssSvReport is for receiving GnssSvDataT when Location Client is
+            in a positioning session.  <br/>
+                        
+        @experimental: asil-level  : ASIL_QM
+        @experimental: periodicity  : 100.0 
+        @experimental: exclusion_time  : 
+    **/
+    broadcast GnssSvReport {
+        out {
+
+            /**
+                @description : GNSS SV report 
+                
+                    
+                @experimental: size: 176
+                    
+                
+            **/
+            GnssSvDataT [] gnssSv
+
+        }
+    }
+    /**
+        
+        @description :
+            * @brief
+            GnssNmea is for receiving NMEA sentences when
+            Client is in a positioning session. <br/>
+            @param timestamp: timestamp that NMEA sentence is
+            generated. <br/>
+            @param nmea: nmea strings generated from position and SV
+            report. <br/>
+                        
+        @experimental: asil-level  : ASIL_QM
+        @experimental: periodicity  : 100.0 
+        @experimental: exclusion_time  : 
+    **/
+    broadcast GnssNmea {
+        out {
+
+            /**
+                @description : timestamp that NMEA sentence is generated 
+                
+            **/
+            UInt64 timestamp
+
+            /**
+                @description : nmea strings generated from position and SV report 
+                
+                    
+                @experimental: max-size: 4000
+                    
+                
+            **/
+            String nmea
+
+        }
+    }
+    /**
+        
+        @description :
+            * @brief
+            EngineNmea is for receiving Engine Specific NMEA sentences when
+            Location Client is in a positioning session. <br/>
+            @param engType: engine type that NMEA is derived from
+            @param timestamp: timestamp that NMEA sentence is
+            generated. <br/>
+            @param nmea: nmea strings generated from position and SV
+            report of specified position engine. <br/>
+                        
+        @experimental: asil-level  : ASIL_QM
+        @experimental: periodicity  : 100.0 
+        @experimental: exclusion_time  : 
+    **/
+    broadcast EngineNmea {
+        out {
+
+            /**
+                @description : engine type that NMEA is derived from 
+                
+            **/
+            LocOutputEngineTypeT engType
+
+            /**
+                @description : timestamp that NMEA sentence is generated 
+                
+            **/
+            UInt64 timestamp
+
+            /**
+                @description : nmea strings generated from position and SV report 
+                
+                    
+                @experimental: max-size: 4000
+                    
+                
+            **/
+            String nmea
+
+        }
+    }
+    /**
+        
+        @description :
+            * @brief
+            GnssDataReport is for receiving GnssDataT, e.g.:
+            jammer information when Location Client is in a
+            positioning session. <br/>
+            @param gnssData: GNSS jammer and agc information. <br/>
+                        
+        @experimental: asil-level  : ASIL_QM
+        @experimental: periodicity  : 100.0 
+        @experimental: exclusion_time  : 
+    **/
+    broadcast GnssDataReport {
+        out {
+
+            /**
+                @description : GNSS jammer and agc information 
+                
+            **/
+            GnssDataT gnssData
+
+        }
+    }
+    
+    
+    
+        
+    /**
+        @description :
+            Start or update a session 
+            to receive location information in format of LocationReportT and 
+            other reports like NMEA, SV report, SV measurement reports
+                        
+        @experimental: asil-level  : 
+        @experimental: periodicity :
+        @experimental: exclusion-time : 
+    **/
+    method StartPositionSessionLocationReport {
+            
+        in {
+
+            /**
+                @description :  Time between fixes, or TBF, in milliseconds. 
+                
+            **/
+            UInt32 intervalInMs
+
+            /**
+                @description :  Specify the mask to receive the reports when invoking 
+                         StartPositionSessionLocationReport()  
+                
+            **/
+            UInt32 gnssReportCallbackMask
+
+        }
+            
+            
+        out {
+
+            /**
+                @description :  Location status code defined in LocationStatusT  
+                
+            **/
+            LocationStatusT status
+
+        }
+            
+    }
+        
+    /**
+        @description :
+            Start or update a session 
+            which may provide default combined position report and position 
+            reports from other engines in format of LocationReportT together 
+            with NMEA, SV report, SV measurement reports
+                        
+        @experimental: asil-level  : 
+        @experimental: periodicity :
+        @experimental: exclusion-time : 
+    **/
+    method StartPositionSessionEngineSpecificLocation {
+            
+        in {
+
+            /**
+                @description :  Time between fixes, or TBF, in milliseconds. 
+                
+            **/
+            UInt32 intervalInMs
+
+            /**
+                @description :  Specify the set of engines whose position reports are requested 
+                         via StartPositionSessionEngineSpecificLocation() 
+                
+            **/
+            UInt32 locReqEngMask
+
+            /**
+                @description :  Specify the set of callback masks to receive the reports when 
+                         invoking StartPositionSessionEngineSpecificLocation() 
+                
+            **/
+            UInt32 engReportCallbackMask
+
+        }
+            
+            
+        out {
+
+            /**
+                @description :  Location status code defined in LocationStatusT  
+                
+            **/
+            LocationStatusT status
+
+        }
+            
+    }
+        
+    /**
+        @description :
+            Stop the ongoing 
+            positioning session and de-register the callbacks of 
+            previous startPositionSession
+                        
+        @experimental: asil-level  : 
+        @experimental: periodicity :
+        @experimental: exclusion-time : 
+    **/
+    method StopPositionSession {
+            
+            
+        out {
+
+            /**
+                @description :  Location status code defined in LocationStatusT  
+                
+            **/
+            LocationStatusT status
+
+        }
+            
+    }
+        
+    /**
+        @description :
+            Request deletion of the 
+            specified aiding data from all position engines on the device
+                        
+        @experimental: asil-level  : 
+        @experimental: periodicity :
+        @experimental: exclusion-time : 
+    **/
+    method DeleteAidingData {
+            
+        in {
+
+            /**
+                @description :  Mask used to specify the set of aiding data that can be 
+                         deleted via DeleteAidingData()  
+                
+            **/
+            UInt32 deleteMask
+
+        }
+            
+            
+        out {
+
+            /**
+                @description :  Location status code defined in LocationStatusT  
+                
+            **/
+            LocationStatusT status
+
+        }
+            
+    }
+        
+    /**
+        @description :
+            Blacklist some constellations 
+            or subset of SVs from the constellation from being used by the GNSS 
+            standard position engine (SPE) 
+            Please note this API call is not incremental and the new setting 
+            will completely overwrite the previous call. LocationGnssSvIdInfo 
+            shall contain the complete list of blacklisted constellations and 
+            blacklisted SVs. Constellations and SVs not specified in the 
+            parameter will be considered to be allowed to get used by 
+            GNSS standard position engine (SPE).
+                        
+        @experimental: asil-level  : 
+        @experimental: periodicity :
+        @experimental: exclusion-time : 
+    **/
+    method ConfigConstellations {
+            
+        in {
+
+            /**
+                @description : None 
+                
+                    
+                @experimental: size: 176
+                    
+                
+            **/
+            GnssSvIdInfoT [] svList
+
+        }
+            
+            
+        out {
+
+            /**
+                @description :  Location status code defined in LocationStatusT  
+                
+            **/
+            LocationStatusT status
+
+        }
+            
+    }
+        
+    /**
+        @description :
+            get Location capabilities 
+             from Service. 
+             Client can call this API to know the capabilities before 
+             starting the session. 
+                        
+        @experimental: asil-level  : 
+        @experimental: periodicity :
+        @experimental: exclusion-time : 
+    **/
+    method GetLocationCapabilities {
+            
+            
+        out {
+
+            /**
+                @description :  Location capabilities information 
+                
+            **/
+            UInt32 capabilitiesMask
+
+        }
+            
+    }
+        
+    
+}

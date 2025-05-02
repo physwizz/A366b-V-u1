@@ -1,0 +1,3024 @@
+/** Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+   SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+/******************************************************
+*******************************************************
+**                                                    *
+**             Definition - Location                 *
+**                                                    *
+*******************************************************
+*******************************************************/
+
+enum MapMatchingFeedbackDataValidityT;
+
+/************   MapMatchingFeedbackDataValidityT VALUES      ************
+Name of the Data: MapMatchingFeedbackDataValidityT
+Description: 
+Type: uint32
+MMFDVT_INVALID=0,
+MMFDVT_UTC_TIME=1,
+MMFDVT_LAT_DIFF=2,
+MMFDVT_LONG_DIFF=4,
+MMFDVT_TUNNEL=8,
+MMFDVT_BEARING=16,
+MMFDVT_ALTITUDE=32,
+MMFDVT_HOR_ACC=64,
+MMFDVT_ALT_ACC=128,
+MMFDVT_BEARING_ACC=256,
+***********************************************/
+enum GnssReportCbInfoMaskT;
+
+/************   GnssReportCbInfoMaskT VALUES      ************
+Name of the Data: GnssReportCbInfoMaskT
+Description: 
+Type: uint32
+GRCIMT_UNKNOWN=0,
+GRCIMT_LOCATION_CB_INFO_BIT=1,
+GRCIMT_SV_CB_INFO_BIT=2,
+GRCIMT_NMEA_CB_INFO_BIT=4,
+GRCIMT_DATA_CB_INFO_BIT=8,
+GRCIMT_MEAS_CB_INFO_BIT=16,
+***********************************************/
+enum LocationStatusT;
+
+/************   LocationStatusT VALUES      ************
+Name of the Data: LocationStatusT
+Description: 
+Type: uint8
+LOCATION_STATUS_T_UNKNOWN=0,
+LOCATION_STATUS_T_SUCCESS=1,
+LOCATION_STATUS_T_UNKOWN_FAILURE=2,
+LOCATION_STATUS_T_NOT_SUPPORTED=3,
+LOCATION_STATUS_T_PARAM_INVALID=4,
+LOCATION_STATUS_T_TIMEOUT=5,
+LOCATION_STATUS_T_REQUEST_ALREADY_IN_PROGRESS=6,
+LOCATION_STATUS_T_SYSTEM_NOT_READY=7,
+LOCATION_STATUS_T_EXCLUSIVE_SESSION_IN_PROGRESS=8,
+***********************************************/
+enum LocReqEngineTypeMaskT;
+
+/************   LocReqEngineTypeMaskT VALUES      ************
+Name of the Data: LocReqEngineTypeMaskT
+Description: 
+Type: uint16
+LRETM_UNKNOWN=0,
+LRETM_FUSED=1,
+LRETM_SPE=2,
+LRETM_PPE=4,
+LRETM_VPE=8,
+***********************************************/
+enum EngineReportCbMaskT;
+
+/************   EngineReportCbMaskT VALUES      ************
+Name of the Data: EngineReportCbMaskT
+Description: 
+Type: uint32
+ERCMT_LOCATION_CB_INFO_UNKNOWN=0,
+ERCMT_LOCATION_CB_INFO_BIT=1,
+ERCMT_SV_CB_INFO_BIT=2,
+ERCMT_NMEA_CB_INFO_BIT=4,
+ERCMT_DATA_CB_INFO_BIT=8,
+ERCMT_MEAS_CB_INFO_BIT=16,
+ERCMT_ENGINE_NMEA_CB_INFO_BIT=32,
+***********************************************/
+enum AidingDataDeletionMaskT;
+
+/************   AidingDataDeletionMaskT VALUES      ************
+Name of the Data: AidingDataDeletionMaskT
+Description: 
+Type: uint16
+ADDMT_UNKNOWN=0,
+ADDMT_ALL=1,
+ADDMT_EPHEMERIS=2,
+ADDMT_DR_SENSOR_CALIBRATION=4,
+***********************************************/
+enum GnssConstellationTypeT;
+
+/************   GnssConstellationTypeT VALUES      ************
+Name of the Data: GnssConstellationTypeT
+Description: 
+Type: uint8
+GCTT_UNKNOWN=0,
+GCTT_GLONASS=1,
+GCTT_QZSS=2,
+GCTT_BEIDOU=3,
+GCTT_GALILEO=4,
+GCTT_SBAS=5,
+GCTT_NAVIC=6,
+GCTT_GPS=7,
+GCTT_MAX=7,
+***********************************************/
+enum LocationCapabilitiesMaskT;
+
+/************   LocationCapabilitiesMaskT VALUES      ************
+Name of the Data: LocationCapabilitiesMaskT
+Description: 
+Type: uint32
+LCMT_UNKNOWN=0,
+LCMT_TIME_BASED_TRACKING_BIT=1,
+LCMT_GNSS_MEAS_BIT=2,
+***********************************************/
+enum GnssMeasurementsClockFlagsMaskT;
+
+/************   GnssMeasurementsClockFlagsMaskT VALUES      ************
+Name of the Data: GnssMeasurementsClockFlagsMaskT
+Description: 
+Type: uint32
+GMCFMT_UNKNOWN=0,
+GMCFMT_LEAP_SECOND_BIT=1,
+GMCFMT_TIME_BIT=2,
+GMCFMT_TIME_UNCERTAINTY_BIT=4,
+GMCFMT_FULL_BIAS_BIT=8,
+GMCFMT_BIAS_BIT=16,
+GMCFMT_BIAS_UNCERTAINTY_BIT=32,
+GMCFMT_DRIFT_BIT=64,
+GMCFMT_DRIFT_UNCERTAINTY_BIT=128,
+GMCFMT_HW_CLOCK_DISCONTINUITY_COUNT_BIT=256,
+GMCFMT_ELAPSED_REAL_TIME_BIT=512,
+GMCFMT_ELAPSED_REAL_TIME_UNC_BIT=1024,
+GMCFMT_ELAPSED_GPTP_TIME_BIT=2048,
+GMCFMT_ELAPSED_GPTP_TIME_UNC_BIT=4096,
+***********************************************/
+enum GnssMeasurementsDataFlagsMaskT;
+
+/************   GnssMeasurementsDataFlagsMaskT VALUES      ************
+Name of the Data: GnssMeasurementsDataFlagsMaskT
+Description: 
+Type: uint32
+GMDFMT_UNKNOWN=0,
+GMDFMT_SV_ID_BIT=1,
+GMDFMT_SV_TYPE_BIT=2,
+GMDFMT_STATE_BIT=4,
+GMDFMT_RECEIVED_SV_TIME_BIT=8,
+GMDFMT_RECVD_SV_TIME_UNC_BIT=16,
+GMDFMT_CARRIER_TO_NOISE_BIT=32,
+GMDFMT_PR_RATE_BIT=64,
+GMDFMT_PR_RATE_UNC_BIT=128,
+GMDFMT_ADR_STATE_BIT=256,
+GMDFMT_ADR_BIT=512,
+GMDFMT_ADR_UNC_BIT=1024,
+GMDFMT_CARRIER_FREQ_BIT=2048,
+GMDFMT_CARRIER_CYCLES_BIT=4096,
+GMDFMT_CARRIER_PHASE_BIT=8192,
+GMDFMT_CARRIER_PHASE_UNC_BIT=16384,
+GMDFMT_MULTIPATH_IND_BIT=32768,
+GMDFMT_SIGNAL_TO_NOISE_RATIO=65536,
+GMDFMT_AUTO_GAIN_CTRL_BIT=131072,
+GMDFMT_FULL_ISB_BIT=262144,
+GMDFMT_FULL_ISB_UNC_BIT=524288,
+GMDFMT_CYCLE_SLIP_COUNT_BIT=1048576,
+GMDFMT_GNSS_SIGNAL_TYPE_BIT=2097152,
+GMDFMT_BASEBAND_CARRIER_TO_NOISE_BIT=4194304,
+***********************************************/
+enum GnssSvTypeT;
+
+/************   GnssSvTypeT VALUES      ************
+Name of the Data: GnssSvTypeT
+Description: 
+Type: uint8
+GNSS_SV_TYPE_T_UNKNOWN=0,
+GNSS_SV_TYPE_T_GPS=1,
+GNSS_SV_TYPE_T_SBAS=2,
+GNSS_SV_TYPE_T_GLONASS=3,
+GNSS_SV_TYPE_T_QZSS=4,
+GNSS_SV_TYPE_T_BEIDOU=5,
+GNSS_SV_TYPE_T_GALILEO=6,
+GNSS_SV_TYPE_T_NAVIC=7,
+***********************************************/
+enum GnssMeasurementsStateMaskT;
+
+/************   GnssMeasurementsStateMaskT VALUES      ************
+Name of the Data: GnssMeasurementsStateMaskT
+Description: 
+Type: uint32
+GMSMT_UNKNOWN=0,
+GMSMT_CODE_LOCK=1,
+GMSMT_BIT_SYNC=2,
+GMSMT_SUBFRAME_SYNC=4,
+GMSMT_TOW_DECODED=8,
+GMSMT_MSEC_AMBIGUOUS=16,
+GMSMT_SYMBOL_SYNC=32,
+GMSMT_GLO_STRING_SYNC=64,
+GMSMT_GLO_TOD_DECODED=128,
+GMSMT_BDS_D2_BIT_SYNC=256,
+GMSMT_BDS_D2_SUBFRAME_SYNC=512,
+GMSMT_GAL_E1BC_CODE_LOCK=1024,
+GMSMT_GAL_E1C_2ND_CODE_LOCK=2048,
+GMSMT_GAL_E1B_PAGE_SYNC=4096,
+GMSMT_SBAS_SYNC=8192,
+***********************************************/
+enum GnssMeasurementsAdrStateMaskT;
+
+/************   GnssMeasurementsAdrStateMaskT VALUES      ************
+Name of the Data: GnssMeasurementsAdrStateMaskT
+Description: 
+Type: uint16
+GMASMT_STATE_UNKNOWN=0,
+GMASMT_STATE_VALID_BIT=1,
+GMASMT_STATE_RESET_BIT=2,
+GMASMT_STATE_CYCLE_SLIP_BIT=4,
+GMASMT_STATE_HALF_CYCLE_RESOLVED_BIT=8,
+***********************************************/
+enum GnssMeasurementsMultipathIndicatorT;
+
+/************   GnssMeasurementsMultipathIndicatorT VALUES      ************
+Name of the Data: GnssMeasurementsMultipathIndicatorT
+Description: 
+Type: uint16
+GMMIT_UNKNOWN=0,
+GMMIT_PRESENT=1,
+GMMIT_NOT_PRESENT=2,
+***********************************************/
+enum GnssSignalTypeT;
+
+/************   GnssSignalTypeT VALUES      ************
+Name of the Data: GnssSignalTypeT
+Description: 
+Type: uint32
+GSTT_UNKNOWN=0,
+GSTT_GPS_L1CA_BIT=1,
+GSTT_GPS_L1C_BIT=2,
+GSTT_GPS_L2_BIT=3,
+GSTT_GPS_L5_BIT=4,
+GSTT_GLONASS_G1_BIT=5,
+GSTT_GLONASS_G2_BIT=6,
+GSTT_GALILEO_E1_BIT=7,
+GSTT_GALILEO_E5A_BIT=8,
+GSTT_GALILEO_E5B_BIT=9,
+GSTT_BEIDOU_B1_BIT=10,
+GSTT_BEIDOU_B2_BIT=11,
+GSTT_QZSS_L1CA_BIT=12,
+GSTT_QZSS_L1S_BIT=13,
+GSTT_QZSS_L2_BIT=14,
+GSTT_QZSS_L5_BIT=15,
+GSTT_SBAS_L1_BIT=16,
+GSTT_BEIDOU_B1I_BIT=17,
+GSTT_BEIDOU_B1C_BIT=18,
+GSTT_BEIDOU_B2I_BIT=19,
+GSTT_BEIDOU_B2AI_BIT=20,
+GSTT_NAVIC_L5_BIT=21,
+GSTT_BEIDOU_B2AQ_BIT=22,
+GSTT_BEIDOU_B2BI_BIT=23,
+GSTT_BEIDOU_B2BQ_BIT=24,
+GSTT_NAVIC_L1_BIT=25,
+GSTT_MAX_NUMBER_OF_SIGNAL_TYPES=25,
+***********************************************/
+enum LocationFlagsMaskT;
+
+/************   LocationFlagsMaskT VALUES      ************
+Name of the Data: LocationFlagsMaskT
+Description: 
+Type: uint32
+LFMT_UNKNOWN=0,
+LFMT_HAS_LAT_LONG_BIT=1,
+LFMT_HAS_ALTITUDE_BIT=2,
+LFMT_HAS_SPEED_BIT=4,
+LFMT_HAS_BEARING_BIT=8,
+LFMT_HAS_ACCURACY_BIT=16,
+LFMT_HAS_VERTICAL_ACCURACY_BIT=32,
+LFMT_HAS_SPEED_ACCURACY_BIT=64,
+LFMT_HAS_BEARING_ACCURACY_BIT=128,
+LFMT_HAS_TIMESTAMP_BIT=256,
+LFMT_HAS_ELAPSED_REAL_TIME_BIT=512,
+LFMT_ELAPSED_REAL_TIME_UNC_BIT=1024,
+LFMT_HAS_TIME_UNC_BIT=2048,
+LFMT_HAS_ELAPSED_PTP_TIME_BIT=4096,
+***********************************************/
+enum LocationTechnologyMaskT;
+
+/************   LocationTechnologyMaskT VALUES      ************
+Name of the Data: LocationTechnologyMaskT
+Description: 
+Type: uint32
+LTMT_UNKNOWN=0,
+LTMT_GNSS_BIT=1,
+LTMT_CELL_BIT=2,
+LTMT_WIFI_BIT=4,
+LTMT_SENSORS_BIT=8,
+LTMT_REF_LOC_BIT=16,
+LTMT_INJECTED_COARSE_POS_BIT=32,
+LTMT_AFLT_BIT=64,
+LTMT_HYBRID_BIT=128,
+LTMT_PPE_BIT=256,
+LTMT_VEH_BIT=512,
+LTMT_VIS_BIT=1024,
+LTMT_PROPAGATED_BIT=2048,
+***********************************************/
+enum LocationReportFlagMaskT;
+
+/************   LocationReportFlagMaskT VALUES      ************
+Name of the Data: LocationReportFlagMaskT
+Description: 
+Type: uint32
+LRFMT_UNKNOWN=0,
+LRFMT_ALTITUDE_MEAN_SEA_LEVEL=1,
+LRFMT_DOP=2,
+LRFMT_MAGNETIC_DEVIATION=4,
+LRFMT_HOR_RELIABILITY=8,
+LRFMT_VER_RELIABILITY=16,
+LRFMT_HOR_ACCURACY_ELIP_SEMI_MAJOR=32,
+LRFMT_HOR_ACCURACY_ELIP_SEMI_MINOR=64,
+LRFMT_HOR_ACCURACY_ELIP_AZIMUTH=128,
+LRFMT_GNSS_SV_USED_DATA=256,
+LRFMT_NAV_SOLUTION_MASK_BIT=512,
+LRFMT_GNSS_LOCATION_INFO_POS_TECH_MASK=1024,
+LRFMT_POS_DYNAMICS_DATA=2048,
+LRFMT_EXT_DOP=4096,
+LRFMT_NORTH_STD_DEV=8192,
+LRFMT_EAST_STD_DEV=16384,
+LRFMT_NORTH_VEL=32768,
+LRFMT_EAST_VEL=65536,
+LRFMT_UP_VEL=131072,
+LRFMT_NORTH_VEL_UNC=262144,
+LRFMT_EAST_VEL_UNC=524288,
+LRFMT_UP_VEL_UNC=1048576,
+LRFMT_LEAP_SECONDS=2097152,
+LRFMT_NUM_SV_USED_IN_POS=4194304,
+LRFMT_CALIB_CONFIDENCE_PERCENT=8388608,
+LRFMT_CALIB_STATUS=16777216,
+LRFMT_OUTPUT_ENG_TYPE=33554432,
+LRFMT_OUTPUT_ENG_MASK=67108864,
+LRFMT_CONFORMITY_INDEX=134217728,
+LRFMT_LLA_VRP_BASED=268435456,
+LRFMT_ENU_VEL_VRP_BASED=536870912,
+LRFMT_DR_SOL_STATUS_MASK=1073741824,
+***********************************************/
+enum LocationReliabilityT;
+
+/************   LocationReliabilityT VALUES      ************
+Name of the Data: LocationReliabilityT
+Description: 
+Type: uint8
+LOCATION_RELIABILIT_T_NOT_SET=0,
+LOCATION_RELIABILIT_T_VERY_LOW=1,
+LOCATION_RELIABILIT_T_LOW=2,
+LOCATION_RELIABILIT_T_MEDIUM=3,
+LOCATION_RELIABILIT_T_HIGH=4,
+***********************************************/
+enum LocationReportNavSolutionMaskT;
+
+/************   LocationReportNavSolutionMaskT VALUES      ************
+Name of the Data: LocationReportNavSolutionMaskT
+Description: 
+Type: uint32
+LRNSMT_UNKNOWN=0,
+LRNSMT_SBAS_CORR_IONO=1,
+LRNSMT_SBAS_CORR_FAST=2,
+LRNSMT_SBAS_CORR_LONG=4,
+LRNSMT_SBAS_INTEGRITY=8,
+LRNSMT_NAV_CORR_DGNSS=16,
+LRNSMT_NAV_CORR_RTK=32,
+LRNSMT_NAV_CORR_PPP=64,
+LRNSMT_NAV_CORR_RTK_FIX=128,
+LRNSMT_NAV_CORR_ONLY_SBAS_CORR_SV_USED=256,
+LRNSMT_NAV_CORR_MMF_AIDED=512,
+***********************************************/
+enum LocationReportPosDataMaskT;
+
+/************   LocationReportPosDataMaskT VALUES      ************
+Name of the Data: LocationReportPosDataMaskT
+Description: 
+Type: uint32
+LRPDMT_UNKNOWN=0,
+LRPDMT_NAV_DATA_LONG_ACCEL=1,
+LRPDMT_NAV_DATA_LAT_ACCEL=2,
+LRPDMT_NAV_DATA_VERT_ACCEL=4,
+LRPDMT_NAV_DATA_YAW_RATE=8,
+LRPDMT_NAV_DATA_PITCH=16,
+LRPDMT_NAV_DATA_LONG_ACCEL_UNC=32,
+LRPDMT_NAV_DATA_LAT_ACCEL_UNC=64,
+LRPDMT_NAV_DATA_VERT_ACCEL_UNC=128,
+LRPDMT_NAV_DATA_YAW_RATE_UNC=256,
+LRPDMT_NAV_DATA_PITCH_UNC=512,
+LRPDMT_NAV_DATA_PITCH_RATE=1024,
+LRPDMT_NAV_DATA_PITCH_RATE_UNC=2048,
+LRPDMT_NAV_DATA_ROLL=4096,
+LRPDMT_NAV_DATA_ROLL_UNC=8192,
+LRPDMT_NAV_DATA_ROLL_RATE=16384,
+LRPDMT_NAV_DATA_ROLL_RATE_UNC=32768,
+LRPDMT_NAV_DATA_YAW=65536,
+LRPDMT_NAV_DATA_YAW_UNC=131072,
+***********************************************/
+enum GnssLocSvSystemTypeT;
+
+/************   GnssLocSvSystemTypeT VALUES      ************
+Name of the Data: GnssLocSvSystemTypeT
+Description: 
+Type: uint8
+GLSSTT_UNKNOWN=0,
+GLSSTT_GPS=1,
+GLSSTT_GAL=2,
+GLSSTT_SBAS=3,
+GLSSTT_GLO=4,
+GLSSTT_BDS=5,
+GLSSTT_QZSS=6,
+GLSSTT_NAVIC=7,
+***********************************************/
+enum GnssSystemTimeStructTypeFlagsT;
+
+/************   GnssSystemTimeStructTypeFlagsT VALUES      ************
+Name of the Data: GnssSystemTimeStructTypeFlagsT
+Description: 
+Type: uint32
+GSTSTFT_INVALID=0,
+GSTSTFT_WEEK_VALID=1,
+GSTSTFT_WEEK_MS_VALID=2,
+GSTSTFT_CLK_TIME_BIAS_VALID=4,
+GSTSTFT_CLK_TIME_BIAS_UNC_VALID=8,
+GSTSTFT_REF_FCOUNT_VALID=16,
+GSTSTFT_NUM_CLOCK_RESETS_VALID=32,
+***********************************************/
+enum GnssGloTimeStructTypeFlagsT;
+
+/************   GnssGloTimeStructTypeFlagsT VALUES      ************
+Name of the Data: GnssGloTimeStructTypeFlagsT
+Description: 
+Type: uint32
+GGTSTFT_INVALID=0,
+GGTSTFT_DAYS_VALID=1,
+GGTSTFT_MSEC_VALID=2,
+GGTSTFT_CLK_TIME_BIAS_VALID=4,
+GGTSTFT_CLK_TIME_BIAS_UNC_VALID=8,
+GGTSTFT_REF_FCOUNT_VALID=16,
+GGTSTFT_NUM_CLK_RESETS_VALID=32,
+GGTSTFT_FOUR_YEAR_VALID=64,
+***********************************************/
+enum DrCalibrationStatusMaskT;
+
+/************   DrCalibrationStatusMaskT VALUES      ************
+Name of the Data: DrCalibrationStatusMaskT
+Description: 
+Type: uint32
+DCSMT_UNKNOWN=0,
+DCSMT_ROLL_CALIB_NEEDED=1,
+DCSMT_PITCH_CALIB_NEEDED=2,
+DCSMT_YAW_CALIB_NEEDED=4,
+DCSMT_ODO_CALIB_NEEDED=8,
+DCSMT_GYRO_CALIB_NEEDED=16,
+DCSMT_TURN_CALIB_LOW=32,
+DCSMT_TURN_CALIB_MED=64,
+DCSMT_TURN_CALIB_HIGH=128,
+DCSMT_LINEAR_ACCEL_CALIB_LOW=256,
+DCSMT_LINEAR_ACCEL_CALIB_MED=512,
+DCSMT_LINEAR_ACCEL_CALIB_HIGH=1024,
+DCSMT_LINEAR_MOTION_CALIB_LOW=2048,
+DCSMT_LINEAR_MOTION_CALIB_MED=4096,
+DCSMT_LINEAR_MOTION_CALIB_HIGH=8192,
+DCSMT_STATIC_CALIB_LOW=16384,
+DCSMT_STATIC_CALIB_MED=32768,
+DCSMT_STATIC_CALIB_HIGH=65536,
+***********************************************/
+enum LocOutputEngineTypeT;
+
+/************   LocOutputEngineTypeT VALUES      ************
+Name of the Data: LocOutputEngineTypeT
+Description: 
+Type: uint8
+LOETT_UNKNOWN=0,
+LOETT_FUSED=1,
+LOETT_SPE=2,
+LOETT_PPE=3,
+LOETT_VPE=4,
+LOETT_COUNT=4,
+***********************************************/
+enum PositioningEngineMaskT;
+
+/************   PositioningEngineMaskT VALUES      ************
+Name of the Data: PositioningEngineMaskT
+Description: 
+Type: uint16
+PEMT_UNKNOWN=0,
+PEMT_STANDARD_POSITIONING_ENGINE=1,
+PEMT_DEAD_RECKONING_ENGINE=2,
+PEMT_PRECISE_POSITIONING_ENGINE=4,
+PEMT_VP_POSITIONING_ENGINE=8,
+***********************************************/
+enum DrSolutionStatusMaskT;
+
+/************   DrSolutionStatusMaskT VALUES      ************
+Name of the Data: DrSolutionStatusMaskT
+Description: 
+Type: uint32
+DSSMT_UNKNOWN=0,
+DSSMT_VEHICLE_SENSOR_SPEED_INPUT_DETECTED=1,
+DSSMT_VEHICLE_SENSOR_SPEED_INPUT_USED=2,
+DSSMT_WARNING_UNCALIBRATED=4,
+DSSMT_WARNING_GNSS_QUALITY_INSUFFICIENT=8,
+DSSMT_WARNING_FERRY_DETECTED=16,
+DSSMT_ERROR_6DOF_SENSOR_UNAVAILABLE=32,
+DSSMT_ERROR_VEHICLE_SPEED_UNAVAILABLE=64,
+DSSMT_ERROR_GNSS_EPH_UNAVAILABLE=128,
+DSSMT_ERROR_GNSS_MEAS_UNAVAILABLE=256,
+DSSMT_WARNING_INIT_POSITION_INVALID=512,
+DSSMT_WARNING_INIT_POSITION_UNRELIABLE=1024,
+DSSMT_WARNING_POSITON_UNRELIABLE=2048,
+DSSMT_ERROR_GENERIC=4096,
+DSSMT_WARNING_SENSOR_TEMP_OUT_OF_RANGE=8192,
+DSSMT_WARNING_USER_DYNAMICS_INSUFFICIENT=16384,
+DSSMT_WARNING_FACTORY_DATA_INCONSISTENT=32768,
+DSSMT_WARNING_MMF_UNAVAILABLE=65536,
+DSSMT_WARNING_MMF_NOT_USABLE=131072,
+***********************************************/
+enum LocationReportExtendedFlagMaskT;
+
+/************   LocationReportExtendedFlagMaskT VALUES      ************
+Name of the Data: LocationReportExtendedFlagMaskT
+Description: 
+Type: uint32
+LREFMT_UNKNOWN=0,
+LREFMT_ALTITUDE_ASSUMED=1,
+LREFMT_SESSION_STATUS=2,
+LREFMT_INTEGRITY_RISK_USED=4,
+LREFMT_PROTECT_ALONG_TRACK=8,
+LREFMT_PROTECT_CROSS_TRACK=16,
+LREFMT_PROTECT_VERTICAL=32,
+LREFMT_DGNSS_STATION_ID=64,
+LREFMT_GPTP_TIME_BIT=128,
+LREFMT_GPTP_TIME_UNC_BIT=256,
+LREFMT_BASE_LINE_LENGTH_BIT=512,
+LREFMT_AGE_OF_CORRECTION_BIT=1024,
+LREFMT_REPORT_INTERVAL_BIT=2048,
+LREFMT_LEAP_SECONDS_UNC_BIT=4096,
+***********************************************/
+enum LocSessionStatusT;
+
+/************   LocSessionStatusT VALUES      ************
+Name of the Data: LocSessionStatusT
+Description: 
+Type: uint8
+LSS_UNKNOWN=0,
+LSS_SUCCESS=1,
+LSS_INTERMEDIATE=2,
+LSS_FAILURE=3,
+***********************************************/
+enum GnssSvOptionsMaskT;
+
+/************   GnssSvOptionsMaskT VALUES      ************
+Name of the Data: GnssSvOptionsMaskT
+Description: 
+Type: uint32
+GSOMT_UNKNOWN=0,
+GSOMT_HAS_EPHEMER_BIT=1,
+GSOMT_HAS_ALMANAC_BIT=2,
+GSOMT_HAS_USED_IN_FIX_BIT=4,
+GSOMT_HAS_CARRIER_FREQ_BIT=8,
+GSOMT_HAS_GNSS_SIGNAL_TYPE_BIT=16,
+GSOMT_HAS_BASEBAND_CARRIER_TO_NOISE_BIT=32,
+GSOMT_HAS_ELEVATION_BIT=64,
+GSOMT_HAS_AZIMUTH_BIT=128,
+***********************************************/
+enum GnssDataMaskT;
+
+/************   GnssDataMaskT VALUES      ************
+Name of the Data: GnssDataMaskT
+Description: 
+Type: uint16
+GDMT_UNKNOWN=0,
+GDMT_JAMMER_IND_BIT=1,
+GDMT_AGC_BIT=2,
+***********************************************/
+
+struct MapMatchingFeedbackDataT
+{
+        uint32 validityMask;
+        uint64 utcTimestampMs;
+        float64 mapMatchedLatitudeDifference;
+        float64 mapMatchedLongitudeDifference;
+        float32 bearing;
+        float64 altitude;
+        float32 horizontalAccuracy;
+        float32 altitudeAccuracy;
+        float32 bearingAccuracy;
+        Boolean isTunnel;
+};
+/*********  MapMatchingFeedbackDataT VALUES    *********
+Name of the Data: validityMask
+Description: Validity fields for MMF data fields to follow   Flags defined using enum MapMatchingFeedbackDataValidityT 
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: utcTimestampMs
+Description: Unix epoch time of the location fix for which map-match   feedback is being sent, since the start of the Unix epoch (00:00:00 January 1, 1970 UTC).  Unit: Milli-seconds 
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: mapMatchedLatitudeDifference
+Description: Latitude difference = map matched latitude - reported latitude   Unit: Degrees  Range: [-90.0, 90.0] 
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: mapMatchedLongitudeDifference
+Description: Longitude difference = map matched longitude - reported longitude    Unit: Degrees   Range: [-180.0, 180.0] 
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: bearing
+Description: Bearing: The horizontal direction of travel of the device with   respect to north and is unrelated to the device orientation.    Unit: Degrees    range: [0, 360) 
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: altitude
+Description: Absolute Altitude above the WGS 84 reference ellipsoid    Unit: meters 
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: horizontalAccuracy
+Description: Horizontal accuracy radius defined with the    68th percentile confidence level    Unit: meter    Range: 0 or greater 
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: altitudeAccuracy
+Description: Altitude accuracy. Defined with 68% confidence level.    Unit:meter    Range: 0 or greater 
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: bearingAccuracy
+Description: Estimated bearing accuracy defined with    68 percentile confidence level (1 sigma)    Unit: Degrees    Range [0, 360) 
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: isTunnel
+Description: Road Type. Decision to use the MMF data depends on isTunnel    Value: True or False
+Type: Boolean
+Minimum Value : 0.0
+Maximum Value : 1.0
+Unit : 
+Resolution : 1.0
+                    *****
+***********************************************/
+
+struct LocationReportRequest
+{
+        uint32 intervalInMs;
+        uint32 gnssReportCallbackMask;
+};
+/*********  LocationReportRequest VALUES    *********
+Name of the Data: intervalInMs
+Description:  Time between fixes, or TBF, in milliseconds.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gnssReportCallbackMask
+Description:  Specify the mask to receive the reports when invoking   StartPositionSessionLocationReport() 
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct LocationResponse
+{
+        LocationStatusT status;
+};
+/*********  LocationResponse VALUES    *********
+Name of the Data: status
+Description:  Location status code defined in LocationStatusT 
+Type: LocationStatusT
+                    *****
+***********************************************/
+
+struct EngineSpecificLocationRequest
+{
+        uint32 intervalInMs;
+        uint32 locReqEngMask;
+        uint32 engReportCallbackMask;
+};
+/*********  EngineSpecificLocationRequest VALUES    *********
+Name of the Data: intervalInMs
+Description:  Time between fixes, or TBF, in milliseconds.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: locReqEngMask
+Description:  Specify the set of engines whose position reports are requested   via StartPositionSessionEngineSpecificLocation()
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: engReportCallbackMask
+Description:  Specify the set of callback masks to receive the reports when   invoking StartPositionSessionEngineSpecificLocation()
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct LocationAidingDataDeletionMask
+{
+        uint32 deleteMask;
+};
+/*********  LocationAidingDataDeletionMask VALUES    *********
+Name of the Data: deleteMask
+Description:  Mask used to specify the set of aiding data that can be   deleted via DeleteAidingData() 
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssSvIdInfoT
+{
+        GnssConstellationTypeT constellation;
+        uint32 svId;
+};
+/*********  GnssSvIdInfoT VALUES    *********
+Name of the Data: constellation
+Description: constellation for the sv
+Type: GnssConstellationTypeT
+                    *****
+Name of the Data: svId
+Description: sv id range for the constellation:   GLONASS SV id range: 65 to 96   QZSS SV id range: 193 to 197   BDS SV id range: 201 to 263   GAL SV id range: 301 to 336   SBAS SV id range: 120 to 158 and 183 to 191   NAVIC SV id range: 401 to 414
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct LocationGnssSvIdInfo
+{
+        GnssSvIdInfoT svList[];
+};
+/*********  LocationGnssSvIdInfo VALUES    *********
+Name of the Data: svList
+Description:
+Type: GnssSvIdInfoT
+Maximum Data Size:176
+                    *****
+***********************************************/
+
+struct LocationCapabilities
+{
+        uint32 capabilitiesMask;
+};
+/*********  LocationCapabilities VALUES    *********
+Name of the Data: capabilitiesMask
+Description:  Location capabilities information
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssMeasurementsClockT
+{
+        uint32 flags;
+        sint32 leapSecond;
+        sint64 timeNs;
+        float64 timeUncertaintyNs;
+        sint64 fullBiasNs;
+        float64 biasNs;
+        float64 biasUncertaintyNs;
+        float64 driftNsps;
+        float64 driftUncertaintyNsps;
+        uint32 hwClockDiscontinuityCount;
+        uint64 elapsedRealTime;
+        uint64 elapsedRealTimeUnc;
+        uint64 elapsedgPtpTime;
+        uint64 elapsedgPtpTimeUnc;
+};
+/*********  GnssMeasurementsClockT VALUES    *********
+Name of the Data: flags
+Description: Bitwise OR of GnssMeasurementsClockFlagsMask.   Contains GnssMeasurementsClockFlagsMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: leapSecond
+Description: Leap second, in unit of seconds.   deployment to be mapped to int16
+Type: sint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: timeNs
+Description: Time, monotonically increasing as long as the power is on,   in unit of nanoseconds
+Type: sint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: timeUncertaintyNs
+Description: Time uncertainty (one sigma), in unit of nanoseconds
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: fullBiasNs
+Description: Full bias, in uint of nanoseconds
+Type: sint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: biasNs
+Description: Sub-nanoseconds bias, in unit of nonoseconds
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: biasUncertaintyNs
+Description: Bias uncertainty (one sigma), in unit of nanoseconds
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: driftNsps
+Description: Clock drift, in unit of nanoseconds/second
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: driftUncertaintyNsps
+Description: Clock drift uncertainty (one sigma), in unit of nanoseconds/second
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: hwClockDiscontinuityCount
+Description: HW clock discontinuity count - incremented for each discontinuity in HW clock
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: elapsedRealTime
+Description: elapsed time since boot, in unit of nonoseconds
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: elapsedRealTimeUnc
+Description: uncertainty of elapsedRealTime, in unit of nonoseconds
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: elapsedgPtpTime
+Description: gPTP since boot, in unit of nonoseconds
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: elapsedgPtpTimeUnc
+Description: uncertainty of elapsedgPTPTime, in unit of nonoseconds
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssMeasurementsDataT
+{
+        uint32 flags;
+        uint32 svId;
+        GnssSvTypeT svType;
+        float64 timeOffsetNs;
+        uint32 stateMask;
+        sint64 receivedSvTimeNs;
+        float32 receivedSvTimeSubNs;
+        sint64 receivedSvTimeUncertaintyNs;
+        float64 carrierToNoiseDbHz;
+        float64 pseudorangeRateMps;
+        float64 pseudorangeRateUncertaintyMps;
+        uint32 adrStateMask;
+        float64 adrMeters;
+        float64 adrUncertaintyMeters;
+        float32 carrierFrequencyHz;
+        sint64 carrierCycles;
+        float64 carrierPhase;
+        float64 carrierPhaseUncertainty;
+        uint32 multipathIndicator;
+        float64 signalToNoiseRatioDb;
+        float64 agcLevelDb;
+        float64 basebandCarrierToNoiseDbHz;
+        GnssSignalTypeT gnssSignalType;
+        float64 fullInterSignalBiasNs;
+        float64 fullInterSignalBiasUncertaintyNs;
+        uint32 cycleSlipCount;
+};
+/*********  GnssMeasurementsDataT VALUES    *********
+Name of the Data: flags
+Description: Bitwise OR of GnssMeasurementsDataFlagsMaskT to specify the   valid fields in GnssMeasurementsData.   Contains GnssMeasurementsDataFlagsMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: svId
+Description: Specify satellite vehicle ID number.   For SV id range of each supported constellations, refer to   documentation in GnssSv::svId.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: svType
+Description: SV constellation type
+Type: GnssSvTypeT
+                    *****
+Name of the Data: timeOffsetNs
+Description: Time offset when the measurement was taken in unit of nanoseconds
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: stateMask
+Description: Bitwise OR of GnssMeasurementsStateMaskT to specify the   GNSS measurement state.   Contains GnssMeasurementsStateMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: receivedSvTimeNs
+Description: Received GNSS time of the week in nanoseconds when the   measurement was taken.   For sub nanoseconds part of the time, please refer to   of GnssMeasurementsData::receivedSvTimeSubNs.   Total time is: receivedSvTimeNs+receivedSvTimeSubNs
+Type: sint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: receivedSvTimeSubNs
+Description: Sub nanoseconds portion of the received GNSS time of the   week when the measurement was taken.   For nanoseconds portion of the time, please refer to field   of GnssMeasurementsData::receivedSvTimeSubNs.   Total time is: receivedSvTimeNs+receivedSvTimeSubNs
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: receivedSvTimeUncertaintyNs
+Description: Satellite time.   All SV times in the current measurement block are already   propagated to a common reference time epoch, in unit of   nanoseconds.
+Type: sint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: carrierToNoiseDbHz
+Description: Signal strength, carrier to noise ratio, in unit of dB-Hz
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: pseudorangeRateMps
+Description: Uncorrected pseudorange rate, in unit of meters/second
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: pseudorangeRateUncertaintyMps
+Description: Uncorrected pseudorange rate uncertainty, in unit of meters/second
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: adrStateMask
+Description: Bitwise OR of GnssMeasurementsAdrStateMask.   Contains GnssMeasurementsAdrStateMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: adrMeters
+Description: Accumulated delta range, in unit of meters
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: adrUncertaintyMeters
+Description: Accumulated delta range uncertainty, in unit of meters
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: carrierFrequencyHz
+Description: Carrier frequency of the tracked signal, in unit of Hertz
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: carrierCycles
+Description: The number of full carrier cycles between the receiver and the satellite
+Type: sint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: carrierPhase
+Description: The RF carrier phase that the receiver has detected
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: carrierPhaseUncertainty
+Description: The RF carrier phase uncertainty
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: multipathIndicator
+Description: Multipath indicator, could be unknown, present or not present.   Contains GnssMeasurementsMultipathIndicatorT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: signalToNoiseRatioDb
+Description: Signal to noise ratio, in unit of dB
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: agcLevelDb
+Description: Automatic gain control level, in unit of dB
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: basebandCarrierToNoiseDbHz
+Description: Baseband signal strength, in unit of dB Hz.   Should always be available in measurement report
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gnssSignalType
+Description: GNSS signal type mask of the SV.   Should always be available in measurement report.   Contains GnssSignalTypeT bit
+Type: GnssSignalTypeT
+                    *****
+Name of the Data: fullInterSignalBiasNs
+Description: The full inter-signal bias (ISB) in nanoseconds.   This value is the sum of the estimated receiver-side and the   space-segment-side inter-system bias, inter-frequency bias   and inter-code bias
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: fullInterSignalBiasUncertaintyNs
+Description: 1-sigma uncertainty associated with the full inter-signal bias in nanoseconds
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: cycleSlipCount
+Description: Increments when a cycle slip is detected.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssMeasurementsT
+{
+        GnssMeasurementsClockT clock;
+        GnssMeasurementsDataT measurements[];
+        Boolean isNHz;
+        sint32 reportingLatency;
+};
+/*********  GnssMeasurementsT VALUES    *********
+Name of the Data: clock
+Description: GNSS measurements clock info
+Type: GnssMeasurementsClockT
+                    *****
+Name of the Data: measurements
+Description: GNSS measurements data
+Type: GnssMeasurementsDataT
+Maximum Data Size:176
+                    *****
+Name of the Data: isNHz
+Description: NHz measurements indicator
+Type: Boolean
+Minimum Value : 0.0
+Maximum Value : 1.0
+Unit : 
+Resolution : 1.0
+                    *****
+Name of the Data: reportingLatency
+Description: Time difference between packet generation time  and sending over SOMEIP  Unit- milli-seconds 
+Type: sint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct LocationT
+{
+        uint32 flags;
+        uint64 timestamp;
+        float64 latitude;
+        float64 longitude;
+        float64 altitude;
+        float32 speed;
+        float32 bearing;
+        float32 horizontalAccuracy;
+        float32 verticalAccuracy;
+        float32 speedAccuracy;
+        float32 bearingAccuracy;
+        uint32 techMask;
+        uint64 elapsedRealTimeNs;
+        uint64 elapsedRealTimeUncNs;
+        float32 timeUncMs;
+};
+/*********  LocationT VALUES    *********
+Name of the Data: flags
+Description: Bitwise OR of LocationFlagsMaskT to specify the valid fields.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: timestamp
+Description: UTC timestamp for location fix since January 1, 1970, in unit of milliseconds.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: latitude
+Description: Latitude, in unit of degrees, range [-90.0, 90.0].
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: longitude
+Description: Longitude, in unit of degrees, range [-180.0, 180.0].
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: altitude
+Description: Altitude above the WGS 84 reference ellipsoid, in unit of meters.
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: speed
+Description: Horizontal speed, in meters/second.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: bearing
+Description: Bearing, in unit of degrees, range [0, 360).
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: horizontalAccuracy
+Description: Horizontal accuracy, in unit of meters.   Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: verticalAccuracy
+Description: Vertical accuracy, in unit of meters.   Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: speedAccuracy
+Description: Horizontal speed uncertainty, in unit meters/second.   Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: bearingAccuracy
+Description: Bearing uncertainty, in unit of degrees, range (0 to 359.999).  Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: techMask
+Description: Sets of technology that contributed to the fix.   Contains LocationTechnologyMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: elapsedRealTimeNs
+Description: Boot timestamp corresponding to the UTC timestamp for location fix. In unit of nanoseconds.   This field may not always be available.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: elapsedRealTimeUncNs
+Description: Uncertainty for the boot timestamp. In unit of nanoseconds.   This field may not always be available.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: timeUncMs
+Description: Time uncertainty associated with this position. In unit of milliseconds.   This field may not always be available.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct LocationReportSvUsedInPositionT
+{
+        uint64 gpsSvUsedIdsMask;
+        uint64 gloSvUsedIdsMask;
+        uint64 galSvUsedIdsMask;
+        uint64 bdsSvUsedIdsMask;
+        uint64 qzssSvUsedIdsMask;
+        uint64 navicSvUsedIdsMask;
+};
+/*********  LocationReportSvUsedInPositionT VALUES    *********
+Name of the Data: gpsSvUsedIdsMask
+Description: Specify the set of SVs from GPS constellation that are used to compute the position.   Bit 0 to Bit 31 corresponds to GPS SV id 1 to 32.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gloSvUsedIdsMask
+Description: Specify the set of SVs from GLONASS constellation that are used to compute the position.   Bit 0 to Bit 31 corresponds to GLO SV id 65 to 96.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: galSvUsedIdsMask
+Description: Specify the set of SVs from GALILEO constellation that are used to compute the position.   Bit 0 to Bit 35 corresponds to GAL SV id 301 to 336.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: bdsSvUsedIdsMask
+Description: Specify the set of SVs from BEIDOU constellation that are used to compute the position.  Bit 0 to Bit 62 corresponds to BDS SV id 201 to 263.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: qzssSvUsedIdsMask
+Description: Specify the set of SVs from QZSS constellation that are used to compute the position.   Bit 0 to Bit 4 corresponds to QZSS SV id 193 to 197.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: navicSvUsedIdsMask
+Description: Specify the set of SVs from NAVIC constellation that are used to compute the position.   Bit 0 to Bit 13 corresponds to NAVIC SV id 401 to 414.
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct LocationReportPositionDynamicsT
+{
+        uint32 bodyFrameDataMask;
+        float32 longAccel;
+        float32 latAccel;
+        float32 vertAccel;
+        float32 longAccelUnc;
+        float32 latAccelUnc;
+        float32 vertAccelUnc;
+        float32 pitch;
+        float32 pitchUnc;
+        float32 pitchRate;
+        float32 pitchRateUnc;
+        float32 roll;
+        float32 rollUnc;
+        float32 rollRate;
+        float32 rollRateUnc;
+        float32 yaw;
+        float32 yawUnc;
+        float32 yawRate;
+        float32 yawRateUnc;
+};
+/*********  LocationReportPositionDynamicsT VALUES    *********
+Name of the Data: bodyFrameDataMask
+Description: Bitwise OR of LocationReportPosDataMaskT to specify the valid fields   in LocationReportPositionDynamicsT. Contains LocationReportPosDataMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: longAccel
+Description: Forward acceleration in body frame, in unit of meters/second^2.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: latAccel
+Description: Sideward acceleration in body frame, in unit of meters/second^2.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: vertAccel
+Description: Vertical acceleration in body frame, in unit of meters/second^2.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: longAccelUnc
+Description: Uncertainty of forward acceleration in body frame, in unit of meters/second^2.   Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: latAccelUnc
+Description: Uncertainty of side-ward acceleration in body frame, in unit of meters/second^2.   Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: vertAccelUnc
+Description: Uncertainty of vertical acceleration in body frame, in unit of meters/second^2.   Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: pitch
+Description: Body pitch, in unit of radians.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: pitchUnc
+Description: Uncertainty of body pitch, in unit of radians. Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: pitchRate
+Description: Body pitch rate, in unit of radians/second.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: pitchRateUnc
+Description: Uncertainty of pitch rate, in unit of radians/second. Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: roll
+Description: Roll of body frame, clockwise is positive, in unit of radian.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: rollUnc
+Description: Uncertainty of roll, in unit of radian.   Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: rollRate
+Description: Roll rate of body frame, clockwise is positive, in unit of radian/second.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: rollRateUnc
+Description: Uncertainty of roll rate, in unit of radian/second. Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: yaw
+Description: Yaw of body frame, clockwise is positive, in unit of radian.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: yawUnc
+Description: Uncertainty of yaw, 68% confidence level, in unit of radian. Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: yawRate
+Description: Heading rate, in unit of radians/second. Range: +/- pi (where pi is ~3.14159).   The positive value is clockwise and negative value is anti-clockwise.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: yawRateUnc
+Description: Uncertainty of heading rate, in unit of radians/second.   Uncertainty is defined with 68% confidence level.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssSystemTimeStructTypeT
+{
+        uint32 validityMask;
+        uint32 systemWeek;
+        uint32 systemMsec;
+        float32 systemClkTimeBias;
+        float32 systemClkTimeUncMs;
+        uint32 refFcount;
+        uint32 numClockResets;
+};
+/*********  GnssSystemTimeStructTypeT VALUES    *********
+Name of the Data: validityMask
+Description: Bitwise OR of GnssSystemTimeStructTypeFlagsT to specify valid fields   in GnssSystemTimeStructType. Contains GnssSystemTimeStructTypeFlagsT bits  
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: systemWeek
+Description: Extended week number at reference tick, in unit of week.   Set to 65535 if week number is unknown. For GPS: calculated from midnight, Jan. 6, 1980.   OTA decoded 10 bit GPS week is extended to map between: [NV6264 to (NV6264 + 1023)]   For BDS: calculated from 00:00:00 on January 1, 2006 of Coordinated Universal Time (UTC).   For GAL: calculated from 00:00 UT on Sunday August 22, 1999   (midnight between August 21 and August 22).
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: systemMsec
+Description: Time in to the current week at reference tick, in unit of milliseconds.   Range is 0 to 604799999.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: systemClkTimeBias
+Description: System clock time bias, in unit of milliseconds.   Note: System time (TOW Millisecond) = system_msec - system_clk_time_bias.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: systemClkTimeUncMs
+Description: Single sided maximum time bias uncertainty, in unit of milliseconds.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: refFcount
+Description: FCount (free running HW timer) value, in unit of milliseconds.   Don't use for relative time purpose due to possible discontinuities.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: numClockResets
+Description: Number of clock resets/discontinuities detected, which affects the local hardware counter value.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssGloTimeStructTypeT
+{
+        uint32 validityMask;
+        uint32 gloFourYear;
+        uint32 gloDays;
+        uint32 gloMsec;
+        float32 gloClkTimeBias;
+        float32 gloClkTimeUncMs;
+        uint32 refFCount;
+        uint32 numClockResets;
+};
+/*********  GnssGloTimeStructTypeT VALUES    *********
+Name of the Data: validityMask
+Description: Bitwise OR of GnssGloTimeStructTypeFlagsT to specify the valid fields in GnssGloTimeStructType.   Contains GnssGloTimeStructTypeFlagsT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gloFourYear
+Description: GLONASS four year number from 1996.   Refer to GLONASS ICD. Applicable only for GLONASS and shall be ignored   for other constellations.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gloDays
+Description: GLONASS day number in four years. Refer to GLONASS ICD. If unknown shall be set to 65535.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gloMsec
+Description: GLONASS time of day in unit of millisecond. Refer to GLONASS ICD.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gloClkTimeBias
+Description: GLONASS clock time bias, in unit of millisecond.   Note: GLO time (TOD Millisecond) = gloMsec - gloClkTimeBias.   Check for gloClkTimeUncMs before use.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gloClkTimeUncMs
+Description: Single sided maximum time bias uncertainty, in unit of milliseconds.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: refFCount
+Description: FCount (free running HW timer) value, in unit of milliseconds.   Don't use for relative time purpose due to possible discontinuities.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: numClockResets
+Description: Number of clock resets/discontinuities detected, affecting the local hardware counter value.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct SystemTimeStructT
+{
+        GnssSystemTimeStructTypeT gnssSystemTime;
+        GnssGloTimeStructTypeT gloSystemTime;
+};
+/*********  SystemTimeStructT VALUES    *********
+Name of the Data: gnssSystemTime
+Description: System time info from GPS/GAL/BDS/QZSS/NAVIC constellation.
+Type: GnssSystemTimeStructTypeT
+                    *****
+Name of the Data: gloSystemTime
+Description: System time info from GALILEO constellation.
+Type: GnssGloTimeStructTypeT
+                    *****
+***********************************************/
+
+struct GnssSystemTimeT
+{
+        GnssLocSvSystemTypeT gnssSystemTimeSrc;
+        SystemTimeStructT systemTime;
+};
+/*********  GnssSystemTimeT VALUES    *********
+Name of the Data: gnssSystemTimeSrc
+Description: Specify the source constellation for GNSS system time.
+Type: GnssLocSvSystemTypeT
+                    *****
+Name of the Data: systemTime
+Description: Specify the GNSS system time corresponding to the source.
+Type: SystemTimeStructT
+                    *****
+***********************************************/
+
+struct GnssMeasUsageInfoT
+{
+        GnssConstellationTypeT gnssConstellation;
+        uint32 gnssSvId;
+        GnssSignalTypeT gnssSignalType;
+};
+/*********  GnssMeasUsageInfoT VALUES    *********
+Name of the Data: gnssConstellation
+Description: Specify GNSS Constellation Type for the SV.
+Type: GnssConstellationTypeT
+                    *****
+Name of the Data: gnssSvId
+Description: Specify satellite vehicle ID number.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gnssSignalType
+Description: Specify the signal type mask of the SV.
+Type: GnssSignalTypeT
+                    *****
+***********************************************/
+
+struct LlaInfoT
+{
+        float64 latitude;
+        float64 longitude;
+        float32 altitude;
+};
+/*********  LlaInfoT VALUES    *********
+Name of the Data: latitude
+Description: Latitude, in unit of degrees, range [-90.0, 90.0]
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: longitude
+Description: Longitude, in unit of degrees, range [-180.0, 180.0]
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: altitude
+Description: Altitude above the WGS 84 reference ellipsoid, in unit of meters
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct LocationReportT
+{
+        LocationT locInfo;
+        uint32 locationInfoFlags;
+        float32 altitudeMeanSeaLevel;
+        float32 pdop;
+        float32 hdop;
+        float32 vdop;
+        float32 gdop;
+        float32 tdop;
+        float32 magneticDeviation;
+        uint32 horReliability;
+        uint32 verReliability;
+        float32 horUncEllipseSemiMajor;
+        float32 horUncEllipseSemiMinor;
+        float32 horUncEllipseOrientAzimuth;
+        float32 northStdDeviation;
+        float32 eastStdDeviation;
+        float32 northVelocity;
+        float32 eastVelocity;
+        float32 upVelocity;
+        float32 northVelocityStdDeviation;
+        float32 eastVelocityStdDeviation;
+        float32 upVelocityStdDeviation;
+        uint32 numSvUsedInPosition;
+        LocationReportSvUsedInPositionT svUsedInPosition;
+        uint32 navSolutionMask;
+        uint32 posTechMask;
+        LocationReportPositionDynamicsT bodyFrameData;
+        GnssSystemTimeT gnssSystemTime;
+        GnssMeasUsageInfoT measUsageInfo[];
+        uint32 leapSeconds;
+        uint32 calibrationConfidencePercent;
+        uint32 calibrationStatus;
+        LocOutputEngineTypeT locOutputEngType;
+        uint32 locOutputEngMask;
+        float32 conformityIndex;
+        LlaInfoT llaVrpBased;
+        float32 enuVelocityVrpBased[];
+        uint32 drSolutionStatusMask;
+        uint32 locationInfoExtendedFlags;
+        Boolean altitudeAssumed;
+        LocSessionStatusT sessionStatus;
+        uint32 integrityRiskUsed;
+        float32 protectAlongTrack;
+        float32 protectCrossTrack;
+        float32 protectVertical;
+        uint32 dgnssStationId[];
+        uint64 elapsedgPtpTime;
+        uint64 elapsedgPtpTimeUnc;
+        float64 baseLineLength;
+        uint64 ageMsecOfCorrections;
+        uint32 posReportingInterval;
+        sint32 reportingLatency;
+        uint32 leapSecondsUnc;
+};
+/*********  LocationReportT VALUES    *********
+Name of the Data: locInfo
+Description: Basic Location information structure
+Type: LocationT
+                    *****
+Name of the Data: locationInfoFlags
+Description: Bitwise OR of LocationReportFlagMaskT for param validity.   Contains LocationReportFlagMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: altitudeMeanSeaLevel
+Description: Altitude wrt mean sea level, in unit of meters
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: pdop
+Description: Position dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy)
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: hdop
+Description: Horizontal dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy)
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: vdop
+Description: Vertical dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy)
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gdop
+Description: Geometric dilution of precision range: 0 (highest accuracy) to 50 (lowest accuracy)
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: tdop
+Description: Time dilution of precision range: 0 (highest accuracy) to 50 (lowest accuracy)
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: magneticDeviation
+Description: Difference between the bearing to true north and the bearing shown on a magnetic compass.   The deviation is positive when the magnetic north is east of true north
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: horReliability
+Description: Horizontal reliability. Contains LocationReliabilityT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: verReliability
+Description: Vertical reliability. Contains LocationReliabilityT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: horUncEllipseSemiMajor
+Description: Horizontal elliptical accuracy semi-major axis, in unit of meters.   Uncertainty is defined with 39% confidence level
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: horUncEllipseSemiMinor
+Description: Horizontal elliptical accuracy semi-minor axis, in unit of meters.   Uncertainty is defined with 39% confidence level
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: horUncEllipseOrientAzimuth
+Description: Horizontal elliptical accuracy azimuth, in unit of degrees, range [0, 180].   Confidence for uncertainty is not specified
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: northStdDeviation
+Description: North standard deviation, in unit of meters.   Uncertainty is defined with 68% confidence level
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: eastStdDeviation
+Description: East standard deviation, in unit of meters.   Uncertainty is defined with 68% confidence level
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: northVelocity
+Description: North velocity, in unit of meters/sec
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: eastVelocity
+Description: East velocity, in unit of meters/sec
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: upVelocity
+Description: Up velocity, in unit of meters/sec
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: northVelocityStdDeviation
+Description: North velocity uncertainty, in unit of meters/sec.   Uncertainty is defined with 68% confidence level
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: eastVelocityStdDeviation
+Description: East velocity uncertainty, in unit of meters/sec.   Uncertainty is defined with 68% confidence level
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: upVelocityStdDeviation
+Description: Up velocity uncertainty, in unit of meters/sec.   Uncertainty is defined with 68% confidence level
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: numSvUsedInPosition
+Description: Number of SV used in position report. deployment to be mapped to Uint16
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: svUsedInPosition
+Description: GNSS SV used in position data
+Type: LocationReportSvUsedInPositionT
+                    *****
+Name of the Data: navSolutionMask
+Description: Navigation solutions that are used to calculate the position report.   contains LocationReportNavSolutionMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: posTechMask
+Description: Position technology used in computing this fix. Contains LocationTechnologyMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: bodyFrameData
+Description: Body frame dynamics info
+Type: LocationReportPositionDynamicsT
+                    *****
+Name of the Data: gnssSystemTime
+Description: GNSS system time when this position is calculated
+Type: GnssSystemTimeT
+                    *****
+Name of the Data: measUsageInfo
+Description: GNSS measurement usage info
+Type: GnssMeasUsageInfoT
+Maximum Data Size:176
+                    *****
+Name of the Data: leapSeconds
+Description: Number of leap Seconds at time when this position is generated
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: calibrationConfidencePercent
+Description: Sensor calibration confidence percent, range [0, 100]
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: calibrationStatus
+Description: Sensor calibration status. Contains DrCalibrationStatusMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: locOutputEngType
+Description: Location engine type defined in LocOutputEngineTypeT
+Type: LocOutputEngineTypeT
+                    *****
+Name of the Data: locOutputEngMask
+Description: When loc output eng type is set to fused,   this field indicates the set of engines contribute to the fix.   Contains PositioningEngineMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: conformityIndex
+Description: When robust location is enabled, this field will indicate how well   the various input data considered for GNSS navigation solution conforms to expectations.   Note that Conformity index is for GNSS only output, not including other engines.   Range: [0.0, 1.0], with 0.0 for least conforming and 1.0 for most conforming
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: llaVrpBased
+Description: VRP-based latitude/longitude/altitude
+Type: LlaInfoT
+                    *****
+Name of the Data: enuVelocityVrpBased
+Description: VRP-based east, north, and up velocity
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+Maximum Data Size:3
+                    *****
+Name of the Data: drSolutionStatusMask
+Description: Dead reckoning position engine status. Contains DrSolutionStatusMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: locationInfoExtendedFlags
+Description: Bitwise OR of LocationReportExtendedFlagMaskT for param validity starting   from altitude_assumed. Contains LocationReportExtendedFlagMaskT bits
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: altitudeAssumed
+Description: When this field is valid, it will indicate whether altitude is assumed or calculated.   false: Altitude is calculated.   true: Altitude is assumed   there may not be enough satellites to determine the precise altitude
+Type: Boolean
+Minimum Value : 0.0
+Maximum Value : 1.0
+Unit : 
+Resolution : 1.0
+                    *****
+Name of the Data: sessionStatus
+Description: Indicates whether session is success, failure or intermediate
+Type: LocSessionStatusT
+                    *****
+Name of the Data: integrityRiskUsed
+Description: Integrity risk used for protection level parameters. Unit of 2.5e-10.   Valid range is [1 to (4e9-1)]. Other values means integrity risk is disabled   and LocationReportT::protectAlongTrack, LocationReportT::protectCrossTrack   and LocationReportT::protectVertical will not be available.   Note that integrityRiskUsed is for GNSS only output, not including other engines
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: protectAlongTrack
+Description: Along-track protection level at specified integrity risk, in unit of meter
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: protectCrossTrack
+Description: Cross-track protection level at specified integrity risk, in unit of meter
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: protectVertical
+Description: Vertical component protection level at specified integrity risk, in unit of meter
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: dgnssStationId
+Description: List of DGNSS station IDs providing corrections.  Range: - SBAS -- 120 to 158 and 183 to 191.   - Monitoring station -- 1000-2023 (Station ID biased by 1000).   - Other values reserved.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+Maximum Data Size:3
+                    *****
+Name of the Data: elapsedgPtpTime
+Description: PTP time corresponding to the UTC timestamp for location fix. In unit in nanoseconds
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: elapsedgPtpTimeUnc
+Description: GPTP time Unc
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: baseLineLength
+Description: Distance between the base station and the receiver  Unit- meters
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: ageMsecOfCorrections
+Description: Difference in time between the fix timestamp using the   correction and the time of the correction   Unit: milli-seconds 
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: posReportingInterval
+Description: Current GNSS engine reporting interval   Time interval at which GNSS engine is delivering position reports   Unit: milli-seconds
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: reportingLatency
+Description:  Time difference between packet generation time   and sending over SOMEIP   Unit: milli-seconds 
+Type: sint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: leapSecondsUnc
+Description:  Uncertainty for the GNSS leap second   Unit: Seconds
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssSvDataT
+{
+        uint32 svId;
+        GnssSvTypeT type;
+        float32 cN0DbHz;
+        float32 elevation;
+        float32 azimuth;
+        uint32 gnssSvOptionsMask;
+        float32 carrierFrequencyHz;
+        GnssSignalTypeT gnssSignalType;
+        float64 basebandCarrierToNoiseDbHz;
+        uint32 gloFrequency;
+};
+/*********  GnssSvDataT VALUES    *********
+Name of the Data: svId
+Description: Unique SV Identifier. This field is always valid.   SV Range for supported constellation is specified as below:   - For GPS:     1 to 32   - For GLONASS: 65 to 96 or FCN+104                  [65, 96] if orbital slot number(OSN) is known                  [97, 110] as frequency channel number(FCN) [-7, 6] + 104                  i.e. encode FCN -7 as 97, 0 as 104, 6 as 110   - For SBAS:    120 to 158 and 183 to 191   - For QZSS:    193 to 197   - For BDS:     201 to 263   - For GAL:     301 to 336   - For NAVIC:   401 to 414
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: type
+Description: Constellation type of the SV (GPS, SBAS, GLONASS, QZSS, BEIDOU, GALILEO).   This field is always valid.
+Type: GnssSvTypeT
+                    *****
+Name of the Data: cN0DbHz
+Description: Carrier-to-noise ratio of the signal measured at antenna, in unit of dB-Hz.   cN0DbHz of 0.0 indicates that this field is unknown.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: elevation
+Description: Elevation of the SV, in unit of degrees. This field is always valid.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: azimuth
+Description: Azimuth of the SV, in unit of degrees. This field is always valid.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gnssSvOptionsMask
+Description: Bitwise OR of GnssSvOptionsMaskT to specify additional info and valid fields in GnssSvDataT.   This field is always valid.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: carrierFrequencyHz
+Description: Carrier frequency of the signal tracked.   This field is valid if gnssSvOptionsMask has GNSS_SV_OPTIONS_HAS_CARRIER_FREQUENCY_BIT set.
+Type: float32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gnssSignalType
+Description: GNSS signal type mask of the SV. This field is valid if gnssSvOptionsMask has   GNSS_SV_OPTIONS_HAS_GNSS_SIGNAL_TYPE_BIT. Contains GnssSignalTypeT bit
+Type: GnssSignalTypeT
+                    *****
+Name of the Data: basebandCarrierToNoiseDbHz
+Description: Carrier-to-noise ratio of the signal measured at baseband, in unit of dB-Hz.   This field is valid if gnssSvOptionsMask has   GNSS_SV_OPTIONS_HAS_BASEBAND_CARRIER_TO_NOISE_BIT set.
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: gloFrequency
+Description: GLONASS frequency channel number, range is [1, 14].   This field is always valid if and only if sv is of GLONASS.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssDataT
+{
+        uint32 gnssDataMask[];
+        float64 jammerInd[];
+        float64 agc[];
+};
+/*********  GnssDataT VALUES    *********
+Name of the Data: gnssDataMask
+Description: Bitwise OR of GnssDataMaskT to indicate   the valid data fields.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+Maximum Data Size:25
+                    *****
+Name of the Data: jammerInd
+Description: Jammer Indication for each GNSS signal.   GSTT_MAX_NUMBER_OF_SIGNAL_TYPES
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+Maximum Data Size:25
+                    *****
+Name of the Data: agc
+Description: Automatic gain control metric, in unit of dB.   GSTT_MAX_NUMBER_OF_SIGNAL_TYPES 
+Type: float64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+Maximum Data Size:25
+                    *****
+***********************************************/
+
+struct GnssCapabilities
+{
+    uint32 capabilitiesMask;
+};
+/*********  GnssCapabilities VALUES     *********
+Name of the Data: capabilitiesMask
+Description: Contains the logic OR between bit position defined in LocationCapabilitiesMaskT
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+***********************************************/
+
+struct GnssMeasurementReport
+{
+    GnssMeasurementsT gnssMeasurements;
+};
+/*********  GnssMeasurementReport VALUES     *********
+Name of the Data: gnssMeasurements
+Description: GNSS measurements information
+Type: GnssMeasurementsT
+                    *****
+***********************************************/
+
+struct GnssLocationReport
+{
+    LocationReportT locationReport;
+};
+/*********  GnssLocationReport VALUES     *********
+Name of the Data: locationReport
+Description: locationReport: LocationReportT
+Type: LocationReportT
+                    *****
+***********************************************/
+
+struct GnssEngineLocationsReport
+{
+    LocationReportT locationReport[];
+};
+/*********  GnssEngineLocationsReport VALUES     *********
+Name of the Data: locationReport
+Description: LocationReportT from requested position engines
+Type: LocationReportT
+Maximum Data Size:4
+                    *****
+***********************************************/
+
+struct GnssSvReport
+{
+    GnssSvDataT gnssSv[];
+};
+/*********  GnssSvReport VALUES     *********
+Name of the Data: gnssSv
+Description: GNSS SV report
+Type: GnssSvDataT
+Maximum Data Size:176
+                    *****
+***********************************************/
+
+struct GnssNmea
+{
+    uint64 timestamp;
+    char nmea[];
+};
+/*********  GnssNmea VALUES     *********
+Name of the Data: timestamp
+Description: timestamp that NMEA sentence is generated
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: nmea
+Description: nmea strings generated from position and SV report
+Size: 4000
+Encoding Type: UTF-8 
+                    *****
+***********************************************/
+
+struct EngineNmea
+{
+    LocOutputEngineTypeT engType;
+    uint64 timestamp;
+    char nmea[];
+};
+/*********  EngineNmea VALUES     *********
+Name of the Data: engType
+Description: engine type that NMEA is derived from
+Type: LocOutputEngineTypeT
+                    *****
+Name of the Data: timestamp
+Description: timestamp that NMEA sentence is generated
+Type: uint64
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+Name of the Data: nmea
+Description: nmea strings generated from position and SV report
+Size: 4000
+Encoding Type: UTF-8 
+                    *****
+***********************************************/
+
+struct GnssDataReport
+{
+    GnssDataT gnssData;
+};
+/*********  GnssDataReport VALUES     *********
+Name of the Data: gnssData
+Description: GNSS jammer and agc information
+Type: GnssDataT
+                    *****
+***********************************************/
+
+struct InjectMapMatchedFeedbackData
+{
+    MapMatchingFeedbackDataT mmfData;
+};
+/*********  InjectMapMatchedFeedbackData VALUES    *********
+Name of the Data: mmfData
+Description: Map Matched Feedback Data
+Type: MapMatchingFeedbackDataT
+                    *****
+***********************************************/
+struct Location
+{
+    uint32 intervalInMs;
+    uint32 gnssReportCallbackMask;
+    LocationStatusT status;  
+};
+/*********  Location VALUES    *********
+Name of the Data: intervalInMs
+Description:  Time between fixes, or TBF, in milliseconds.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+    
+Name of the Data: gnssReportCallbackMask
+Description:  Specify the mask to receive the reports when invoking   StartPositionSessionLocationReport() 
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+    
+Name of the Data: status
+Description:  Location status code defined in LocationStatusT 
+Type: LocationStatusT
+                    *****
+           
+***********************************************/
+struct Location
+{
+    uint32 intervalInMs;
+    uint32 locReqEngMask;
+    uint32 engReportCallbackMask;
+    LocationStatusT status;  
+};
+/*********  Location VALUES    *********
+Name of the Data: intervalInMs
+Description:  Time between fixes, or TBF, in milliseconds.
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+    
+Name of the Data: locReqEngMask
+Description:  Specify the set of engines whose position reports are requested   via StartPositionSessionEngineSpecificLocation()
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+    
+Name of the Data: engReportCallbackMask
+Description:  Specify the set of callback masks to receive the reports when   invoking StartPositionSessionEngineSpecificLocation()
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+    
+Name of the Data: status
+Description:  Location status code defined in LocationStatusT 
+Type: LocationStatusT
+                    *****
+           
+***********************************************/
+struct Location
+{
+    LocationStatusT status;  
+};
+/*********  Location VALUES    *********
+Name of the Data: status
+Description:  Location status code defined in LocationStatusT 
+Type: LocationStatusT
+                    *****
+           
+***********************************************/
+struct Location
+{
+    uint32 deleteMask;
+    LocationStatusT status;  
+};
+/*********  Location VALUES    *********
+Name of the Data: deleteMask
+Description:  Mask used to specify the set of aiding data that can be   deleted via DeleteAidingData() 
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+    
+Name of the Data: status
+Description:  Location status code defined in LocationStatusT 
+Type: LocationStatusT
+                    *****
+           
+***********************************************/
+struct Location
+{
+    GnssSvIdInfoT svList[];
+    LocationStatusT status;  
+};
+/*********  Location VALUES    *********
+Name of the Data: svList
+Description:
+Type: GnssSvIdInfoT
+Maximum Data Size:176
+                    *****
+    
+Name of the Data: status
+Description:  Location status code defined in LocationStatusT 
+Type: LocationStatusT
+                    *****
+           
+***********************************************/
+struct Location
+{
+    uint32 capabilitiesMask;  
+};
+/*********  Location VALUES    *********
+Name of the Data: capabilitiesMask
+Description:  Location capabilities information
+Type: uint32
+Init value : 0.0
+Maximum value : 0.0
+Minimum value : 0.0
+Resolution : 1.0
+Offset : 0
+Unit :  
+                    *****
+           
+***********************************************/

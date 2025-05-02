@@ -1,0 +1,43 @@
+{
+    "unicast" : "192.168.1.10",
+    "netmask" : "255.255.0.0",
+    "logging" :
+    {
+        "level" : "debug",
+        "console" : "true",
+        "file" : { "enable" : "false", "path" : "/tmp/vsomeip-loc-service.log" },
+        "dlt" : "false"
+    },
+    "applications" :
+    [
+        {
+            "name" : "location-fidl-service",
+            "id" : "0x301"
+        },
+        {
+            "name" : "location-fidl-test-client",
+            "id" : "0x302"
+        }
+    ],
+    "services" :
+    [
+        {
+            "service" : "0xEE00",
+            "instance" : "0x01",
+            "unreliable" : "30501",
+            "someip-tp": {
+                "service-to-client": ["0x8001 ", "0x8002", "0x8003", "0x8004", "0x8005", "0x8006", "0x8007", "0x8008"]
+            }
+        }
+    ],
+    "max-payload-size-unreliable" : "15000",
+    "routing" : "tafSomeipGWSvc",
+    "network" : "tafSomeipGWSvc",
+    "service-discovery" :
+    {
+        "enable" : "true",
+        "multicast" : "224.244.224.245",
+        "port" : "30490",
+        "protocol" : "udp"
+    }
+}

@@ -1,0 +1,111 @@
+/** Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+    SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+syntax = "proto3";
+
+//package com.qualcomm.qti.location; //review
+package sdv.connectivity.location;
+
+import "syntax/vsidl.proto";
+import "syntax/sdvsidl.proto";
+import "google/protobuf/empty.proto";
+import "catalog/sdv/connectivity/location/common/location_types.proto";
+
+// message definitions representing request arguments and respose
+message LocationReportRequest {
+  uint32 interval_in_ms = 1 [(sdv.sdvsidl.field_description) =
+    " Time between fixes, or TBF, in milliseconds."];
+  uint32 gnss_report_callback_mask = 2 [(sdv.sdvsidl.field_description) =
+    " Specify the mask to receive the reports when invoking \n"
+    " StartPositionSessionLocationReport() ",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssReportCbInfoMaskT"];
+}
+
+message EngineSpecificLocationRequest {
+  uint32 interval_in_ms = 1 [(sdv.sdvsidl.field_description) =
+    " Time between fixes, or TBF, in milliseconds."];
+  uint32 loc_req_eng_mask = 2 [(sdv.sdvsidl.field_description) =
+    " Specify the set of engines whose position reports are requested \n"
+    " via StartPositionSessionEngineSpecificLocation()",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocReqEngineTypeMaskT"];
+  uint32 eng_report_callback_mask = 3;
+    " Specify the set of callback masks to receive the reports when \n"
+    " invoking StartPositionSessionEngineSpecificLocation()",
+    (sdv.sdvsidl.bitmask_enum_link) = "EngineReportCbMaskT"];
+}
+
+message LocationResponse {
+  LocationStatusT status = 1 [(sdv.sdvsidl.field_description) =
+    " Location status code defined in LocationStatusT "];
+}
+
+message LocationAidingDataDeletionMask {
+  uint32 delete_mask = 1 [(sdv.sdvsidl.field_description) =
+    " Mask used to specify the set of aiding data that can be \n"
+    " deleted via DeleteAidingData() ",
+    (sdv.sdvsidl.bitmask_enum_link) = "AidingDataDeletionMaskT"];
+}
+
+message LocationGnssSvIdInfo {
+  repeated GnssSvIdInfoT sv_list = 1
+    [(sdv.vsidl.repeated_field_max_count) = 176];
+}
+
+message LocationCapabilities {
+  uint32 capabilities_mask = 1 [(sdv.sdvsidl.field_description) =
+    " Location capabilities information",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationCapabilitiesMaskT"];
+}
+
+// RPC interface definition for Location APIs
+service Location {
+  option(sdv.sdvsidl.service_description) = "RPC interface definition"
+    "for Location Client APIs";
+  option(sdv.sdvsidl.service_system_owner) = S21_MULTIMEDIA;
+  rpc StartPositionSessionLocationReport (LocationReportRequest)
+    returns (LocationResponse) {
+    option(sdv.sdvsidl.method_description) = "Start or update a session \n"
+      "to receive location information in format of LocationReportT and \n"
+      "other reports like NMEA, SV report, SV measurement reports";
+  }
+  rpc StartPositionSessionEngineSpecificLocation (EngineSpecificLocationRequest)
+    returns (LocationResponse) {
+    option(sdv.sdvsidl.method_description) = "Start or update a session \n"
+      "which may provide default combined position report and position \n"
+      "reports from other engines in format of LocationReportT together \n"
+      "with NMEA, SV report, SV measurement reports";
+  }
+  rpc StopPositionSession (google.protobuf.Empty)
+    returns (LocationResponse) {
+    option(sdv.sdvsidl.method_description) = "Stop the ongoing \n"
+      "positioning session and de-register the callbacks of \n"
+      "previous startPositionSession";
+
+  }
+  rpc DeleteAidingData (LocationAidingDataDeletionMask)
+    returns (LocationResponse) {
+    option(sdv.sdvsidl.method_description) = "Request deletion of the \n"
+      "specified aiding data from all position engines on the device";
+
+  }
+  rpc ConfigConstellations (LocationGnssSvIdInfo)
+    returns (LocationResponse) {
+    option(sdv.sdvsidl.method_description) = "Blacklist some constellations \n"
+      "or subset of SVs from the constellation from being used by the GNSS \n"
+      "standard position engine (SPE) \n"
+      "Please note this API call is not incremental and the new setting \n"
+      "will completely overwrite the previous call. LocationGnssSvIdInfo \n"
+      "shall contain the complete list of blacklisted constellations and \n"
+      "blacklisted SVs. Constellations and SVs not specified in the \n"
+      "parameter will be considered to be allowed to get used by \n"
+      "GNSS standard position engine (SPE).";
+  }
+  rpc GetLocationCapabilities(google.protobuf.Empty)
+    returns (LocationCapabilities) {
+    option(sdv.sdvsidl.method_description) = "get Location capabilities \n"
+      " from Service. \n"
+      " Client can call this API to know the capabilities before \n"
+      " starting the session. ";
+  }
+
+}

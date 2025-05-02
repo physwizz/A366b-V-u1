@@ -1,0 +1,2637 @@
+/** Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+   SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+package com.qualcomm.qti.location
+
+/**
+    @description :
+        
+            
+**/
+typeCollection LocationTypes {
+    version { major 1 minor 0 }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration MapMatchingFeedbackDataValidityT {
+        /** MapMatchingFeedbackDataT is invalid   **/
+        MMFDVT_INVALID = 0
+        
+        /** MapMatchingFeedbackDataT has valid  utcTimestampMs   **/
+        MMFDVT_UTC_TIME = 1
+        
+        /** MapMatchingFeedbackDataT has valid  mapMatchedLatitudeDifference   **/
+        MMFDVT_LAT_DIFF = 2
+        
+        /** MapMatchingFeedbackDataT has valid  mapMatchedLongitudeDifference   **/
+        MMFDVT_LONG_DIFF = 4
+        
+        /** MapMatchingFeedbackDataT has valid  isTunnel value   **/
+        MMFDVT_TUNNEL = 8
+        
+        /** MapMatchingFeedbackDataT has valid  bearing   **/
+        MMFDVT_BEARING = 16
+        
+        /** MapMatchingFeedbackDataT has valid  altitude   **/
+        MMFDVT_ALTITUDE = 32
+        
+        /** MapMatchingFeedbackDataT has valid  horizontalAccuracy   **/
+        MMFDVT_HOR_ACC = 64
+        
+        /** MapMatchingFeedbackDataT has valid  altitudeAccuracy   **/
+        MMFDVT_ALT_ACC = 128
+        
+        /** MapMatchingFeedbackDataT has valid  bearingAccuracy   **/
+        MMFDVT_BEARING_ACC = 256
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration GnssReportCbInfoMaskT {
+        /** Unknown Capabilities Mask  **/
+        GRCIMT_UNKNOWN = 0
+        
+        /** Callback to receive LocationReportT. When there are multiple engines running on the system, 
+             the received Location is fused report from all engines. When there is only standard SPE engine 
+             running on the system, the received Location is from modem GNSS engine.  **/
+        GRCIMT_LOCATION_CB_INFO_BIT = 1
+        
+        /** Callback to receive GnssSv from modem GNSS engine.  **/
+        GRCIMT_SV_CB_INFO_BIT = 2
+        
+        /** Callback to receive NMEA sentences. NMEA will be generated from GnssSv and position report.
+             When there are multiple 
+             engines running on the system, position related NMEA sentences will be generated from 
+             the fused position report. 
+             When there is only SPE engine running on the system, position related NMEA sentences 
+             will be generated from the 
+             position report from modem GNSS engine report.  **/
+        GRCIMT_NMEA_CB_INFO_BIT = 4
+        
+        /** Callback to receive GnssDataT from modem GNSS engine.  **/
+        GRCIMT_DATA_CB_INFO_BIT = 8
+        
+        /** Callback to receive GnssMeasurementsT from modem GNSS engine.  **/
+        GRCIMT_MEAS_CB_INFO_BIT = 16
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint8
+    **/
+    enumeration LocationStatusT {
+        /** Unknown Response  **/
+        LOCATION_STATUS_T_UNKNOWN = 0
+        
+        /** Location Api call is successful  **/
+        LOCATION_STATUS_T_SUCCESS = 1
+        
+        /** Location Api call has failed  **/
+        LOCATION_STATUS_T_UNKOWN_FAILURE = 2
+        
+        /** Location Api call is not supported  **/
+        LOCATION_STATUS_T_NOT_SUPPORTED = 3
+        
+        /** Location Api call has invalid parameter  **/
+        LOCATION_STATUS_T_PARAM_INVALID = 4
+        
+        /** Location Api call timeout  **/
+        LOCATION_STATUS_T_TIMEOUT = 5
+        
+        /** Location Api is busy  **/
+        LOCATION_STATUS_T_REQUEST_ALREADY_IN_PROGRESS = 6
+        
+        /** System is not ready, e.g.: hal daemon is not yet ready  **/
+        LOCATION_STATUS_T_SYSTEM_NOT_READY = 7
+        
+        /** LCA doesn't support simultaneous tracking and batching session. Other session is ongoing  **/
+        LOCATION_STATUS_T_EXCLUSIVE_SESSION_IN_PROGRESS = 8
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint16
+    **/
+    enumeration LocReqEngineTypeMaskT {
+        /** Engine Mask Unknown  **/
+        LRETM_UNKNOWN = 0
+        
+        /** Mask to indicate that client requests the fused/default 
+             position via registering location_client::EngineLocations for the tracking session. 
+             The default position is the propagated/aggregated reports from all engines running 
+             on the system (e.g.: DR/SPE/PPE).  **/
+        LRETM_FUSED = 1
+        
+        /** Mask to indicate that client requests the unmodified SPE 
+             position via registering location_client::EngineLocations 
+             for the tracking session.  **/
+        LRETM_SPE = 2
+        
+        /** Mask to indicate that the client requests unmodified PPE 
+             position via registering location_client::EngineLocations 
+             for the tracking session.  **/
+        LRETM_PPE = 4
+        
+        /** Mask to indicate that the client requests unmodified VPE 
+             position via registering location_client::EngineLocations for the tracking session.  **/
+        LRETM_VPE = 8
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration EngineReportCbMaskT {
+        /** Unknown Capabilities Mask  **/
+        ERCMT_LOCATION_CB_INFO_UNKNOWN = 0
+        
+        /** Callback to receive LocationReportT from selected engines.  **/
+        ERCMT_LOCATION_CB_INFO_BIT = 1
+        
+        /** Callback to receive GnssSv from modem GNSS engine.  **/
+        ERCMT_SV_CB_INFO_BIT = 2
+        
+        /** Callback to receive NMEA sentences. NMEA will be generated from GnssSv 
+             and position report. When there are multiple 
+             engines running in the system, position related NMEA sentences will be 
+             generated from the fused position report. 
+             When there is only SPE engine running on the system, position related 
+             NMEA sentences will be generated from the 
+             position report from modem GNSS engine report.  **/
+        ERCMT_NMEA_CB_INFO_BIT = 4
+        
+        /** Callback to receive GnssDataT from modem GNSS engine.  **/
+        ERCMT_DATA_CB_INFO_BIT = 8
+        
+        /** Callback to receive GnssMeasurementsT from modem GNSS engine.  **/
+        ERCMT_MEAS_CB_INFO_BIT = 16
+        
+        /** Receive NMEA related to position report from all registered engines. 
+             The SV report will come from GNSS engine. Don't 
+             register both GnssNmea and EngineNmea at same time. If attempted, 
+             invalid error will be returned. Recommend to use 
+             EngineNmea.  **/
+        ERCMT_ENGINE_NMEA_CB_INFO_BIT = 32
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint16
+    **/
+    enumeration AidingDataDeletionMaskT {
+        /** Aiding Mask Unknown  **/
+        ADDMT_UNKNOWN = 0
+        
+        /** Mask to delete all aiding data from all position 
+             engines on the device  **/
+        ADDMT_ALL = 1
+        
+        /** Mask to delete ephemeris aiding data  **/
+        ADDMT_EPHEMERIS = 2
+        
+        /** Mask to delete calibration datafrom dead reckoning position engine.  **/
+        ADDMT_DR_SENSOR_CALIBRATION = 4
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint8
+    **/
+    enumeration GnssConstellationTypeT {
+        /** Unknown SV system  **/
+        GCTT_UNKNOWN = 0
+        
+        /** GLONASS SV system  **/
+        GCTT_GLONASS = 1
+        
+        /** QZSS SV system  **/
+        GCTT_QZSS = 2
+        
+        /** BEIDOU SV system  **/
+        GCTT_BEIDOU = 3
+        
+        /** GALILEO SV system  **/
+        GCTT_GALILEO = 4
+        
+        /** SBAS SV system  **/
+        GCTT_SBAS = 5
+        
+        /** NAVIC SV system   **/
+        GCTT_NAVIC = 6
+        
+        /** GPS SV system  **/
+        GCTT_GPS = 7
+        
+        /** Maximum constellatoin system   **/
+        GCTT_MAX = 7
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration LocationCapabilitiesMaskT {
+        /** Unknown Capabilities  **/
+        LCMT_UNKNOWN = 0
+        
+        /** Location Interface can support time-based tracking session via 
+             StartPositionSessionLocationReport() and 
+             StartPositionSessionEngineSpecificLocation   **/
+        LCMT_TIME_BASED_TRACKING_BIT = 1
+        
+        /** Location Interface  can support receiving GnssMeasurementsT data in 
+             GnssMeasurementReport when Location Client is in a 
+             positioning session.  **/
+        LCMT_GNSS_MEAS_BIT = 2
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration GnssMeasurementsClockFlagsMaskT {
+        /** Unknown Measurement Clock Flags  **/
+        GMCFMT_UNKNOWN = 0
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::leapSecond  **/
+        GMCFMT_LEAP_SECOND_BIT = 1
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::timeNs  **/
+        GMCFMT_TIME_BIT = 2
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::timeUncertaintyNs  **/
+        GMCFMT_TIME_UNCERTAINTY_BIT = 4
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::fullBiasNs  **/
+        GMCFMT_FULL_BIAS_BIT = 8
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::biasNs  **/
+        GMCFMT_BIAS_BIT = 16
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::biasUncertaintyNs  **/
+        GMCFMT_BIAS_UNCERTAINTY_BIT = 32
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::driftNsps  **/
+        GMCFMT_DRIFT_BIT = 64
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::driftUncertaintyNsps  **/
+        GMCFMT_DRIFT_UNCERTAINTY_BIT = 128
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::hwClockDiscontinuityCount  **/
+        GMCFMT_HW_CLOCK_DISCONTINUITY_COUNT_BIT = 256
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::elapsedRealTime  **/
+        GMCFMT_ELAPSED_REAL_TIME_BIT = 512
+        
+        /** GnssMeasurementsClockT has valid GnssMeasurementsClock::elapsedRealTimeUnc  **/
+        GMCFMT_ELAPSED_REAL_TIME_UNC_BIT = 1024
+        
+        /** GnssMeasurementsClock:: has valid GnssMeasurementsClock::elapsedgPTPTime  **/
+        GMCFMT_ELAPSED_GPTP_TIME_BIT = 2048
+        
+        /** GnssMeasurementsClock:: has valid GnssMeasurementsClock::elapsedgPTPTimeUnc  **/
+        GMCFMT_ELAPSED_GPTP_TIME_UNC_BIT = 4096
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration GnssMeasurementsDataFlagsMaskT {
+        /**  Unknown Measurement Data Flags  **/
+        GMDFMT_UNKNOWN = 0
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::svId.  **/
+        GMDFMT_SV_ID_BIT = 1
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::svType  **/
+        GMDFMT_SV_TYPE_BIT = 2
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::stateMask.  **/
+        GMDFMT_STATE_BIT = 4
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::receivedSvTimeNs and 
+             GnssMeasurementsData::receivedSvTimeSubNs  **/
+        GMDFMT_RECEIVED_SV_TIME_BIT = 8
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::receivedSvTimeUncertaintyNs.  **/
+        GMDFMT_RECVD_SV_TIME_UNC_BIT = 16
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::carrierToNoiseDbHz  **/
+        GMDFMT_CARRIER_TO_NOISE_BIT = 32
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::pseudorangeRateMps  **/
+        GMDFMT_PR_RATE_BIT = 64
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::pseudorangeRateUncertaintyMps  **/
+        GMDFMT_PR_RATE_UNC_BIT = 128
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::adrStateMask  **/
+        GMDFMT_ADR_STATE_BIT = 256
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::adrMeters  **/
+        GMDFMT_ADR_BIT = 512
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::adrUncertaintyMeters  **/
+        GMDFMT_ADR_UNC_BIT = 1024
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::carrierFrequencyHz  **/
+        GMDFMT_CARRIER_FREQ_BIT = 2048
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::carrierCycles  **/
+        GMDFMT_CARRIER_CYCLES_BIT = 4096
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::carrierPhase  **/
+        GMDFMT_CARRIER_PHASE_BIT = 8192
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::carrierPhaseUncertainty  **/
+        GMDFMT_CARRIER_PHASE_UNC_BIT = 16384
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::multipathIndicator.  **/
+        GMDFMT_MULTIPATH_IND_BIT = 32768
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::signalToNoiseRatioDb  **/
+        GMDFMT_SIGNAL_TO_NOISE_RATIO = 65536
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::agcLevelDb  **/
+        GMDFMT_AUTO_GAIN_CTRL_BIT = 131072
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::fullInterSignalBiasNs  **/
+        GMDFMT_FULL_ISB_BIT = 262144
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::fullInterSignalBiasUncertaintyNs  **/
+        GMDFMT_FULL_ISB_UNC_BIT = 524288
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::cycleslipCount  **/
+        GMDFMT_CYCLE_SLIP_COUNT_BIT = 1048576
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::gnssSignalType  **/
+        GMDFMT_GNSS_SIGNAL_TYPE_BIT = 2097152
+        
+        /** GnssMeasurementsDataT has valid GnssMeasurementsData::gnssSignalType  **/
+        GMDFMT_BASEBAND_CARRIER_TO_NOISE_BIT = 4194304
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint8
+    **/
+    enumeration GnssSvTypeT {
+        /** SV is of unknown constellation.   **/
+        GNSS_SV_TYPE_T_UNKNOWN = 0
+        
+        /** SV is of GPS constellation.  **/
+        GNSS_SV_TYPE_T_GPS = 1
+        
+        /** SV is of SBAS constellation.  **/
+        GNSS_SV_TYPE_T_SBAS = 2
+        
+        /** SV is of GLONASS constellation.  **/
+        GNSS_SV_TYPE_T_GLONASS = 3
+        
+        /** SV is of QZSS constellation.  **/
+        GNSS_SV_TYPE_T_QZSS = 4
+        
+        /** SV is of BEIDOU constellation.  **/
+        GNSS_SV_TYPE_T_BEIDOU = 5
+        
+        /** SV is of GALILEO constellation.  **/
+        GNSS_SV_TYPE_T_GALILEO = 6
+        
+        /** SV is of NAVIC constellation.  **/
+        GNSS_SV_TYPE_T_NAVIC = 7
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration GnssMeasurementsStateMaskT {
+        /** GNSS measurement state is unknown.  **/
+        GMSMT_UNKNOWN = 0
+        
+        /** GNSS measurement state is "code lock"  **/
+        GMSMT_CODE_LOCK = 1
+        
+        /** GNSS measurement state is "bit sync"  **/
+        GMSMT_BIT_SYNC = 2
+        
+        /** GNSS measurement state is "subframe sync"  **/
+        GMSMT_SUBFRAME_SYNC = 4
+        
+        /** GNSS measurement state is "tow decoded"  **/
+        GMSMT_TOW_DECODED = 8
+        
+        /** GNSS measurement state is "msec ambiguous"  **/
+        GMSMT_MSEC_AMBIGUOUS = 16
+        
+        /** GNSS measurement state is "symbol sync"  **/
+        GMSMT_SYMBOL_SYNC = 32
+        
+        /** GNSS measurement state is "GLONASS string sync"  **/
+        GMSMT_GLO_STRING_SYNC = 64
+        
+        /** GNSS measurement state is "GLONASS TOD decoded"  **/
+        GMSMT_GLO_TOD_DECODED = 128
+        
+        /** GNSS measurement state is "BDS D2 bit sync"  **/
+        GMSMT_BDS_D2_BIT_SYNC = 256
+        
+        /** GNSS measurement state is "BDS D2 subframe sync"  **/
+        GMSMT_BDS_D2_SUBFRAME_SYNC = 512
+        
+        /** GNSS measurement state is "Galileo E1BC code lock"  **/
+        GMSMT_GAL_E1BC_CODE_LOCK = 1024
+        
+        /** GNSS measurement state is "Galileo E1C second code lock"  **/
+        GMSMT_GAL_E1C_2ND_CODE_LOCK = 2048
+        
+        /** GNSS measurement state is "Galileo E1B page sync"  **/
+        GMSMT_GAL_E1B_PAGE_SYNC = 4096
+        
+        /** GNSS measurement state is "SBAS sync"  **/
+        GMSMT_SBAS_SYNC = 8192
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint16
+    **/
+    enumeration GnssMeasurementsAdrStateMaskT {
+        /** Accumulated delta range state is unknown  **/
+        GMASMT_STATE_UNKNOWN = 0
+        
+        /** Accumulated delta range state is valid  **/
+        GMASMT_STATE_VALID_BIT = 1
+        
+        /** Accumulated delta range state is reset  **/
+        GMASMT_STATE_RESET_BIT = 2
+        
+        /** Accumulated delta range state is cycle slip  **/
+        GMASMT_STATE_CYCLE_SLIP_BIT = 4
+        
+        /** Accumulated delta range state is half cycle resolved  **/
+        GMASMT_STATE_HALF_CYCLE_RESOLVED_BIT = 8
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint16
+    **/
+    enumeration GnssMeasurementsMultipathIndicatorT {
+        /** Multipath indicator is unknown  **/
+        GMMIT_UNKNOWN = 0
+        
+        /** Multipath indicator is present  **/
+        GMMIT_PRESENT = 1
+        
+        /** Multipath indicator is not present  **/
+        GMMIT_NOT_PRESENT = 2
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration GnssSignalTypeT {
+        /** Unknown Signal Type  **/
+        GSTT_UNKNOWN = 0
+        
+        /** GNSS signal is of GPS L1CA RF band  **/
+        GSTT_GPS_L1CA_BIT = 1
+        
+        /** GNSS signal is of GPS L1C RF band  **/
+        GSTT_GPS_L1C_BIT = 2
+        
+        /** GNSS signal is of GPS L2 RF band  **/
+        GSTT_GPS_L2_BIT = 3
+        
+        /** GNSS signal is of GPS L5 RF band  **/
+        GSTT_GPS_L5_BIT = 4
+        
+        /** GNSS signal is of GLONASS G1 (L1OF) RF band  **/
+        GSTT_GLONASS_G1_BIT = 5
+        
+        /** GNSS signal is of GLONASS G2 (L2OF) RF band  **/
+        GSTT_GLONASS_G2_BIT = 6
+        
+        /** GNSS signal is of GALILEO E1 RF band  **/
+        GSTT_GALILEO_E1_BIT = 7
+        
+        /** GNSS signal is of GALILEO E5A RF band  **/
+        GSTT_GALILEO_E5A_BIT = 8
+        
+        /** GNSS signal is of GALILEO E5B RF band  **/
+        GSTT_GALILEO_E5B_BIT = 9
+        
+        /** GNSS signal is of BEIDOU B1 RF band  **/
+        GSTT_BEIDOU_B1_BIT = 10
+        
+        /** GNSS signal is of BEIDOU B2 RF band  **/
+        GSTT_BEIDOU_B2_BIT = 11
+        
+        /** GNSS signal is of QZSS L1CA RF band  **/
+        GSTT_QZSS_L1CA_BIT = 12
+        
+        /** GNSS signal is of QZSS L1S RF band  **/
+        GSTT_QZSS_L1S_BIT = 13
+        
+        /** GNSS signal is of QZSS L2 RF band  **/
+        GSTT_QZSS_L2_BIT = 14
+        
+        /** GNSS signal is of QZSS L5 RF band  **/
+        GSTT_QZSS_L5_BIT = 15
+        
+        /** GNSS signal is of SBAS L1 RF band  **/
+        GSTT_SBAS_L1_BIT = 16
+        
+        /** GNSS signal is of BEIDOU B1I RF band  **/
+        GSTT_BEIDOU_B1I_BIT = 17
+        
+        /** GNSS signal is of BEIDOU B1C RF band  **/
+        GSTT_BEIDOU_B1C_BIT = 18
+        
+        /** GNSS signal is of BEIDOU B2I RF band  **/
+        GSTT_BEIDOU_B2I_BIT = 19
+        
+        /** GNSS signal is of BEIDOU B2AI RF band  **/
+        GSTT_BEIDOU_B2AI_BIT = 20
+        
+        /** GNSS signal is of NAVIC L5 RF band  **/
+        GSTT_NAVIC_L5_BIT = 21
+        
+        /** GNSS signal is of BEIDOU B2A_Q RF band  **/
+        GSTT_BEIDOU_B2AQ_BIT = 22
+        
+        /** GNSS signal is of BEIDOU B2B_I RF band  **/
+        GSTT_BEIDOU_B2BI_BIT = 23
+        
+        /** GNSS signal is of BEIDOU B2B_Q RF band  **/
+        GSTT_BEIDOU_B2BQ_BIT = 24
+        
+        /** GNSS signal is of NAVIC L1 RF band  **/
+        GSTT_NAVIC_L1_BIT = 25
+        
+        /** Maximum number of signal types  **/
+        GSTT_MAX_NUMBER_OF_SIGNAL_TYPES = 25
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration LocationFlagsMaskT {
+        /** Unknown Flags  **/
+        LFMT_UNKNOWN = 0
+        
+        /** Location has valid Location::latitude and Location::longitude  **/
+        LFMT_HAS_LAT_LONG_BIT = 1
+        
+        /** Location has valid Location::altitude  **/
+        LFMT_HAS_ALTITUDE_BIT = 2
+        
+        /** Location has valid Location::speed  **/
+        LFMT_HAS_SPEED_BIT = 4
+        
+        /** Location has valid Location::bearing  **/
+        LFMT_HAS_BEARING_BIT = 8
+        
+        /** Location has valid Location::horizontalAccuracy  **/
+        LFMT_HAS_ACCURACY_BIT = 16
+        
+        /** Location has valid Location::verticalAccuracy  **/
+        LFMT_HAS_VERTICAL_ACCURACY_BIT = 32
+        
+        /** Location has valid Location::speedAccuracy  **/
+        LFMT_HAS_SPEED_ACCURACY_BIT = 64
+        
+        /** Location has valid Location::bearingAccuracy  **/
+        LFMT_HAS_BEARING_ACCURACY_BIT = 128
+        
+        /** Location has valid Location::timestamp  **/
+        LFMT_HAS_TIMESTAMP_BIT = 256
+        
+        /** Location has valid Location::elapsedRealTime  **/
+        LFMT_HAS_ELAPSED_REAL_TIME_BIT = 512
+        
+        /** Location has valid Location::elapsedRealTimeUnc  **/
+        LFMT_ELAPSED_REAL_TIME_UNC_BIT = 1024
+        
+        /** Location has valid Location::timeUncMs  **/
+        LFMT_HAS_TIME_UNC_BIT = 2048
+        
+        /** Location has valid Location::elapsedPTPTime  **/
+        LFMT_HAS_ELAPSED_PTP_TIME_BIT = 4096
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration LocationTechnologyMaskT {
+        /** Unknown Tech Mask  **/
+        LTMT_UNKNOWN = 0
+        
+        /** GNSS-based technology was used to calculate Location  **/
+        LTMT_GNSS_BIT = 1
+        
+        /** Cell-based technology was used to calculate Location  **/
+        LTMT_CELL_BIT = 2
+        
+        /** WiFi-based technology was used to calculate Location  **/
+        LTMT_WIFI_BIT = 4
+        
+        /** Sensor-based technology was used to calculate Location  **/
+        LTMT_SENSORS_BIT = 8
+        
+        /** Reference location was used to calculate Location  **/
+        LTMT_REF_LOC_BIT = 16
+        
+        /** Coarse position injected into the location engine was used to calculate Location  **/
+        LTMT_INJECTED_COARSE_POS_BIT = 32
+        
+        /** AFLT was used to calculate Location  **/
+        LTMT_AFLT_BIT = 64
+        
+        /** GNSS and network-provided measurements were used to calculate Location  **/
+        LTMT_HYBRID_BIT = 128
+        
+        /** Precise position engine was used to calculate Location  **/
+        LTMT_PPE_BIT = 256
+        
+        /** Vehicular data was used to calculate Location  **/
+        LTMT_VEH_BIT = 512
+        
+        /** Visual data was used to calculate Location  **/
+        LTMT_VIS_BIT = 1024
+        
+        /** Propagation logic was used to calculate Location  **/
+        LTMT_PROPAGATED_BIT = 2048
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration LocationReportFlagMaskT {
+        /** Location Info Flags unknown  **/
+        LRFMT_UNKNOWN = 0
+        
+        /** LocationReportT has valid LocationReportT::altitudeMeanSeaLevel.  **/
+        LRFMT_ALTITUDE_MEAN_SEA_LEVEL = 1
+        
+        /** LocationReportT has valid DOP fields (pdop, hdop, vdop)  **/
+        LRFMT_DOP = 2
+        
+        /** LocationReportT has valid LocationReportT::magneticDeviation.  **/
+        LRFMT_MAGNETIC_DEVIATION = 4
+        
+        /** LocationReportT has valid LocationReportT::horReliability.  **/
+        LRFMT_HOR_RELIABILITY = 8
+        
+        /** LocationReportT has valid LocationReportT::verReliability.  **/
+        LRFMT_VER_RELIABILITY = 16
+        
+        /** LocationReportT has valid LocationReportT::horUncEllipseSemiMajor.  **/
+        LRFMT_HOR_ACCURACY_ELIP_SEMI_MAJOR = 32
+        
+        /** LocationReportT has valid LocationReportT::horUncEllipseSemiMinor.  **/
+        LRFMT_HOR_ACCURACY_ELIP_SEMI_MINOR = 64
+        
+        /** LocationReportT has valid LocationReportT::horUncEllipseOrientAzimuth.  **/
+        LRFMT_HOR_ACCURACY_ELIP_AZIMUTH = 128
+        
+        /** LocationReportT has valid LocationReportT::svUsedInPosition and LocationReportT::measUsageInfo.  **/
+        LRFMT_GNSS_SV_USED_DATA = 256
+        
+        /** LocationReportT has valid LocationReportT::navSolutionMask.  **/
+        LRFMT_NAV_SOLUTION_MASK_BIT = 512
+        
+        /** LocationReportT has valid LocationReportT::posTechMask.  **/
+        LRFMT_GNSS_LOCATION_INFO_POS_TECH_MASK = 1024
+        
+        /** LocationReportT has valid LocationReportT::altitudeMeanSeaLevel.  **/
+        LRFMT_POS_DYNAMICS_DATA = 2048
+        
+        /** LocationReportT has valid LocationReportT::gdop and LocationReportT::tdop.  **/
+        LRFMT_EXT_DOP = 4096
+        
+        /** LocationReportT has valid LocationReportT::northStdDeviation.  **/
+        LRFMT_NORTH_STD_DEV = 8192
+        
+        /** LocationReportT has valid LocationReportT::eastStdDeviation.  **/
+        LRFMT_EAST_STD_DEV = 16384
+        
+        /** LocationReportT has valid LocationReportT::northVelocity.  **/
+        LRFMT_NORTH_VEL = 32768
+        
+        /** LocationReportT has valid LocationReportT::eastVelocity.  **/
+        LRFMT_EAST_VEL = 65536
+        
+        /** LocationReportT has valid LocationReportT::upVelocity.  **/
+        LRFMT_UP_VEL = 131072
+        
+        /** LocationReportT has valid LocationReportT::northVelocityStdDeviation.  **/
+        LRFMT_NORTH_VEL_UNC = 262144
+        
+        /** LocationReportT has valid LocationReportT::eastVelocityStdDeviation.  **/
+        LRFMT_EAST_VEL_UNC = 524288
+        
+        /** LocationReportT has valid LocationReportT::upVelocityStdDeviation.  **/
+        LRFMT_UP_VEL_UNC = 1048576
+        
+        /** LocationReportT has valid LocationReportT::leapSeconds.  **/
+        LRFMT_LEAP_SECONDS = 2097152
+        
+        /** LocationReportT has valid LocationReportT::numSvUsedInPosition.  **/
+        LRFMT_NUM_SV_USED_IN_POS = 4194304
+        
+        /** LocationReportT has valid LocationReportT::calibrationConfidencePercent.  **/
+        LRFMT_CALIB_CONFIDENCE_PERCENT = 8388608
+        
+        /** LocationReportT has valid LocationReportT::calibrationStatus.  **/
+        LRFMT_CALIB_STATUS = 16777216
+        
+        /** LocationReportT has valid LocationReportT::locOutputEngType.  **/
+        LRFMT_OUTPUT_ENG_TYPE = 33554432
+        
+        /** LocationReportT has valid LocationReportT::locOutputEngMask.  **/
+        LRFMT_OUTPUT_ENG_MASK = 67108864
+        
+        /** LocationReportT has valid LocationReportT::conformityIndex.  **/
+        LRFMT_CONFORMITY_INDEX = 134217728
+        
+        /** LocationReportT has valid LocationReportT::llaVRPBased.  **/
+        LRFMT_LLA_VRP_BASED = 268435456
+        
+        /** LocationReportT has valid LocationReportT::enuVelocityVRPBased.  **/
+        LRFMT_ENU_VEL_VRP_BASED = 536870912
+        
+        /** LocationReportT has valid LocationReportT::drSolutionStatusMask.  **/
+        LRFMT_DR_SOL_STATUS_MASK = 1073741824
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint8
+    **/
+    enumeration LocationReliabilityT {
+        /** LocationReportT reliability is not set.  **/
+        LOCATION_RELIABILIT_T_NOT_SET = 0
+        
+        /** LocationReportT reliability is very low. Use it at your own risk.  **/
+        LOCATION_RELIABILIT_T_VERY_LOW = 1
+        
+        /** LocationReportT reliability is low. Little or no cross-checking is possible  **/
+        LOCATION_RELIABILIT_T_LOW = 2
+        
+        /** LocationReportT reliability is medium. Limited cross-check has passed  **/
+        LOCATION_RELIABILIT_T_MEDIUM = 3
+        
+        /** LocationReportT reliability is high. Strong cross-check passed.  **/
+        LOCATION_RELIABILIT_T_HIGH = 4
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration LocationReportNavSolutionMaskT {
+        /** Unknown NavSolution Mask  **/
+        LRNSMT_UNKNOWN = 0
+        
+        /** SBAS ionospheric correction was used to calculate LocationReportT  **/
+        LRNSMT_SBAS_CORR_IONO = 1
+        
+        /** SBAS fast correction was used to calculate LocationReportT  **/
+        LRNSMT_SBAS_CORR_FAST = 2
+        
+        /** SBAS long-term correction was used to calculate LocationReportT  **/
+        LRNSMT_SBAS_CORR_LONG = 4
+        
+        /** SBAS integrity information was used to calculate LocationReportT  **/
+        LRNSMT_SBAS_INTEGRITY = 8
+        
+        /** DGNSS correction was used to calculate LocationReportT  **/
+        LRNSMT_NAV_CORR_DGNSS = 16
+        
+        /** RTK correction was used to calculate LocationReportT  **/
+        LRNSMT_NAV_CORR_RTK = 32
+        
+        /** PPP correction was used to calculate LocationReportT  **/
+        LRNSMT_NAV_CORR_PPP = 64
+        
+        /** RTK fixed correction was used to to calculate LocationReportT  **/
+        LRNSMT_NAV_CORR_RTK_FIX = 128
+        
+        /** Only SBAS corrected SVs was used to calculate LocationReportT  **/
+        LRNSMT_NAV_CORR_ONLY_SBAS_CORR_SV_USED = 256
+        
+        /** MMF data aiding was used to calculate LocationReportT  **/
+        LRNSMT_NAV_CORR_MMF_AIDED = 512
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration LocationReportPosDataMaskT {
+        /** Unknown Position Data Mask  **/
+        LRPDMT_UNKNOWN = 0
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::longAccel  **/
+        LRPDMT_NAV_DATA_LONG_ACCEL = 1
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::latAccel  **/
+        LRPDMT_NAV_DATA_LAT_ACCEL = 2
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::vertAccel  **/
+        LRPDMT_NAV_DATA_VERT_ACCEL = 4
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::yawRate  **/
+        LRPDMT_NAV_DATA_YAW_RATE = 8
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::pitch  **/
+        LRPDMT_NAV_DATA_PITCH = 16
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::longAccelUnc  **/
+        LRPDMT_NAV_DATA_LONG_ACCEL_UNC = 32
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::latAccelUnc  **/
+        LRPDMT_NAV_DATA_LAT_ACCEL_UNC = 64
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::vertAccelUnc  **/
+        LRPDMT_NAV_DATA_VERT_ACCEL_UNC = 128
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::yawRateUnc  **/
+        LRPDMT_NAV_DATA_YAW_RATE_UNC = 256
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::pitchUnc  **/
+        LRPDMT_NAV_DATA_PITCH_UNC = 512
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::pitchRate  **/
+        LRPDMT_NAV_DATA_PITCH_RATE = 1024
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::pitchRateUnc  **/
+        LRPDMT_NAV_DATA_PITCH_RATE_UNC = 2048
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::roll  **/
+        LRPDMT_NAV_DATA_ROLL = 4096
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::rollUnc  **/
+        LRPDMT_NAV_DATA_ROLL_UNC = 8192
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::rollRate  **/
+        LRPDMT_NAV_DATA_ROLL_RATE = 16384
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::rollRateUnc  **/
+        LRPDMT_NAV_DATA_ROLL_RATE_UNC = 32768
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::yaw  **/
+        LRPDMT_NAV_DATA_YAW = 65536
+        
+        /** LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::yawUnc  **/
+        LRPDMT_NAV_DATA_YAW_UNC = 131072
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint8
+    **/
+    enumeration GnssLocSvSystemTypeT {
+        /** SV is of Unknown constellation.  **/
+        GLSSTT_UNKNOWN = 0
+        
+        /** SV is of GPS constellation.  **/
+        GLSSTT_GPS = 1
+        
+        /** SV is of GALILEO constellation.  **/
+        GLSSTT_GAL = 2
+        
+        /** SV is of SBAS constellation.  **/
+        GLSSTT_SBAS = 3
+        
+        /** SV is of GLONASS constellation.  **/
+        GLSSTT_GLO = 4
+        
+        /** SV is of BDS constellation.  **/
+        GLSSTT_BDS = 5
+        
+        /** SV is of QZSS constellation.  **/
+        GLSSTT_QZSS = 6
+        
+        /** SV is of NAVIC constellation.  **/
+        GLSSTT_NAVIC = 7
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration GnssSystemTimeStructTypeFlagsT {
+        /** GnssSystemTimeStructTypeT is invalid  **/
+        GSTSTFT_INVALID = 0
+        
+        /** GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::systemWeek.  **/
+        GSTSTFT_WEEK_VALID = 1
+        
+        /** GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::systemMsec.  **/
+        GSTSTFT_WEEK_MS_VALID = 2
+        
+        /** GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::systemClkTimeBias.  **/
+        GSTSTFT_CLK_TIME_BIAS_VALID = 4
+        
+        /** GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::systemClkTimeUncMs.  **/
+        GSTSTFT_CLK_TIME_BIAS_UNC_VALID = 8
+        
+        /** GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::refFCount.  **/
+        GSTSTFT_REF_FCOUNT_VALID = 16
+        
+        /** GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::numClockResets.  **/
+        GSTSTFT_NUM_CLOCK_RESETS_VALID = 32
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration GnssGloTimeStructTypeFlagsT {
+        /** GnssGloTimeStructTypeT is invalid  **/
+        GGTSTFT_INVALID = 0
+        
+        /** GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloDays.  **/
+        GGTSTFT_DAYS_VALID = 1
+        
+        /** GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloMsec.  **/
+        GGTSTFT_MSEC_VALID = 2
+        
+        /** GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloClkTimeBias.  **/
+        GGTSTFT_CLK_TIME_BIAS_VALID = 4
+        
+        /** GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloClkTimeUncMs.  **/
+        GGTSTFT_CLK_TIME_BIAS_UNC_VALID = 8
+        
+        /** GnssGloTimeStructTypeT has valid GnssGloTimeStructType::refFCount.  **/
+        GGTSTFT_REF_FCOUNT_VALID = 16
+        
+        /** GnssGloTimeStructTypeT has valid GnssGloTimeStructType::numClockResets.  **/
+        GGTSTFT_NUM_CLK_RESETS_VALID = 32
+        
+        /** GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloClkTimeBias.  **/
+        GGTSTFT_FOUR_YEAR_VALID = 64
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration DrCalibrationStatusMaskT {
+        /** Unknown calibration  **/
+        DCSMT_UNKNOWN = 0
+        
+        /** Indicate that roll calibration is neededNeed to take more turns on level ground.  **/
+        DCSMT_ROLL_CALIB_NEEDED = 1
+        
+        /** Indicate that pitch calibration is needed.Need to take more turns on level ground.  **/
+        DCSMT_PITCH_CALIB_NEEDED = 2
+        
+        /** Indicate that yaw calibration is needed.Need to accelerate in a straight line.  **/
+        DCSMT_YAW_CALIB_NEEDED = 4
+        
+        /** Indicate that odo calibration is needed.Need to accelerate in a straight line.  **/
+        DCSMT_ODO_CALIB_NEEDED = 8
+        
+        /** Indicate that gyro calibration is needed.Need to take more turns on level ground.  **/
+        DCSMT_GYRO_CALIB_NEEDED = 16
+        
+        /** Lot more turns on level ground needed  **/
+        DCSMT_TURN_CALIB_LOW = 32
+        
+        /** Some more turns on level ground needed  **/
+        DCSMT_TURN_CALIB_MED = 64
+        
+        /** Sufficient turns on level ground observed  **/
+        DCSMT_TURN_CALIB_HIGH = 128
+        
+        /** Lot more accelerations in straight line needed  **/
+        DCSMT_LINEAR_ACCEL_CALIB_LOW = 256
+        
+        /** Some more accelerations in straight line needed  **/
+        DCSMT_LINEAR_ACCEL_CALIB_MED = 512
+        
+        /** Sufficient acceleration events in straight line observed  **/
+        DCSMT_LINEAR_ACCEL_CALIB_HIGH = 1024
+        
+        /** Lot more motion in straight line needed  **/
+        DCSMT_LINEAR_MOTION_CALIB_LOW = 2048
+        
+        /** Some more motion in straight line needed  **/
+        DCSMT_LINEAR_MOTION_CALIB_MED = 4096
+        
+        /** Sufficient motion events in straight line observed  **/
+        DCSMT_LINEAR_MOTION_CALIB_HIGH = 8192
+        
+        /** Lot more stationary events on level ground needed  **/
+        DCSMT_STATIC_CALIB_LOW = 16384
+        
+        /** Some more stationary events on level ground needed  **/
+        DCSMT_STATIC_CALIB_MED = 32768
+        
+        /** Sufficient stationary events on level ground observed  **/
+        DCSMT_STATIC_CALIB_HIGH = 65536
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint8
+    **/
+    enumeration LocOutputEngineTypeT {
+        /** Unknown Engine Type  **/
+        LOETT_UNKNOWN = 0
+        
+        /** This is the propagated/aggregated report from the fixes of 
+             all engines running on the system (e.g.: DR/SPE/PPE).  **/
+        LOETT_FUSED = 1
+        
+        /** This fix is the unmodified fix from modem GNSS engine.  **/
+        LOETT_SPE = 2
+        
+        /** This is the unmodified fix from PPE engine.  **/
+        LOETT_PPE = 3
+        
+        /** This is the unmodified fix from VPE engine.  **/
+        LOETT_VPE = 4
+        
+        /** This is the entry count of this enum.  **/
+        LOETT_COUNT = 4
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint16
+    **/
+    enumeration PositioningEngineMaskT {
+        /** Position Engine Mask Unknown  **/
+        PEMT_UNKNOWN = 0
+        
+        /** Mask for standard GNSS position engine.  **/
+        PEMT_STANDARD_POSITIONING_ENGINE = 1
+        
+        /** Mask for dead reckoning position engine.  **/
+        PEMT_DEAD_RECKONING_ENGINE = 2
+        
+        /** Mask for precise position engine.  **/
+        PEMT_PRECISE_POSITIONING_ENGINE = 4
+        
+        /** Mask for vpe engine.  **/
+        PEMT_VP_POSITIONING_ENGINE = 8
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration DrSolutionStatusMaskT {
+        /**  DR Soultion Status Unknown   **/
+        DSSMT_UNKNOWN = 0
+        
+        /**  Vehicle sensor speed input was detected by the DR position engine.   **/
+        DSSMT_VEHICLE_SENSOR_SPEED_INPUT_DETECTED = 1
+        
+        /**  Vehicle sensor speed input was used by the DR position engine.  **/
+        DSSMT_VEHICLE_SENSOR_SPEED_INPUT_USED = 2
+        
+        /**  DRE solution disengaged due to insufficient calibration  **/
+        DSSMT_WARNING_UNCALIBRATED = 4
+        
+        /**  DRE solution disengaged due to bad GNSS quality   **/
+        DSSMT_WARNING_GNSS_QUALITY_INSUFFICIENT = 8
+        
+        /**  DRE solution disengaged as ferry condition detected   **/
+        DSSMT_WARNING_FERRY_DETECTED = 16
+        
+        /**  DRE solution disengaged as 6DOF sensor inputs not available  **/
+        DSSMT_ERROR_6DOF_SENSOR_UNAVAILABLE = 32
+        
+        /**  DRE solution disengaged as vehicle speed inputs not available   **/
+        DSSMT_ERROR_VEHICLE_SPEED_UNAVAILABLE = 64
+        
+        /**  DRE solution disengaged as Ephemeris info not available   **/
+        DSSMT_ERROR_GNSS_EPH_UNAVAILABLE = 128
+        
+        /**  DRE solution disengaged as GNSS measurement info not available   **/
+        DSSMT_ERROR_GNSS_MEAS_UNAVAILABLE = 256
+        
+        /**  DRE solution disengaged due non-availability of stored position from previous session   **/
+        DSSMT_WARNING_INIT_POSITION_INVALID = 512
+        
+        /**  DRE solution disengaged due to vehicle motion detected at session start   **/
+        DSSMT_WARNING_INIT_POSITION_UNRELIABLE = 1024
+        
+        /**  DRE solution disengaged due to unreliable position   **/
+        DSSMT_WARNING_POSITON_UNRELIABLE = 2048
+        
+        /**  DRE solution disengaged due to a generic error   **/
+        DSSMT_ERROR_GENERIC = 4096
+        
+        /**  DRE solution disengaged due to Sensor Temperature being out of range   **/
+        DSSMT_WARNING_SENSOR_TEMP_OUT_OF_RANGE = 8192
+        
+        /**  DRE solution disengaged due to insufficient user dynamics   **/
+        DSSMT_WARNING_USER_DYNAMICS_INSUFFICIENT = 16384
+        
+        /**  DRE solution disengaged due to inconsistent factory data   **/
+        DSSMT_WARNING_FACTORY_DATA_INCONSISTENT = 32768
+        
+        /**  DRE did not recieve any recent map matching feedback data   **/
+        DSSMT_WARNING_MMF_UNAVAILABLE = 65536
+        
+        /**  Map matching feedback is available for DRE but is not usable   **/
+        DSSMT_WARNING_MMF_NOT_USABLE = 131072
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration LocationReportExtendedFlagMaskT {
+        /** Location Info Extended Flags unknown  **/
+        LREFMT_UNKNOWN = 0
+        
+        /** LocationReportT has valid LocationReportT::altitudeAssumed.  **/
+        LREFMT_ALTITUDE_ASSUMED = 1
+        
+        /** LocationReportT has valid LocationReportT::sessionStatus.  **/
+        LREFMT_SESSION_STATUS = 2
+        
+        /** LocationReportT has valid LocationReportT::integrityRiskUsed.  **/
+        LREFMT_INTEGRITY_RISK_USED = 4
+        
+        /** LocationReportT has valid LocationReportT::protectAlongTrack.  **/
+        LREFMT_PROTECT_ALONG_TRACK = 8
+        
+        /** LocationReportT has valid LocationReportT::protectCrossTrack.  **/
+        LREFMT_PROTECT_CROSS_TRACK = 16
+        
+        /** LocationReportT has valid LocationReportT::protectVertical.  **/
+        LREFMT_PROTECT_VERTICAL = 32
+        
+        /** LocationReportT has valid LocationReportT::dgnssStationId.  **/
+        LREFMT_DGNSS_STATION_ID = 64
+        
+        /** LocationReportT has valid LocationReportT::elapsedgPTPTime.  **/
+        LREFMT_GPTP_TIME_BIT = 128
+        
+        /** LocationReportT has valid LocationReportT::elapsedgPTPTimeUnc.  **/
+        LREFMT_GPTP_TIME_UNC_BIT = 256
+        
+        /** LocationReportT has valid LocationReportT::baseLineLength.  **/
+        LREFMT_BASE_LINE_LENGTH_BIT = 512
+        
+        /** LocationReportT has valid LocationReportT::ageMsecOfCorrections.  **/
+        LREFMT_AGE_OF_CORRECTION_BIT = 1024
+        
+        /** LocationReportT has valid LocationReportT::posReportingInterval.  **/
+        LREFMT_REPORT_INTERVAL_BIT = 2048
+        
+        /** LocationReportT has valid LocationReportT::leapSecondsUnc.  **/
+        LREFMT_LEAP_SECONDS_UNC_BIT = 4096
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint8
+    **/
+    enumeration LocSessionStatusT {
+        /**  Session Status is unknown   **/
+        LSS_UNKNOWN = 0
+        
+        /**  Session is successful.   **/
+        LSS_SUCCESS = 1
+        
+        /** Session is still in progress, the reported has not yet 
+             achieved the needed criteria.   **/
+        LSS_INTERMEDIATE = 2
+        
+        /**  Session has failed.   **/
+        LSS_FAILURE = 3
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint32
+    **/
+    enumeration GnssSvOptionsMaskT {
+        /** Ephemeris is Unknown for this SV  **/
+        GSOMT_UNKNOWN = 0
+        
+        /** Ephemeris is available for this SV  **/
+        GSOMT_HAS_EPHEMER_BIT = 1
+        
+        /** Almanac is available for this SV  **/
+        GSOMT_HAS_ALMANAC_BIT = 2
+        
+        /** This SV is used in the position fix that has output engine type set to LOETT_SPE  **/
+        GSOMT_HAS_USED_IN_FIX_BIT = 4
+        
+        /** This SV has valid GnssSv::carrierFrequencyHz  **/
+        GSOMT_HAS_CARRIER_FREQ_BIT = 8
+        
+        /** This SV has valid GnssSv::gnssSignalTypeMask  **/
+        GSOMT_HAS_GNSS_SIGNAL_TYPE_BIT = 16
+        
+        /** This SV has valid GnssSv::basebandCarrierToNoiseDbHz  **/
+        GSOMT_HAS_BASEBAND_CARRIER_TO_NOISE_BIT = 32
+        
+        /** This SV has valid GnssSv::elevation  **/
+        GSOMT_HAS_ELEVATION_BIT = 64
+        
+        /** This SV has valid GnssSv::azimuth  **/
+        GSOMT_HAS_AZIMUTH_BIT = 128
+            
+    }
+    
+    /**
+        @description :
+            
+        @experimental: type : uint16
+    **/
+    enumeration GnssDataMaskT {
+        /**  Unknown Data indication   **/
+        GDMT_UNKNOWN = 0
+        
+        /**  Jammer Indicator is available.  **/
+        GDMT_JAMMER_IND_BIT = 1
+        
+        /**  AGC is available.   **/
+        GDMT_AGC_BIT = 2
+            
+    }
+    
+        
+    
+    /**
+        @description :
+
+    **/
+    struct MapMatchingFeedbackDataT {
+        /**
+            @description : Validity fields for MMF data fields to follow 
+             Flags defined using enum MapMatchingFeedbackDataValidityT  
+        **/
+        UInt32 validityMask
+        
+        /**
+            @description : Unix epoch time of the location fix for which map-match 
+             feedback is being sent, since the start of the Unix epoch (00:00:00 January 1, 1970 UTC).  Unit: Milli-seconds  
+        **/
+        UInt64 utcTimestampMs
+        
+        /**
+            @description : Latitude difference = map matched latitude - reported latitude 
+             Unit: Degrees  Range: [-90.0, 90.0]  
+        **/
+        Double mapMatchedLatitudeDifference
+        
+        /**
+            @description : Longitude difference = map matched longitude - reported longitude 
+              Unit: Degrees   Range: [-180.0, 180.0]  
+        **/
+        Double mapMatchedLongitudeDifference
+        
+        /**
+            @description : Bearing: The horizontal direction of travel of the device with 
+             respect to north and is unrelated to the device orientation. 
+              Unit: Degrees 
+              range: [0, 360)  
+        **/
+        Float bearing
+        
+        /**
+            @description : Absolute Altitude above the WGS 84 reference ellipsoid 
+              Unit: meters  
+        **/
+        Double altitude
+        
+        /**
+            @description : Horizontal accuracy radius defined with the 
+              68th percentile confidence level 
+              Unit: meter 
+              Range: 0 or greater  
+        **/
+        Float horizontalAccuracy
+        
+        /**
+            @description : Altitude accuracy. Defined with 68% confidence level. 
+              Unit:meter 
+              Range: 0 or greater  
+        **/
+        Float altitudeAccuracy
+        
+        /**
+            @description : Estimated bearing accuracy defined with 
+              68 percentile confidence level (1 sigma) 
+              Unit: Degrees 
+              Range [0, 360)  
+        **/
+        Float bearingAccuracy
+        
+        /**
+            @description : Road Type. Decision to use the MMF data depends on isTunnel 
+              Value: True or False 
+        **/
+        Boolean isTunnel
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationReportRequest {
+        /**
+            @description :  Time between fixes, or TBF, in milliseconds. 
+        **/
+        UInt32 intervalInMs
+        
+        /**
+            @description :  Specify the mask to receive the reports when invoking 
+             StartPositionSessionLocationReport()  
+        **/
+        UInt32 gnssReportCallbackMask
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationResponse {
+        /**
+            @description :  Location status code defined in LocationStatusT  
+        **/
+        LocationStatusT status
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct EngineSpecificLocationRequest {
+        /**
+            @description :  Time between fixes, or TBF, in milliseconds. 
+        **/
+        UInt32 intervalInMs
+        
+        /**
+            @description :  Specify the set of engines whose position reports are requested 
+             via StartPositionSessionEngineSpecificLocation() 
+        **/
+        UInt32 locReqEngMask
+        
+        /**
+            @description :  Specify the set of callback masks to receive the reports when 
+             invoking StartPositionSessionEngineSpecificLocation() 
+        **/
+        UInt32 engReportCallbackMask
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationAidingDataDeletionMask {
+        /**
+            @description :  Mask used to specify the set of aiding data that can be 
+             deleted via DeleteAidingData()  
+        **/
+        UInt32 deleteMask
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssSvIdInfoT {
+        /**
+            @description : constellation for the sv 
+        **/
+        GnssConstellationTypeT constellation
+        
+        /**
+            @description : sv id range for the constellation: 
+             GLONASS SV id range: 65 to 96 
+             QZSS SV id range: 193 to 197 
+             BDS SV id range: 201 to 263 
+             GAL SV id range: 301 to 336 
+             SBAS SV id range: 120 to 158 and 183 to 191 
+             NAVIC SV id range: 401 to 414 
+        **/
+        UInt32 svId
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationGnssSvIdInfo {
+        /**
+            @description : None 
+            @experimental : repeated_field_max_count: 176
+        **/
+        GnssSvIdInfoT [] svList
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationCapabilities {
+        /**
+            @description :  Location capabilities information 
+        **/
+        UInt32 capabilitiesMask
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssMeasurementsClockT {
+        /**
+            @description : Bitwise OR of GnssMeasurementsClockFlagsMask. 
+             Contains GnssMeasurementsClockFlagsMaskT bits 
+        **/
+        UInt32 flags
+        
+        /**
+            @description : Leap second, in unit of seconds. 
+             deployment to be mapped to int16 
+        **/
+        Int32 leapSecond
+        
+        /**
+            @description : Time, monotonically increasing as long as the power is on, 
+             in unit of nanoseconds 
+        **/
+        Int64 timeNs
+        
+        /**
+            @description : Time uncertainty (one sigma), in unit of nanoseconds 
+        **/
+        Double timeUncertaintyNs
+        
+        /**
+            @description : Full bias, in uint of nanoseconds 
+        **/
+        Int64 fullBiasNs
+        
+        /**
+            @description : Sub-nanoseconds bias, in unit of nonoseconds 
+        **/
+        Double biasNs
+        
+        /**
+            @description : Bias uncertainty (one sigma), in unit of nanoseconds 
+        **/
+        Double biasUncertaintyNs
+        
+        /**
+            @description : Clock drift, in unit of nanoseconds/second 
+        **/
+        Double driftNsps
+        
+        /**
+            @description : Clock drift uncertainty (one sigma), in unit of nanoseconds/second 
+        **/
+        Double driftUncertaintyNsps
+        
+        /**
+            @description : HW clock discontinuity count - incremented for each discontinuity in HW clock 
+        **/
+        UInt32 hwClockDiscontinuityCount
+        
+        /**
+            @description : elapsed time since boot, in unit of nonoseconds 
+        **/
+        UInt64 elapsedRealTime
+        
+        /**
+            @description : uncertainty of elapsedRealTime, in unit of nonoseconds 
+        **/
+        UInt64 elapsedRealTimeUnc
+        
+        /**
+            @description : gPTP since boot, in unit of nonoseconds 
+        **/
+        UInt64 elapsedgPtpTime
+        
+        /**
+            @description : uncertainty of elapsedgPTPTime, in unit of nonoseconds 
+        **/
+        UInt64 elapsedgPtpTimeUnc
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssMeasurementsDataT {
+        /**
+            @description : Bitwise OR of GnssMeasurementsDataFlagsMaskT to specify the 
+             valid fields in GnssMeasurementsData. 
+             Contains GnssMeasurementsDataFlagsMaskT bits 
+        **/
+        UInt32 flags
+        
+        /**
+            @description : Specify satellite vehicle ID number. 
+             For SV id range of each supported constellations, refer to 
+             documentation in GnssSv::svId. 
+        **/
+        UInt32 svId
+        
+        /**
+            @description : SV constellation type 
+        **/
+        GnssSvTypeT svType
+        
+        /**
+            @description : Time offset when the measurement was taken in unit of nanoseconds 
+        **/
+        Double timeOffsetNs
+        
+        /**
+            @description : Bitwise OR of GnssMeasurementsStateMaskT to specify the 
+             GNSS measurement state. 
+             Contains GnssMeasurementsStateMaskT bits 
+        **/
+        UInt32 stateMask
+        
+        /**
+            @description : Received GNSS time of the week in nanoseconds when the 
+             measurement was taken. 
+             For sub nanoseconds part of the time, please refer to 
+             of GnssMeasurementsData::receivedSvTimeSubNs. 
+             Total time is: receivedSvTimeNs+receivedSvTimeSubNs 
+        **/
+        Int64 receivedSvTimeNs
+        
+        /**
+            @description : Sub nanoseconds portion of the received GNSS time of the 
+             week when the measurement was taken. 
+             For nanoseconds portion of the time, please refer to field 
+             of GnssMeasurementsData::receivedSvTimeSubNs. 
+             Total time is: receivedSvTimeNs+receivedSvTimeSubNs 
+        **/
+        Float receivedSvTimeSubNs
+        
+        /**
+            @description : Satellite time. 
+             All SV times in the current measurement block are already 
+             propagated to a common reference time epoch, in unit of 
+             nanoseconds. 
+        **/
+        Int64 receivedSvTimeUncertaintyNs
+        
+        /**
+            @description : Signal strength, carrier to noise ratio, in unit of dB-Hz 
+        **/
+        Double carrierToNoiseDbHz
+        
+        /**
+            @description : Uncorrected pseudorange rate, in unit of meters/second 
+        **/
+        Double pseudorangeRateMps
+        
+        /**
+            @description : Uncorrected pseudorange rate uncertainty, in unit of meters/second 
+        **/
+        Double pseudorangeRateUncertaintyMps
+        
+        /**
+            @description : Bitwise OR of GnssMeasurementsAdrStateMask. 
+             Contains GnssMeasurementsAdrStateMaskT bits 
+        **/
+        UInt32 adrStateMask
+        
+        /**
+            @description : Accumulated delta range, in unit of meters 
+        **/
+        Double adrMeters
+        
+        /**
+            @description : Accumulated delta range uncertainty, in unit of meters 
+        **/
+        Double adrUncertaintyMeters
+        
+        /**
+            @description : Carrier frequency of the tracked signal, in unit of Hertz 
+        **/
+        Float carrierFrequencyHz
+        
+        /**
+            @description : The number of full carrier cycles between the receiver and the satellite 
+        **/
+        Int64 carrierCycles
+        
+        /**
+            @description : The RF carrier phase that the receiver has detected 
+        **/
+        Double carrierPhase
+        
+        /**
+            @description : The RF carrier phase uncertainty 
+        **/
+        Double carrierPhaseUncertainty
+        
+        /**
+            @description : Multipath indicator, could be unknown, present or not present. 
+             Contains GnssMeasurementsMultipathIndicatorT bits 
+        **/
+        UInt32 multipathIndicator
+        
+        /**
+            @description : Signal to noise ratio, in unit of dB 
+        **/
+        Double signalToNoiseRatioDb
+        
+        /**
+            @description : Automatic gain control level, in unit of dB 
+        **/
+        Double agcLevelDb
+        
+        /**
+            @description : Baseband signal strength, in unit of dB Hz. 
+             Should always be available in measurement report 
+        **/
+        Double basebandCarrierToNoiseDbHz
+        
+        /**
+            @description : GNSS signal type mask of the SV. 
+             Should always be available in measurement report. 
+             Contains GnssSignalTypeT bit 
+        **/
+        GnssSignalTypeT gnssSignalType
+        
+        /**
+            @description : The full inter-signal bias (ISB) in nanoseconds. 
+             This value is the sum of the estimated receiver-side and the 
+             space-segment-side inter-system bias, inter-frequency bias 
+             and inter-code bias 
+        **/
+        Double fullInterSignalBiasNs
+        
+        /**
+            @description : 1-sigma uncertainty associated with the full inter-signal bias in nanoseconds 
+        **/
+        Double fullInterSignalBiasUncertaintyNs
+        
+        /**
+            @description : Increments when a cycle slip is detected. 
+        **/
+        UInt32 cycleSlipCount
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssMeasurementsT {
+        /**
+            @description : GNSS measurements clock info 
+        **/
+        GnssMeasurementsClockT clock
+        
+        /**
+            @description : GNSS measurements data 
+            @experimental : repeated_field_max_count: 176
+        **/
+        GnssMeasurementsDataT [] measurements
+        
+        /**
+            @description : NHz measurements indicator 
+        **/
+        Boolean isNHz
+        
+        /**
+            @description : Time difference between packet generation time 
+            and sending over SOMEIP 
+            Unit- milli-seconds  
+        **/
+        Int32 reportingLatency
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationT {
+        /**
+            @description : Bitwise OR of LocationFlagsMaskT to specify the valid fields. 
+        **/
+        UInt32 flags
+        
+        /**
+            @description : UTC timestamp for location fix since January 1, 1970, in unit of milliseconds. 
+        **/
+        UInt64 timestamp
+        
+        /**
+            @description : Latitude, in unit of degrees, range [-90.0, 90.0]. 
+        **/
+        Double latitude
+        
+        /**
+            @description : Longitude, in unit of degrees, range [-180.0, 180.0]. 
+        **/
+        Double longitude
+        
+        /**
+            @description : Altitude above the WGS 84 reference ellipsoid, in unit of meters. 
+        **/
+        Double altitude
+        
+        /**
+            @description : Horizontal speed, in meters/second. 
+        **/
+        Float speed
+        
+        /**
+            @description : Bearing, in unit of degrees, range [0, 360). 
+        **/
+        Float bearing
+        
+        /**
+            @description : Horizontal accuracy, in unit of meters. 
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float horizontalAccuracy
+        
+        /**
+            @description : Vertical accuracy, in unit of meters. 
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float verticalAccuracy
+        
+        /**
+            @description : Horizontal speed uncertainty, in unit meters/second. 
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float speedAccuracy
+        
+        /**
+            @description : Bearing uncertainty, in unit of degrees, range (0 to 359.999).
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float bearingAccuracy
+        
+        /**
+            @description : Sets of technology that contributed to the fix. 
+             Contains LocationTechnologyMaskT bits 
+        **/
+        UInt32 techMask
+        
+        /**
+            @description : Boot timestamp corresponding to the UTC timestamp for location fix. In unit of nanoseconds. 
+             This field may not always be available. 
+        **/
+        UInt64 elapsedRealTimeNs
+        
+        /**
+            @description : Uncertainty for the boot timestamp. In unit of nanoseconds. 
+             This field may not always be available. 
+        **/
+        UInt64 elapsedRealTimeUncNs
+        
+        /**
+            @description : Time uncertainty associated with this position. In unit of milliseconds. 
+             This field may not always be available. 
+        **/
+        Float timeUncMs
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationReportSvUsedInPositionT {
+        /**
+            @description : Specify the set of SVs from GPS constellation that are used to compute the position. 
+             Bit 0 to Bit 31 corresponds to GPS SV id 1 to 32. 
+        **/
+        UInt64 gpsSvUsedIdsMask
+        
+        /**
+            @description : Specify the set of SVs from GLONASS constellation that are used to compute the position. 
+             Bit 0 to Bit 31 corresponds to GLO SV id 65 to 96. 
+        **/
+        UInt64 gloSvUsedIdsMask
+        
+        /**
+            @description : Specify the set of SVs from GALILEO constellation that are used to compute the position. 
+             Bit 0 to Bit 35 corresponds to GAL SV id 301 to 336. 
+        **/
+        UInt64 galSvUsedIdsMask
+        
+        /**
+            @description : Specify the set of SVs from BEIDOU constellation that are used to compute the position.
+             Bit 0 to Bit 62 corresponds to BDS SV id 201 to 263. 
+        **/
+        UInt64 bdsSvUsedIdsMask
+        
+        /**
+            @description : Specify the set of SVs from QZSS constellation that are used to compute the position. 
+             Bit 0 to Bit 4 corresponds to QZSS SV id 193 to 197. 
+        **/
+        UInt64 qzssSvUsedIdsMask
+        
+        /**
+            @description : Specify the set of SVs from NAVIC constellation that are used to compute the position. 
+             Bit 0 to Bit 13 corresponds to NAVIC SV id 401 to 414. 
+        **/
+        UInt64 navicSvUsedIdsMask
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationReportPositionDynamicsT {
+        /**
+            @description : Bitwise OR of LocationReportPosDataMaskT to specify the valid fields 
+             in LocationReportPositionDynamicsT. Contains LocationReportPosDataMaskT bits 
+        **/
+        UInt32 bodyFrameDataMask
+        
+        /**
+            @description : Forward acceleration in body frame, in unit of meters/second^2. 
+        **/
+        Float longAccel
+        
+        /**
+            @description : Sideward acceleration in body frame, in unit of meters/second^2. 
+        **/
+        Float latAccel
+        
+        /**
+            @description : Vertical acceleration in body frame, in unit of meters/second^2. 
+        **/
+        Float vertAccel
+        
+        /**
+            @description : Uncertainty of forward acceleration in body frame, in unit of meters/second^2. 
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float longAccelUnc
+        
+        /**
+            @description : Uncertainty of side-ward acceleration in body frame, in unit of meters/second^2. 
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float latAccelUnc
+        
+        /**
+            @description : Uncertainty of vertical acceleration in body frame, in unit of meters/second^2. 
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float vertAccelUnc
+        
+        /**
+            @description : Body pitch, in unit of radians. 
+        **/
+        Float pitch
+        
+        /**
+            @description : Uncertainty of body pitch, in unit of radians. Uncertainty is defined with 68% confidence level. 
+        **/
+        Float pitchUnc
+        
+        /**
+            @description : Body pitch rate, in unit of radians/second. 
+        **/
+        Float pitchRate
+        
+        /**
+            @description : Uncertainty of pitch rate, in unit of radians/second. Uncertainty is defined with 68% confidence level. 
+        **/
+        Float pitchRateUnc
+        
+        /**
+            @description : Roll of body frame, clockwise is positive, in unit of radian. 
+        **/
+        Float roll
+        
+        /**
+            @description : Uncertainty of roll, in unit of radian. 
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float rollUnc
+        
+        /**
+            @description : Roll rate of body frame, clockwise is positive, in unit of radian/second. 
+        **/
+        Float rollRate
+        
+        /**
+            @description : Uncertainty of roll rate, in unit of radian/second. Uncertainty is defined with 68% confidence level. 
+        **/
+        Float rollRateUnc
+        
+        /**
+            @description : Yaw of body frame, clockwise is positive, in unit of radian. 
+        **/
+        Float yaw
+        
+        /**
+            @description : Uncertainty of yaw, 68% confidence level, in unit of radian. Uncertainty is defined with 68% confidence level. 
+        **/
+        Float yawUnc
+        
+        /**
+            @description : Heading rate, in unit of radians/second. Range: +/- pi (where pi is ~3.14159). 
+             The positive value is clockwise and negative value is anti-clockwise. 
+        **/
+        Float yawRate
+        
+        /**
+            @description : Uncertainty of heading rate, in unit of radians/second. 
+             Uncertainty is defined with 68% confidence level. 
+        **/
+        Float yawRateUnc
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssSystemTimeStructTypeT {
+        /**
+            @description : Bitwise OR of GnssSystemTimeStructTypeFlagsT to specify valid fields 
+             in GnssSystemTimeStructType. Contains GnssSystemTimeStructTypeFlagsT bits 
+             
+        **/
+        UInt32 validityMask
+        
+        /**
+            @description : Extended week number at reference tick, in unit of week. 
+             Set to 65535 if week number is unknown. For GPS: calculated from midnight, Jan. 6, 1980. 
+             OTA decoded 10 bit GPS week is extended to map between: [NV6264 to (NV6264 + 1023)] 
+             For BDS: calculated from 00:00:00 on January 1, 2006 of Coordinated Universal Time (UTC). 
+             For GAL: calculated from 00:00 UT on Sunday August 22, 1999 
+             (midnight between August 21 and August 22). 
+        **/
+        UInt32 systemWeek
+        
+        /**
+            @description : Time in to the current week at reference tick, in unit of milliseconds. 
+             Range is 0 to 604799999. 
+        **/
+        UInt32 systemMsec
+        
+        /**
+            @description : System clock time bias, in unit of milliseconds. 
+             Note: System time (TOW Millisecond) = system_msec - system_clk_time_bias. 
+        **/
+        Float systemClkTimeBias
+        
+        /**
+            @description : Single sided maximum time bias uncertainty, in unit of milliseconds. 
+        **/
+        Float systemClkTimeUncMs
+        
+        /**
+            @description : FCount (free running HW timer) value, in unit of milliseconds. 
+             Don't use for relative time purpose due to possible discontinuities. 
+        **/
+        UInt32 refFcount
+        
+        /**
+            @description : Number of clock resets/discontinuities detected, which affects the local hardware counter value. 
+        **/
+        UInt32 numClockResets
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssGloTimeStructTypeT {
+        /**
+            @description : Bitwise OR of GnssGloTimeStructTypeFlagsT to specify the valid fields in GnssGloTimeStructType. 
+             Contains GnssGloTimeStructTypeFlagsT bits 
+        **/
+        UInt32 validityMask
+        
+        /**
+            @description : GLONASS four year number from 1996. 
+             Refer to GLONASS ICD. Applicable only for GLONASS and shall be ignored 
+             for other constellations. 
+        **/
+        UInt32 gloFourYear
+        
+        /**
+            @description : GLONASS day number in four years. Refer to GLONASS ICD. If unknown shall be set to 65535. 
+        **/
+        UInt32 gloDays
+        
+        /**
+            @description : GLONASS time of day in unit of millisecond. Refer to GLONASS ICD. 
+        **/
+        UInt32 gloMsec
+        
+        /**
+            @description : GLONASS clock time bias, in unit of millisecond. 
+             Note: GLO time (TOD Millisecond) = gloMsec - gloClkTimeBias. 
+             Check for gloClkTimeUncMs before use. 
+        **/
+        Float gloClkTimeBias
+        
+        /**
+            @description : Single sided maximum time bias uncertainty, in unit of milliseconds. 
+        **/
+        Float gloClkTimeUncMs
+        
+        /**
+            @description : FCount (free running HW timer) value, in unit of milliseconds. 
+             Don't use for relative time purpose due to possible discontinuities. 
+        **/
+        UInt32 refFCount
+        
+        /**
+            @description : Number of clock resets/discontinuities detected, affecting the local hardware counter value. 
+        **/
+        UInt32 numClockResets
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct SystemTimeStructT {
+        /**
+            @description : System time info from GPS/GAL/BDS/QZSS/NAVIC constellation. 
+        **/
+        GnssSystemTimeStructTypeT gnssSystemTime
+        
+        /**
+            @description : System time info from GALILEO constellation. 
+        **/
+        GnssGloTimeStructTypeT gloSystemTime
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssSystemTimeT {
+        /**
+            @description : Specify the source constellation for GNSS system time. 
+        **/
+        GnssLocSvSystemTypeT gnssSystemTimeSrc
+        
+        /**
+            @description : Specify the GNSS system time corresponding to the source. 
+        **/
+        SystemTimeStructT systemTime
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssMeasUsageInfoT {
+        /**
+            @description : Specify GNSS Constellation Type for the SV. 
+        **/
+        GnssConstellationTypeT gnssConstellation
+        
+        /**
+            @description : Specify satellite vehicle ID number. 
+        **/
+        UInt32 gnssSvId
+        
+        /**
+            @description : Specify the signal type mask of the SV. 
+        **/
+        GnssSignalTypeT gnssSignalType
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LlaInfoT {
+        /**
+            @description : Latitude, in unit of degrees, range [-90.0, 90.0] 
+        **/
+        Double latitude
+        
+        /**
+            @description : Longitude, in unit of degrees, range [-180.0, 180.0] 
+        **/
+        Double longitude
+        
+        /**
+            @description : Altitude above the WGS 84 reference ellipsoid, in unit of meters 
+        **/
+        Float altitude
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct LocationReportT {
+        /**
+            @description : Basic Location information structure 
+        **/
+        LocationT locInfo
+        
+        /**
+            @description : Bitwise OR of LocationReportFlagMaskT for param validity. 
+             Contains LocationReportFlagMaskT bits 
+        **/
+        UInt32 locationInfoFlags
+        
+        /**
+            @description : Altitude wrt mean sea level, in unit of meters 
+        **/
+        Float altitudeMeanSeaLevel
+        
+        /**
+            @description : Position dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy) 
+        **/
+        Float pdop
+        
+        /**
+            @description : Horizontal dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy) 
+        **/
+        Float hdop
+        
+        /**
+            @description : Vertical dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy) 
+        **/
+        Float vdop
+        
+        /**
+            @description : Geometric dilution of precision range: 0 (highest accuracy) to 50 (lowest accuracy) 
+        **/
+        Float gdop
+        
+        /**
+            @description : Time dilution of precision range: 0 (highest accuracy) to 50 (lowest accuracy) 
+        **/
+        Float tdop
+        
+        /**
+            @description : Difference between the bearing to true north and the bearing shown on a magnetic compass. 
+             The deviation is positive when the magnetic north is east of true north 
+        **/
+        Float magneticDeviation
+        
+        /**
+            @description : Horizontal reliability. Contains LocationReliabilityT bits 
+        **/
+        UInt32 horReliability
+        
+        /**
+            @description : Vertical reliability. Contains LocationReliabilityT bits 
+        **/
+        UInt32 verReliability
+        
+        /**
+            @description : Horizontal elliptical accuracy semi-major axis, in unit of meters. 
+             Uncertainty is defined with 39% confidence level 
+        **/
+        Float horUncEllipseSemiMajor
+        
+        /**
+            @description : Horizontal elliptical accuracy semi-minor axis, in unit of meters. 
+             Uncertainty is defined with 39% confidence level 
+        **/
+        Float horUncEllipseSemiMinor
+        
+        /**
+            @description : Horizontal elliptical accuracy azimuth, in unit of degrees, range [0, 180]. 
+             Confidence for uncertainty is not specified 
+        **/
+        Float horUncEllipseOrientAzimuth
+        
+        /**
+            @description : North standard deviation, in unit of meters. 
+             Uncertainty is defined with 68% confidence level 
+        **/
+        Float northStdDeviation
+        
+        /**
+            @description : East standard deviation, in unit of meters. 
+             Uncertainty is defined with 68% confidence level 
+        **/
+        Float eastStdDeviation
+        
+        /**
+            @description : North velocity, in unit of meters/sec 
+        **/
+        Float northVelocity
+        
+        /**
+            @description : East velocity, in unit of meters/sec 
+        **/
+        Float eastVelocity
+        
+        /**
+            @description : Up velocity, in unit of meters/sec 
+        **/
+        Float upVelocity
+        
+        /**
+            @description : North velocity uncertainty, in unit of meters/sec. 
+             Uncertainty is defined with 68% confidence level 
+        **/
+        Float northVelocityStdDeviation
+        
+        /**
+            @description : East velocity uncertainty, in unit of meters/sec. 
+             Uncertainty is defined with 68% confidence level 
+        **/
+        Float eastVelocityStdDeviation
+        
+        /**
+            @description : Up velocity uncertainty, in unit of meters/sec. 
+             Uncertainty is defined with 68% confidence level 
+        **/
+        Float upVelocityStdDeviation
+        
+        /**
+            @description : Number of SV used in position report. deployment to be mapped to Uint16 
+        **/
+        UInt32 numSvUsedInPosition
+        
+        /**
+            @description : GNSS SV used in position data 
+        **/
+        LocationReportSvUsedInPositionT svUsedInPosition
+        
+        /**
+            @description : Navigation solutions that are used to calculate the position report. 
+             contains LocationReportNavSolutionMaskT bits 
+        **/
+        UInt32 navSolutionMask
+        
+        /**
+            @description : Position technology used in computing this fix. Contains LocationTechnologyMaskT bits 
+        **/
+        UInt32 posTechMask
+        
+        /**
+            @description : Body frame dynamics info 
+        **/
+        LocationReportPositionDynamicsT bodyFrameData
+        
+        /**
+            @description : GNSS system time when this position is calculated 
+        **/
+        GnssSystemTimeT gnssSystemTime
+        
+        /**
+            @description : GNSS measurement usage info 
+            @experimental : repeated_field_max_count: 176
+        **/
+        GnssMeasUsageInfoT [] measUsageInfo
+        
+        /**
+            @description : Number of leap Seconds at time when this position is generated 
+        **/
+        UInt32 leapSeconds
+        
+        /**
+            @description : Sensor calibration confidence percent, range [0, 100] 
+        **/
+        UInt32 calibrationConfidencePercent
+        
+        /**
+            @description : Sensor calibration status. Contains DrCalibrationStatusMaskT bits 
+        **/
+        UInt32 calibrationStatus
+        
+        /**
+            @description : Location engine type defined in LocOutputEngineTypeT 
+        **/
+        LocOutputEngineTypeT locOutputEngType
+        
+        /**
+            @description : When loc output eng type is set to fused, 
+             this field indicates the set of engines contribute to the fix. 
+             Contains PositioningEngineMaskT bits 
+        **/
+        UInt32 locOutputEngMask
+        
+        /**
+            @description : When robust location is enabled, this field will indicate how well 
+             the various input data considered for GNSS navigation solution conforms to expectations. 
+             Note that Conformity index is for GNSS only output, not including other engines. 
+             Range: [0.0, 1.0], with 0.0 for least conforming and 1.0 for most conforming 
+        **/
+        Float conformityIndex
+        
+        /**
+            @description : VRP-based latitude/longitude/altitude 
+        **/
+        LlaInfoT llaVrpBased
+        
+        /**
+            @description : VRP-based east, north, and up velocity 
+            @experimental : repeated_field_max_count: 3
+        **/
+        Float [] enuVelocityVrpBased
+        
+        /**
+            @description : Dead reckoning position engine status. Contains DrSolutionStatusMaskT bits 
+        **/
+        UInt32 drSolutionStatusMask
+        
+        /**
+            @description : Bitwise OR of LocationReportExtendedFlagMaskT for param validity starting 
+             from altitude_assumed. Contains LocationReportExtendedFlagMaskT bits 
+        **/
+        UInt32 locationInfoExtendedFlags
+        
+        /**
+            @description : When this field is valid, it will indicate whether altitude is assumed or calculated. 
+             false: Altitude is calculated. 
+             true: Altitude is assumed 
+             there may not be enough satellites to determine the precise altitude 
+        **/
+        Boolean altitudeAssumed
+        
+        /**
+            @description : Indicates whether session is success, failure or intermediate 
+        **/
+        LocSessionStatusT sessionStatus
+        
+        /**
+            @description : Integrity risk used for protection level parameters. Unit of 2.5e-10. 
+             Valid range is [1 to (4e9-1)]. Other values means integrity risk is disabled 
+             and LocationReportT::protectAlongTrack, LocationReportT::protectCrossTrack 
+             and LocationReportT::protectVertical will not be available. 
+             Note that integrityRiskUsed is for GNSS only output, not including other engines 
+        **/
+        UInt32 integrityRiskUsed
+        
+        /**
+            @description : Along-track protection level at specified integrity risk, in unit of meter 
+        **/
+        Float protectAlongTrack
+        
+        /**
+            @description : Cross-track protection level at specified integrity risk, in unit of meter 
+        **/
+        Float protectCrossTrack
+        
+        /**
+            @description : Vertical component protection level at specified integrity risk, in unit of meter 
+        **/
+        Float protectVertical
+        
+        /**
+            @description : List of DGNSS station IDs providing corrections. 
+            Range: - SBAS -- 120 to 158 and 183 to 191. 
+             - Monitoring station -- 1000-2023 (Station ID biased by 1000). 
+             - Other values reserved. 
+            @experimental : repeated_field_max_count: 3
+        **/
+        UInt32 [] dgnssStationId
+        
+        /**
+            @description : PTP time corresponding to the UTC timestamp for location fix. In unit in nanoseconds 
+        **/
+        UInt64 elapsedgPtpTime
+        
+        /**
+            @description : GPTP time Unc 
+        **/
+        UInt64 elapsedgPtpTimeUnc
+        
+        /**
+            @description : Distance between the base station and the receiver  Unit- meters 
+        **/
+        Double baseLineLength
+        
+        /**
+            @description : Difference in time between the fix timestamp using the 
+             correction and the time of the correction 
+             Unit: milli-seconds  
+        **/
+        UInt64 ageMsecOfCorrections
+        
+        /**
+            @description : Current GNSS engine reporting interval 
+             Time interval at which GNSS engine is delivering position reports 
+             Unit: milli-seconds 
+        **/
+        UInt32 posReportingInterval
+        
+        /**
+            @description :  Time difference between packet generation time 
+             and sending over SOMEIP 
+             Unit: milli-seconds  
+        **/
+        Int32 reportingLatency
+        
+        /**
+            @description :  Uncertainty for the GNSS leap second 
+             Unit: Seconds 
+        **/
+        UInt32 leapSecondsUnc
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssSvDataT {
+        /**
+            @description : Unique SV Identifier. This field is always valid. 
+             SV Range for supported constellation is specified as below: 
+             - For GPS:     1 to 32 
+             - For GLONASS: 65 to 96 or FCN+104 
+                            [65, 96] if orbital slot number(OSN) is known 
+                            [97, 110] as frequency channel number(FCN) [-7, 6] + 104 
+                            i.e. encode FCN -7 as 97, 0 as 104, 6 as 110 
+             - For SBAS:    120 to 158 and 183 to 191 
+             - For QZSS:    193 to 197 
+             - For BDS:     201 to 263 
+             - For GAL:     301 to 336 
+             - For NAVIC:   401 to 414 
+        **/
+        UInt32 svId
+        
+        /**
+            @description : Constellation type of the SV (GPS, SBAS, GLONASS, QZSS, BEIDOU, GALILEO). 
+             This field is always valid. 
+        **/
+        GnssSvTypeT type
+        
+        /**
+            @description : Carrier-to-noise ratio of the signal measured at antenna, in unit of dB-Hz. 
+             cN0DbHz of 0.0 indicates that this field is unknown. 
+        **/
+        Float cN0DbHz
+        
+        /**
+            @description : Elevation of the SV, in unit of degrees. This field is always valid. 
+        **/
+        Float elevation
+        
+        /**
+            @description : Azimuth of the SV, in unit of degrees. This field is always valid. 
+        **/
+        Float azimuth
+        
+        /**
+            @description : Bitwise OR of GnssSvOptionsMaskT to specify additional info and valid fields in GnssSvDataT. 
+             This field is always valid. 
+        **/
+        UInt32 gnssSvOptionsMask
+        
+        /**
+            @description : Carrier frequency of the signal tracked. 
+             This field is valid if gnssSvOptionsMask has GNSS_SV_OPTIONS_HAS_CARRIER_FREQUENCY_BIT set. 
+        **/
+        Float carrierFrequencyHz
+        
+        /**
+            @description : GNSS signal type mask of the SV. This field is valid if gnssSvOptionsMask has 
+             GNSS_SV_OPTIONS_HAS_GNSS_SIGNAL_TYPE_BIT. Contains GnssSignalTypeT bit 
+        **/
+        GnssSignalTypeT gnssSignalType
+        
+        /**
+            @description : Carrier-to-noise ratio of the signal measured at baseband, in unit of dB-Hz. 
+             This field is valid if gnssSvOptionsMask has 
+             GNSS_SV_OPTIONS_HAS_BASEBAND_CARRIER_TO_NOISE_BIT set. 
+        **/
+        Double basebandCarrierToNoiseDbHz
+        
+        /**
+            @description : GLONASS frequency channel number, range is [1, 14]. 
+             This field is always valid if and only if sv is of GLONASS. 
+        **/
+        UInt32 gloFrequency
+          
+    }
+    
+    /**
+        @description :
+
+    **/
+    struct GnssDataT {
+        /**
+            @description : Bitwise OR of GnssDataMaskT to indicate 
+             the valid data fields. 
+            @experimental : repeated_field_max_count: 25
+        **/
+        UInt32 [] gnssDataMask
+        
+        /**
+            @description : Jammer Indication for each GNSS signal. 
+             GSTT_MAX_NUMBER_OF_SIGNAL_TYPES 
+            @experimental : repeated_field_max_count: 25
+        **/
+        Double [] jammerInd
+        
+        /**
+            @description : Automatic gain control metric, in unit of dB. 
+             GSTT_MAX_NUMBER_OF_SIGNAL_TYPES  
+            @experimental : repeated_field_max_count: 25
+        **/
+        Double [] agc
+          
+    }
+    
+}

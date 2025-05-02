@@ -1,0 +1,222 @@
+/** Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+    SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+syntax = "proto3";
+
+package sdv.connectivity.location;
+
+import "syntax/vsidl.proto";
+import "syntax/sdvsidl.proto";
+import "catalog/sdv/connectivity/location/common/location_types.proto";
+
+/** @brief Provides the capabilities of the system.
+    @param capsMask: Bitwise OR of LocationCapabilitiesMask
+*/
+message GnssCapabilities {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: SINGLE_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "gnss capabilities of the system";
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.on_value_change) = true;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  uint32 capabilities_mask = 1 [(sdv.sdvsidl.field_description) =
+    "Contains the logic OR between bit position defined in LocationCapabilitiesMaskT",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationCapabilitiesMaskT"];
+}
+
+/**
+ GnssMeasurementReport is for receiving GnssMeasurementsT
+ information when Location Client is in a positioning
+ session. */
+message GnssMeasurementReport {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: SINGLE_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "GnssMeasurementsReport is for receiving \n"
+      "GnssMeasurementsT information when Location Client is in a \n"
+      "positioning session";
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.period) = 100;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  GnssMeasurementsT gnss_measurements = 1 [(sdv.sdvsidl.field_description) =
+    "GNSS measurements information"];
+
+}
+
+/**
+GnssLocationReport is for receiving LocationReportT when Location Client is
+in a positioning session.
+
+When there are multiple engines running on the system, the
+received LocationReportT is fused report from all engines.
+
+When there is only standard SPE engine running on the
+system, the received LocationReportT is from modem GNSS engine.*/
+message GnssLocationReport {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: SINGLE_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "Gnss location report";
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.period) = 100;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  LocationReportT location_report = 1 [(sdv.sdvsidl.field_description) =
+    "locationReport: LocationReportT"];
+}
+
+/**
+EngineLocationsReport is for receiving LocationReportT from
+selected position engines when Location Client is in a
+positioning session. */
+message EngineLocationsReport {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: SINGLE_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "EngineLocationsReport is for receiving \n"
+    "LocationReportT from selected position engines when Location \n"
+    "Client is in a positioning session";
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.period) = 100;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  repeated LocationReportT location_report = 1 [
+    (sdv.vsidl.repeated_field_max_count) = 4,
+    (sdv.sdvsidl.field_description) = "LocationReportT from requested position engines"];
+}
+
+/** @brief
+    GnssSvReport is for receiving GnssSvDataT when Location Client is
+    in a positioning session.  <br/>
+*/
+message GnssSvReport {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: SINGLE_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "gnss sv information";
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.period) = 100;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  repeated GnssSvDataT gnss_sv = 1 [
+    (sdv.vsidl.repeated_field_max_count) = 176,
+    (sdv.sdvsidl.field_description) = "GNSS SV report"];
+}
+
+/** @brief
+    GnssNmea is for receiving NMEA sentences when
+    Client is in a positioning session. <br/>
+
+    @param timestamp: timestamp that NMEA sentence is
+                    generated. <br/>
+
+    @param nmea: nmea strings generated from position and SV
+           report. <br/>
+*/
+message GnssNmea {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: SINGLE_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "GnssNmea is for receiving NMEA \n"
+    "sentences when Location server is in a positioning session";
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.period) = 100;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  uint64 timestamp = 1 [(sdv.sdvsidl.field_description) =
+    "timestamp that NMEA sentence is generated"];
+
+  string nmea = 2 [
+    (sdv.vsidl.variable_type_max_size) = 4000,
+    (sdv.sdvsidl.field_description) = "nmea strings generated from position and SV report"];
+}
+
+/** @brief
+    EngineNmea is for receiving Engine Specific NMEA sentences when
+    Location Client is in a positioning session. <br/>
+    @param engType: engine type that NMEA is derived from
+    @param timestamp: timestamp that NMEA sentence is
+                    generated. <br/>
+    @param nmea: nmea strings generated from position and SV
+           report of specified position engine. <br/>
+*/
+message EngineNmea {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: SINGLE_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "EngineNmea is for receiving Engine \n"
+    "specific NMEA sentences when Location server is in a positioning \n"
+    "session";
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.period) = 100;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  LocOutputEngineTypeT eng_type = 1 [(sdv.sdvsidl.field_description) =
+    "engine type that NMEA is derived from"];
+
+  uint64 timestamp = 2 [(sdv.sdvsidl.field_description) =
+    "timestamp that NMEA sentence is generated"];
+
+  string nmea = 3 [
+    (sdv.vsidl.variable_type_max_size) = 4000,
+    (sdv.sdvsidl.field_description) = "nmea strings generated from position and SV report"];
+}
+
+/** @brief
+    GnssDataReport is for receiving GnssDataT, e.g.:
+    jammer information when Location Client is in a
+    positioning session. <br/>
+
+    @param gnssData: GNSS jammer and agc information. <br/>
+*/
+message GnssDataReport {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: SINGLE_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "GnssDataReport is for receiving GnssDataT \n"
+    " e.g. jammer information when Location Client is in a positioning \n"
+    "session.";
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.period) = 100;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  GnssDataT gnss_data = 1 [(sdv.sdvsidl.field_description) =
+    "GNSS jammer and agc information"];
+}
+
+message InjectMapMatchedFeedbackData {
+  option (sdv.vsidl.topic) = {
+    unique: true
+    model: MULTI_PUB
+  };
+
+  option (sdv.sdvsidl.description) = "InjectMapMatchedFeedbackData is for \n"
+    " injecting Map Matched Feedback Data";
+
+  option (sdv.sdvsidl.asil) = QM;
+  option (sdv.sdvsidl.period) = 100;
+  option (sdv.sdvsidl.topic_system_owner) = S21_MULTIMEDIA;
+
+  MapMatchingFeedbackDataT mmf_data = 1 [(sdv.sdvsidl.field_description) =
+    "Map Matched Feedback Data"];
+}
+

@@ -1,0 +1,239 @@
+/** Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+   SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-4-SOMEIP_deployment_spec.fdepl"
+import "LocationTypes.fidl"
+import "Location.fidl"
+define org.genivi.commonapi.someip.deployment for interface com.qualcomm.qti.location.Location {
+    SomeIpServiceID = 60928 /** 0xEE00*/
+
+    method InjectMapMatchedFeedbackData {
+        SomeIpMethodID = 1 /** 0x01 */
+        SomeIpReliable = false
+    }
+
+    method StartPositionSessionLocationReport {
+        SomeIpMethodID = 2 /** 0x02 */
+        SomeIpReliable = false
+    }
+
+    method StartPositionSessionEngineSpecificLocation {
+        SomeIpMethodID = 3 /** 0x03 */
+        SomeIpReliable = false
+    }
+
+    method StopPositionSession {
+        SomeIpMethodID = 4 /** 0x04 */
+        SomeIpReliable = false
+    }
+
+    method DeleteAidingData {
+        SomeIpMethodID = 5 /** 0x05 */
+        SomeIpReliable = false
+    }
+
+    method ConfigConstellations {
+        SomeIpMethodID = 6 /** 0x06 */
+        SomeIpReliable = false
+    }
+
+    method GetLocationCapabilities {
+        SomeIpMethodID = 7 /** 0x07 */
+        SomeIpReliable = false
+    }
+
+    broadcast GnssCapabilities {
+        SomeIpEventID = 32769  /** 0x8001 */
+        SomeIpEventGroups = { 8194 }
+
+        out {
+        }
+    }
+
+    broadcast GnssMeasurementReport {
+        SomeIpEventID = 32770 /** 0x8002 */
+        SomeIpEventGroups = { 8193 }
+
+        out {
+        }
+    }
+
+    broadcast GnssLocationReport {
+        SomeIpEventID = 32771 /** 0x8003 */
+        SomeIpEventGroups = { 8193 }
+        out {
+        }
+    }
+
+    broadcast GnssEngineLocationsReport {
+        SomeIpEventID = 32772 /** 0x8004 */
+        SomeIpEventGroups = { 8193 }
+        out {
+        }
+    }
+
+    broadcast GnssSvReport {
+        SomeIpEventID = 32773 /** 0x8005 */
+        SomeIpEventGroups = { 8193 }
+        out {
+        }
+    }
+
+    broadcast GnssNmea {
+        SomeIpEventID = 32774 /** 0x8006 */
+        SomeIpEventGroups = { 8193 }
+        out {
+        }
+    }
+
+    broadcast EngineNmea {
+        SomeIpEventID = 32775 /** 0x8007 */
+        SomeIpEventGroups = { 8193 }
+        out {
+        }
+    }
+
+    broadcast GnssDataReport {
+        SomeIpEventID = 32776 /** 0x8008 */
+        SomeIpEventGroups = { 8193 }
+        out {
+        }
+    }
+
+}
+
+define org.genivi.commonapi.someip.deployment for typeCollection com.qualcomm.qti.location.LocationTypes {
+
+    enumeration LocationReportFlagMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration LocationReportExtendedFlagMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration GnssMeasurementsMultipathIndicatorT {
+        SomeIpEnumWidth = 2
+    }
+
+    enumeration LocOutputEngineTypeT {
+        SomeIpEnumWidth = 1
+    }
+
+    enumeration GnssSvTypeT {
+        SomeIpEnumWidth = 1
+    }
+
+    enumeration LocationStatusT {
+        SomeIpEnumWidth = 1
+    }
+
+    enumeration GnssSignalTypeT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration LocationReportPosDataMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration LocationReportNavSolutionMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration LocationTechnologyMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration LocationFlagsMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration GnssSvOptionsMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration LocationCapabilitiesMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration LocationReliabilityT {
+        SomeIpEnumWidth = 1
+    }
+
+    enumeration GnssLocSvSystemTypeT {
+        SomeIpEnumWidth = 1
+    }
+
+    enumeration GnssSystemTimeStructTypeFlagsT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration GnssGloTimeStructTypeFlagsT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration DrCalibrationStatusMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration LocReqEngineTypeMaskT {
+        SomeIpEnumWidth = 2
+    }
+
+    enumeration PositioningEngineMaskT {
+        SomeIpEnumWidth = 2
+    }
+
+    enumeration DrSolutionStatusMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration GnssDataMaskT {
+        SomeIpEnumWidth = 2
+    }
+
+    enumeration GnssMeasurementsDataFlagsMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration GnssMeasurementsStateMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration GnssMeasurementsAdrStateMaskT {
+        SomeIpEnumWidth = 2
+    }
+
+    enumeration GnssMeasurementsClockFlagsMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration GnssReportCbInfoMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration EngineReportCbMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration AidingDataDeletionMaskT {
+        SomeIpEnumWidth = 4
+    }
+
+    enumeration GnssConstellationTypeT {
+        SomeIpEnumWidth = 1
+    }
+
+    enumeration MapMatchingFeedbackDataValidityT {
+        SomeIpEnumWidth = 4
+    }
+
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance com.qualcomm.qti.location.Location {
+        InstanceId = "com.qualcomm.qti.location.Location"
+
+        SomeIpInstanceID = 1  /**Instance 0x01*/
+    }
+}

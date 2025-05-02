@@ -1,0 +1,14 @@
+cc_library_headers {
+  name: "display_core_headers",
+  vendor: true,
+  header_libs: [
+      "display_intf_headers",
+      "common_interface_headers",
+      "snapalloc_interface_headers",
+  ],
+  export_header_lib_headers: [
+      "display_intf_headers",
+      "common_interface_headers",
+      "snapalloc_interface_headers",
+  ],
+}

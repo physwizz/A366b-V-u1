@@ -1,0 +1,1953 @@
+/** Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+    SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+syntax = "proto3";
+
+package sdv.connectivity.location;
+
+import "syntax/sdvsidl.proto";
+import "syntax/vsidl.proto";
+
+/** Specify the set of callbacks to receive the reports when
+     *  invoking startPositionSession(uint32_t,
+     *  GnssReportCbInfoMaskT) with
+     *  intervalInMs specified. <br/>
+     *  Short form: GRCIM   */
+enum GnssReportCbInfoMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  GRCIMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+      "Unknown Capabilities Mask"];
+
+  GRCIMT_LOCATION_CB_INFO_BIT = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive LocationReportT. When there are multiple engines running on the system, \n"
+      " the received Location is fused report from all engines. When there is only standard SPE engine \n"
+      " running on the system, the received Location"
+      " is from modem GNSS engine."];
+
+  GRCIMT_SV_CB_INFO_BIT = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive GnssSv from modem GNSS engine."];
+
+  GRCIMT_NMEA_CB_INFO_BIT = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive NMEA sentences. NMEA will be generated from GnssSv and position report.\n"
+      " When there are multiple \n"
+      " engines running on the system, position related NMEA sentences will be generated from \n"
+      " the fused position report. \n"
+      " When there is only SPE engine running on the system, position related NMEA sentences \n"
+      " will be generated from the \n"
+      " position report from modem GNSS engine report."];
+
+  GRCIMT_DATA_CB_INFO_BIT = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive GnssDataT from modem GNSS engine."];
+
+  GRCIMT_MEAS_CB_INFO_BIT = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive GnssMeasurementsT from modem GNSS engine."];
+}
+
+/** Specify the set of callbacks to receive the reports when
+ *  invoking startPositionSession(uint32_t,
+ *  LocReqEngineTypeMaskT, const EngineReportCbMaskT)
+ *  with intervalInMs specified.
+ *  Short form for EngineReportCbMaskT is ERCM */
+enum EngineReportCbMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  ERCMT_LOCATION_CB_INFO_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+      "Unknown Capabilities Mask"];
+
+  ERCMT_LOCATION_CB_INFO_BIT = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive LocationReportT from selected engines."];
+
+  ERCMT_SV_CB_INFO_BIT = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive GnssSv from modem GNSS engine."];
+
+  ERCMT_NMEA_CB_INFO_BIT = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive NMEA sentences. NMEA will be generated from GnssSv \n"
+      " and position report. When there are multiple \n"
+      " engines running in the system, position related NMEA sentences will be \n"
+      " generated from the fused position report. \n"
+      " When there is only SPE engine running on the system, position related \n"
+      " NMEA sentences will be generated from the \n"
+      " position report from modem GNSS engine report."];
+
+  ERCMT_DATA_CB_INFO_BIT = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive GnssDataT from modem GNSS engine."];
+
+  ERCMT_MEAS_CB_INFO_BIT = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+      "Callback to receive GnssMeasurementsT from modem GNSS engine."];
+
+  ERCMT_ENGINE_NMEA_CB_INFO_BIT = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+      "Receive NMEA related to position report from all registered engines. \n"
+      " The SV report will come from GNSS engine. Don't \n"
+      " register both GnssNmea and EngineNmea at same time. If attempted, \n"
+      " invalid error will be returned. Recommend to use \n"
+      " EngineNmea."];
+}
+
+enum LocationCapabilitiesMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  LCMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+      "Unknown Capabilities"];
+
+  LCMT_TIME_BASED_TRACKING_BIT = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+      "Location Interface can support time-based tracking session via \n"
+      " StartPositionSessionLocationReport() and \n"
+      " StartPositionSessionEngineSpecificLocation "];
+
+  LCMT_GNSS_MEAS_BIT = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+      "Location Interface  can support receiving GnssMeasurementsT data in \n"
+      " GnssMeasurementReport when Location Client is in a \n"
+      " positioning session."];
+}
+
+enum GnssSvOptionsMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  GSOMT_UNKNOWN = 0x0000 [(sdv.sdvsidl.litteral_description) =
+      "Ephemeris is Unknown for this SV"];
+
+  GSOMT_HAS_EPHEMER_BIT = 0x0001 [(sdv.sdvsidl.litteral_description) =
+      "Ephemeris is available for this SV"];
+
+  GSOMT_HAS_ALMANAC_BIT = 0x0002 [(sdv.sdvsidl.litteral_description) =
+      "Almanac is available for this SV"];
+
+  GSOMT_HAS_USED_IN_FIX_BIT = 0x0004 [(sdv.sdvsidl.litteral_description) =
+      "This SV is used in the position fix that has output engine type set to LOETT_SPE"];
+
+  GSOMT_HAS_CARRIER_FREQ_BIT = 0x0008 [(sdv.sdvsidl.litteral_description) =
+      "This SV has valid GnssSv::carrierFrequencyHz"];
+
+  GSOMT_HAS_GNSS_SIGNAL_TYPE_BIT = 0x0010 [(sdv.sdvsidl.litteral_description) =
+      "This SV has valid GnssSv::gnssSignalTypeMask"];
+
+  GSOMT_HAS_BASEBAND_CARRIER_TO_NOISE_BIT = 0x0020 [(sdv.sdvsidl.litteral_description) =
+      "This SV has valid GnssSv::basebandCarrierToNoiseDbHz"];
+
+  GSOMT_HAS_ELEVATION_BIT = 0x0040 [(sdv.sdvsidl.litteral_description) =
+      "This SV has valid GnssSv::elevation"];
+
+  GSOMT_HAS_AZIMUTH_BIT = 0x0080 [(sdv.sdvsidl.litteral_description) =
+      "This SV has valid GnssSv::azimuth"];
+}
+
+enum LocationFlagsMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  LFMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+      "Unknown Flags"];
+
+  LFMT_HAS_LAT_LONG_BIT = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::latitude and Location::longitude"];
+
+  LFMT_HAS_ALTITUDE_BIT = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::altitude"];
+
+  LFMT_HAS_SPEED_BIT = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::speed"];
+
+  LFMT_HAS_BEARING_BIT = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::bearing"];
+
+  LFMT_HAS_ACCURACY_BIT = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::horizontalAccuracy"];
+
+  LFMT_HAS_VERTICAL_ACCURACY_BIT = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::verticalAccuracy"];
+
+  LFMT_HAS_SPEED_ACCURACY_BIT = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::speedAccuracy"];
+
+  LFMT_HAS_BEARING_ACCURACY_BIT = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::bearingAccuracy"];
+
+  LFMT_HAS_TIMESTAMP_BIT = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::timestamp"];
+
+  LFMT_HAS_ELAPSED_REAL_TIME_BIT = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::elapsedRealTime"];
+
+  LFMT_ELAPSED_REAL_TIME_UNC_BIT = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::elapsedRealTimeUnc"];
+
+  LFMT_HAS_TIME_UNC_BIT = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::timeUncMs"];
+
+  LFMT_HAS_ELAPSED_PTP_TIME_BIT = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+      "Location has valid Location::elapsedPTPTime"];
+}
+
+/**
+ *  Specify the set of technologies that contribute to Location.
+ */
+enum LocationTechnologyMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  LTMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+      "Unknown Tech Mask"];
+
+  LTMT_GNSS_BIT = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+      "GNSS-based technology was used to calculate Location"];
+
+  LTMT_CELL_BIT = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+      "Cell-based technology was used to calculate Location"];
+
+  LTMT_WIFI_BIT = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+      "WiFi-based technology was used to calculate Location"];
+
+  LTMT_SENSORS_BIT = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+      "Sensor-based technology was used to calculate Location"];
+
+  LTMT_REF_LOC_BIT = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+      "Reference location was used to calculate Location"];
+
+  LTMT_INJECTED_COARSE_POS_BIT = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+      "Coarse position injected into the location engine was used to calculate Location"];
+
+  LTMT_AFLT_BIT = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+      "AFLT was used to calculate Location"];
+
+  LTMT_HYBRID_BIT = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+      "GNSS and network-provided measurements were used to calculate Location"];
+
+  LTMT_PPE_BIT = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+      "Precise position engine was used to calculate Location"];
+
+  LTMT_VEH_BIT = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+      "Vehicular data was used to calculate Location"];
+
+  LTMT_VIS_BIT = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+      "Visual data was used to calculate Location"];
+
+  LTMT_PROPAGATED_BIT = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+      "Propagation logic was used to calculate Location"];
+}
+
+
+/** Specify the set of navigation solutions that contribute
+ *  to LocationReportT.  */
+enum LocationReportNavSolutionMaskT {
+  // this means the enum will be serialized on 1 byte
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  LRNSMT_UNKNOWN = 0x0000 [(sdv.sdvsidl.litteral_description) =
+      "Unknown NavSolution Mask"];
+
+  LRNSMT_SBAS_CORR_IONO = 0x0001 [(sdv.sdvsidl.litteral_description) =
+      "SBAS ionospheric correction was used to calculate LocationReportT"];
+
+  LRNSMT_SBAS_CORR_FAST = 0x0002 [(sdv.sdvsidl.litteral_description) =
+      "SBAS fast correction was used to calculate LocationReportT"];
+
+  LRNSMT_SBAS_CORR_LONG = 0x0004 [(sdv.sdvsidl.litteral_description) =
+      "SBAS long-term correction was used to calculate LocationReportT"];
+
+  LRNSMT_SBAS_INTEGRITY = 0x0008 [(sdv.sdvsidl.litteral_description) =
+      "SBAS integrity information was used to calculate LocationReportT"];
+
+  LRNSMT_NAV_CORR_DGNSS = 0x0010 [(sdv.sdvsidl.litteral_description) =
+      "DGNSS correction was used to calculate LocationReportT"];
+
+  LRNSMT_NAV_CORR_RTK = 0x0020 [(sdv.sdvsidl.litteral_description) =
+      "RTK correction was used to calculate LocationReportT"];
+
+  LRNSMT_NAV_CORR_PPP = 0x0040 [(sdv.sdvsidl.litteral_description) =
+      "PPP correction was used to calculate LocationReportT"];
+
+  LRNSMT_NAV_CORR_RTK_FIX = 0x0080 [(sdv.sdvsidl.litteral_description) =
+      "RTK fixed correction was used to to calculate LocationReportT"];
+
+  LRNSMT_NAV_CORR_ONLY_SBAS_CORR_SV_USED = 0x0100 [(sdv.sdvsidl.litteral_description) =
+      "Only SBAS corrected SVs was used to calculate LocationReportT"];
+  LRNSMT_NAV_CORR_MMF_AIDED = 0x0200 [(sdv.sdvsidl.litteral_description) =
+      "MMF data aiding was used to calculate LocationReportT"];
+}
+
+
+/** Specify the valid fields in
+ *  LocationReportPositionDynamicsT.    */
+enum LocationReportPosDataMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  LRPDMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+      "Unknown Position Data Mask"];
+
+  LRPDMT_NAV_DATA_LONG_ACCEL = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::longAccel"];
+
+  LRPDMT_NAV_DATA_LAT_ACCEL = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::latAccel"];
+
+  LRPDMT_NAV_DATA_VERT_ACCEL = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::vertAccel"];
+
+  LRPDMT_NAV_DATA_YAW_RATE = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::yawRate"];
+
+  LRPDMT_NAV_DATA_PITCH = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::pitch"];
+
+  LRPDMT_NAV_DATA_LONG_ACCEL_UNC = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::longAccelUnc"];
+
+  LRPDMT_NAV_DATA_LAT_ACCEL_UNC = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::latAccelUnc"];
+
+  LRPDMT_NAV_DATA_VERT_ACCEL_UNC = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::vertAccelUnc"];
+
+  LRPDMT_NAV_DATA_YAW_RATE_UNC = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::yawRateUnc"];
+
+  LRPDMT_NAV_DATA_PITCH_UNC = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::pitchUnc"];
+
+  LRPDMT_NAV_DATA_PITCH_RATE = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::pitchRate"];
+
+  LRPDMT_NAV_DATA_PITCH_RATE_UNC = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::pitchRateUnc"];
+
+  LRPDMT_NAV_DATA_ROLL = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::roll"];
+
+  LRPDMT_NAV_DATA_ROLL_UNC = 0x00002000 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::rollUnc"];
+
+  LRPDMT_NAV_DATA_ROLL_RATE = 0x00004000 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::rollRate"];
+
+  LRPDMT_NAV_DATA_ROLL_RATE_UNC = 0x00008000 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::rollRateUnc"];
+
+  LRPDMT_NAV_DATA_YAW = 0x00010000 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::yaw"];
+
+  LRPDMT_NAV_DATA_YAW_UNC = 0x00020000 [(sdv.sdvsidl.litteral_description) =
+      "LocationReportPositionDynamicsT has valid LocationReportPositionDynamicsT::yawUnc"];
+}
+
+
+/** Specify the mask for available GNSS signal type and RF band
+ *  used in GnssSv::gnssSignalTypeMask and
+ *  GnssMeasUsageInfoT::gnssSignalType.    */
+enum GnssSignalTypeT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  option allow_alias = true;
+  GSTT_UNKNOWN = 0 [(sdv.sdvsidl.litteral_description) =
+    "Unknown Signal Type"];
+
+  GSTT_GPS_L1CA_BIT = 1 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GPS L1CA RF band"];
+
+  GSTT_GPS_L1C_BIT = 2 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GPS L1C RF band"];
+
+  GSTT_GPS_L2_BIT = 3 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GPS L2 RF band"];
+
+  GSTT_GPS_L5_BIT = 4 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GPS L5 RF band"];
+
+  GSTT_GLONASS_G1_BIT = 5 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GLONASS G1 (L1OF) RF band"];
+
+  GSTT_GLONASS_G2_BIT = 6 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GLONASS G2 (L2OF) RF band"];
+
+  GSTT_GALILEO_E1_BIT = 7 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GALILEO E1 RF band"];
+
+  GSTT_GALILEO_E5A_BIT = 8 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GALILEO E5A RF band"];
+
+  GSTT_GALILEO_E5B_BIT = 9 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of GALILEO E5B RF band"];
+
+  GSTT_BEIDOU_B1_BIT = 10 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B1 RF band"];
+
+  GSTT_BEIDOU_B2_BIT = 11 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B2 RF band"];
+
+  GSTT_QZSS_L1CA_BIT = 12 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of QZSS L1CA RF band"];
+
+  GSTT_QZSS_L1S_BIT = 13 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of QZSS L1S RF band"];
+
+  GSTT_QZSS_L2_BIT = 14 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of QZSS L2 RF band"];
+
+  GSTT_QZSS_L5_BIT = 15 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of QZSS L5 RF band"];
+
+  GSTT_SBAS_L1_BIT = 16 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of SBAS L1 RF band"];
+
+  GSTT_BEIDOU_B1I_BIT = 17 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B1I RF band"];
+
+  GSTT_BEIDOU_B1C_BIT = 18 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B1C RF band"];
+
+  GSTT_BEIDOU_B2I_BIT = 19 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B2I RF band"];
+
+  GSTT_BEIDOU_B2AI_BIT = 20 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B2AI RF band"];
+
+  GSTT_NAVIC_L5_BIT = 21 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of NAVIC L5 RF band"];
+
+  GSTT_BEIDOU_B2AQ_BIT = 22 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B2A_Q RF band"];
+
+  GSTT_BEIDOU_B2BI_BIT = 23 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B2B_I RF band"];
+
+  GSTT_BEIDOU_B2BQ_BIT = 24 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of BEIDOU B2B_Q RF band"];
+
+  GSTT_NAVIC_L1_BIT = 25 [(sdv.sdvsidl.litteral_description) =
+    "GNSS signal is of NAVIC L1 RF band"];
+  GSTT_MAX_NUMBER_OF_SIGNAL_TYPES = 25 [(sdv.sdvsidl.litteral_description) =
+    "Maximum number of signal types"];
+}
+
+/** Specify Location Api function call processing status.
+ *  The status is returned via ResponseCb.    */
+enum LocationStatusT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_ONE;
+  LOCATION_STATUS_T_UNKNOWN = 0 [(sdv.sdvsidl.litteral_description) =
+     "Unknown Response"];
+
+  LOCATION_STATUS_T_SUCCESS = 1 [(sdv.sdvsidl.litteral_description) =
+     "Location Api call is successful"];
+
+  LOCATION_STATUS_T_UNKOWN_FAILURE = 2 [(sdv.sdvsidl.litteral_description) =
+     "Location Api call has failed"];
+
+  LOCATION_STATUS_T_NOT_SUPPORTED = 3 [(sdv.sdvsidl.litteral_description) =
+     "Location Api call is not supported"];
+
+  LOCATION_STATUS_T_PARAM_INVALID = 4 [(sdv.sdvsidl.litteral_description) =
+     "Location Api call has invalid parameter"];
+
+  LOCATION_STATUS_T_TIMEOUT = 5 [(sdv.sdvsidl.litteral_description) =
+     "Location Api call timeout"];
+
+  LOCATION_STATUS_T_REQUEST_ALREADY_IN_PROGRESS = 6 [(sdv.sdvsidl.litteral_description) =
+     "Location Api is busy"];
+
+  LOCATION_STATUS_T_SYSTEM_NOT_READY = 7 [(sdv.sdvsidl.litteral_description) =
+     "System is not ready, e.g.: hal daemon is not yet ready"];
+
+  LOCATION_STATUS_T_EXCLUSIVE_SESSION_IN_PROGRESS = 8 [(sdv.sdvsidl.litteral_description) =
+     "LCA doesn't support simultaneous tracking and batching session. Other session is ongoing"];
+}
+
+
+/** Specify the SV constellation type in GnssSv
+ *  and GnssMeasurementsData.    */
+enum GnssSvTypeT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_ONE;
+  GNSS_SV_TYPE_T_UNKNOWN = 0 [(sdv.sdvsidl.litteral_description) =
+    "SV is of unknown constellation. "];
+
+  GNSS_SV_TYPE_T_GPS = 1 [(sdv.sdvsidl.litteral_description) =
+    "SV is of GPS constellation."];
+
+  GNSS_SV_TYPE_T_SBAS = 2 [(sdv.sdvsidl.litteral_description) =
+    "SV is of SBAS constellation."];
+
+  GNSS_SV_TYPE_T_GLONASS = 3 [(sdv.sdvsidl.litteral_description) =
+    "SV is of GLONASS constellation."];
+
+  GNSS_SV_TYPE_T_QZSS = 4 [(sdv.sdvsidl.litteral_description) =
+    "SV is of QZSS constellation."];
+
+  GNSS_SV_TYPE_T_BEIDOU = 5 [(sdv.sdvsidl.litteral_description) =
+    "SV is of BEIDOU constellation."];
+
+  GNSS_SV_TYPE_T_GALILEO = 6 [(sdv.sdvsidl.litteral_description) =
+    "SV is of GALILEO constellation."];
+
+  GNSS_SV_TYPE_T_NAVIC = 7 [(sdv.sdvsidl.litteral_description) =
+    "SV is of NAVIC constellation."];
+}
+
+
+/** Specify the valid fields in LocationReportT.
+ *  User should determine whether a field in
+ *  LocationReportT is valid or not by checking
+ *  if the corresponding bit in
+ *  LocationReportT::locationInfoFlags is set or
+ *  not.  */
+enum LocationReportFlagMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  LRFMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) = "Location Info Flags unknown"];
+
+  LRFMT_ALTITUDE_MEAN_SEA_LEVEL = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::altitudeMeanSeaLevel."];
+
+  LRFMT_DOP = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid DOP fields (pdop, hdop, vdop)"];
+
+  LRFMT_MAGNETIC_DEVIATION = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::magneticDeviation."];
+
+  LRFMT_HOR_RELIABILITY = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::horReliability."];
+
+  LRFMT_VER_RELIABILITY = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::verReliability."];
+
+  LRFMT_HOR_ACCURACY_ELIP_SEMI_MAJOR = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::horUncEllipseSemiMajor."];
+
+  LRFMT_HOR_ACCURACY_ELIP_SEMI_MINOR = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::horUncEllipseSemiMinor."];
+
+  LRFMT_HOR_ACCURACY_ELIP_AZIMUTH = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::horUncEllipseOrientAzimuth."];
+
+  LRFMT_GNSS_SV_USED_DATA = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::svUsedInPosition and LocationReportT::measUsageInfo."];
+
+  LRFMT_NAV_SOLUTION_MASK_BIT = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::navSolutionMask."];
+
+  LRFMT_GNSS_LOCATION_INFO_POS_TECH_MASK = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::posTechMask."];
+
+  LRFMT_POS_DYNAMICS_DATA = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::altitudeMeanSeaLevel."];
+
+  LRFMT_EXT_DOP = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+   "LocationReportT has valid LocationReportT::gdop and LocationReportT::tdop."];
+
+  LRFMT_NORTH_STD_DEV = 0x00002000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::northStdDeviation."];
+
+  LRFMT_EAST_STD_DEV = 0x00004000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::eastStdDeviation."];
+
+  LRFMT_NORTH_VEL = 0x0008000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::northVelocity."];
+
+  LRFMT_EAST_VEL = 0x00010000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::eastVelocity."];
+
+  LRFMT_UP_VEL = 0x00020000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::upVelocity."];
+
+  LRFMT_NORTH_VEL_UNC = 0x00040000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::northVelocityStdDeviation."];
+
+  LRFMT_EAST_VEL_UNC = 0x00080000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::eastVelocityStdDeviation."];
+
+  LRFMT_UP_VEL_UNC = 0x00100000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::upVelocityStdDeviation."];
+
+  LRFMT_LEAP_SECONDS = 0x00200000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::leapSeconds."];
+
+  LRFMT_NUM_SV_USED_IN_POS = 0x00400000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::numSvUsedInPosition."];
+
+  LRFMT_CALIB_CONFIDENCE_PERCENT = 0x00800000 [(sdv.sdvsidl.litteral_description) =
+   "LocationReportT has valid LocationReportT::calibrationConfidencePercent."];
+
+  LRFMT_CALIB_STATUS = 0x01000000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::calibrationStatus."];
+
+  LRFMT_OUTPUT_ENG_TYPE = 0x02000000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::locOutputEngType."];
+
+  LRFMT_OUTPUT_ENG_MASK = 0x04000000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::locOutputEngMask."];
+
+  LRFMT_CONFORMITY_INDEX = 0x08000000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::conformityIndex."];
+
+  LRFMT_LLA_VRP_BASED = 0x10000000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::llaVRPBased."];
+
+  LRFMT_ENU_VEL_VRP_BASED = 0x20000000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::enuVelocityVRPBased."];
+
+  LRFMT_DR_SOL_STATUS_MASK = 0x40000000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::drSolutionStatusMask."];
+}
+
+enum LocationReportExtendedFlagMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  LREFMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+    "Location Info Extended Flags unknown"];
+
+  LREFMT_ALTITUDE_ASSUMED = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::altitudeAssumed."];
+
+  LREFMT_SESSION_STATUS = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::sessionStatus."];
+
+  LREFMT_INTEGRITY_RISK_USED = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::integrityRiskUsed."];
+
+  LREFMT_PROTECT_ALONG_TRACK = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::protectAlongTrack."];
+
+  LREFMT_PROTECT_CROSS_TRACK = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::protectCrossTrack."];
+
+  LREFMT_PROTECT_VERTICAL = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::protectVertical."];
+
+  LREFMT_DGNSS_STATION_ID = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::dgnssStationId."];
+
+  LREFMT_GPTP_TIME_BIT = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::elapsedgPTPTime."];
+
+  LREFMT_GPTP_TIME_UNC_BIT = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::elapsedgPTPTimeUnc."];
+
+  LREFMT_BASE_LINE_LENGTH_BIT = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::baseLineLength."];
+
+  LREFMT_AGE_OF_CORRECTION_BIT  = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::ageMsecOfCorrections."];
+
+  LREFMT_REPORT_INTERVAL_BIT   = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::posReportingInterval."];
+
+  LREFMT_LEAP_SECONDS_UNC_BIT   = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT has valid LocationReportT::leapSecondsUnc."];
+}
+
+
+/** Specify the reliability level of
+ *  LocationReportT::horReliability and
+ *  LocationReportT::verReliability.    */
+enum LocationReliabilityT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_ONE;
+  LOCATION_RELIABILIT_T_NOT_SET = 0 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT reliability is not set."];
+
+  LOCATION_RELIABILIT_T_VERY_LOW = 1 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT reliability is very low. Use it at your own risk."];
+
+  LOCATION_RELIABILIT_T_LOW = 2 [(sdv.sdvsidl.litteral_description) =
+   "LocationReportT reliability is low. Little or no cross-checking is possible"];
+
+  LOCATION_RELIABILIT_T_MEDIUM = 3 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT reliability is medium. Limited cross-check has passed"];
+
+  LOCATION_RELIABILIT_T_HIGH = 4 [(sdv.sdvsidl.litteral_description) =
+    "LocationReportT reliability is high. Strong cross-check passed."];
+}
+
+
+/** Specify the constellation that the SV belongs to in
+ *   GnssMeasUsageInfoT and GnssSystemTime.  */
+enum GnssLocSvSystemTypeT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_ONE;
+  GLSSTT_UNKNOWN = 0 [(sdv.sdvsidl.litteral_description) = "SV is of Unknown constellation."];
+
+  GLSSTT_GPS = 1 [(sdv.sdvsidl.litteral_description) = "SV is of GPS constellation."];
+
+  GLSSTT_GAL = 2 [(sdv.sdvsidl.litteral_description) = "SV is of GALILEO constellation."];
+
+  GLSSTT_SBAS = 3 [(sdv.sdvsidl.litteral_description) = "SV is of SBAS constellation."];
+
+  GLSSTT_GLO = 4 [(sdv.sdvsidl.litteral_description) = "SV is of GLONASS constellation."];
+
+  GLSSTT_BDS = 5 [(sdv.sdvsidl.litteral_description) = "SV is of BDS constellation."];
+
+  GLSSTT_QZSS = 6 [(sdv.sdvsidl.litteral_description) = "SV is of QZSS constellation."];
+
+  GLSSTT_NAVIC = 7 [(sdv.sdvsidl.litteral_description) = "SV is of NAVIC constellation."];
+}
+
+
+/** Specify the valid fields in GnssSystemTimeStructType.
+ *  <br/>  */
+enum GnssSystemTimeStructTypeFlagsT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  GSTSTFT_INVALID = 0x0000 [(sdv.sdvsidl.litteral_description) =
+    "GnssSystemTimeStructTypeT is invalid"];
+
+  GSTSTFT_WEEK_VALID = 0x0001 [(sdv.sdvsidl.litteral_description) =
+    "GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::systemWeek."];
+
+  GSTSTFT_WEEK_MS_VALID = 0x0002 [(sdv.sdvsidl.litteral_description) =
+    "GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::systemMsec."];
+
+  GSTSTFT_CLK_TIME_BIAS_VALID = 0x0004 [(sdv.sdvsidl.litteral_description) =
+    "GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::systemClkTimeBias."];
+
+  GSTSTFT_CLK_TIME_BIAS_UNC_VALID = 0x0008 [(sdv.sdvsidl.litteral_description) =
+    "GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::systemClkTimeUncMs."];
+
+  GSTSTFT_REF_FCOUNT_VALID = 0x0010 [(sdv.sdvsidl.litteral_description) =
+    "GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::refFCount."];
+
+  GSTSTFT_NUM_CLOCK_RESETS_VALID = 0x0020 [(sdv.sdvsidl.litteral_description) =
+    "GnssSystemTimeStructTypeT has valid GnssSystemTimeStructType::numClockResets."];
+}
+
+
+/** Specify the valid fields in GnssGloTimeStructType.   */
+enum GnssGloTimeStructTypeFlagsT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  GGTSTFT_INVALID = 0x0000 [(sdv.sdvsidl.litteral_description) =
+    "GnssGloTimeStructTypeT is invalid"];
+
+  GGTSTFT_DAYS_VALID = 0x0001 [(sdv.sdvsidl.litteral_description) =
+    "GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloDays."];
+
+  GGTSTFT_MSEC_VALID = 0x0002 [(sdv.sdvsidl.litteral_description) =
+    "GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloMsec."];
+
+  GGTSTFT_CLK_TIME_BIAS_VALID = 0x0004 [(sdv.sdvsidl.litteral_description) =
+    "GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloClkTimeBias."];
+
+  GGTSTFT_CLK_TIME_BIAS_UNC_VALID = 0x0008 [(sdv.sdvsidl.litteral_description) =
+    "GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloClkTimeUncMs."];
+
+  GGTSTFT_REF_FCOUNT_VALID = 0x0010 [(sdv.sdvsidl.litteral_description) =
+    "GnssGloTimeStructTypeT has valid GnssGloTimeStructType::refFCount."];
+
+  GGTSTFT_NUM_CLK_RESETS_VALID = 0x0020 [(sdv.sdvsidl.litteral_description) =
+    "GnssGloTimeStructTypeT has valid GnssGloTimeStructType::numClockResets."];
+
+  GGTSTFT_FOUR_YEAR_VALID = 0x0040 [(sdv.sdvsidl.litteral_description) =
+    "GnssGloTimeStructTypeT has valid GnssGloTimeStructType::gloClkTimeBias."];
+}
+
+
+/** Specify the sensor calibrations status in
+ *  LocationReportT. <br/>  */
+enum DrCalibrationStatusMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  DCSMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+    "Unknown calibration"];
+
+  DCSMT_ROLL_CALIB_NEEDED = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+    "Indicate that roll calibration is needed"
+    "Need to take more turns on level ground."];
+
+  DCSMT_PITCH_CALIB_NEEDED = 0x000000002 [(sdv.sdvsidl.litteral_description) =
+    "Indicate that pitch calibration is needed."
+    "Need to take more turns on level ground."];
+
+  DCSMT_YAW_CALIB_NEEDED = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+    "Indicate that yaw calibration is needed."
+    "Need to accelerate in a straight line."];
+
+  DCSMT_ODO_CALIB_NEEDED = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+    "Indicate that odo calibration is needed."
+    "Need to accelerate in a straight line."];
+
+  DCSMT_GYRO_CALIB_NEEDED = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+    "Indicate that gyro calibration is needed."
+    "Need to take more turns on level ground."];
+
+  DCSMT_TURN_CALIB_LOW = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+    "Lot more turns on level ground needed"];
+
+  DCSMT_TURN_CALIB_MED = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+    "Some more turns on level ground needed"];
+
+  DCSMT_TURN_CALIB_HIGH = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+    "Sufficient turns on level ground observed"];
+
+  DCSMT_LINEAR_ACCEL_CALIB_LOW = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+    "Lot more accelerations in straight line needed"];
+
+  DCSMT_LINEAR_ACCEL_CALIB_MED = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+    "Some more accelerations in straight line needed"];
+
+  DCSMT_LINEAR_ACCEL_CALIB_HIGH = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+    "Sufficient acceleration events in straight line observed"];
+
+  DCSMT_LINEAR_MOTION_CALIB_LOW = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+    "Lot more motion in straight line needed"];
+
+  DCSMT_LINEAR_MOTION_CALIB_MED = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+    "Some more motion in straight line needed"];
+
+  DCSMT_LINEAR_MOTION_CALIB_HIGH = 0x00002000 [(sdv.sdvsidl.litteral_description) =
+    "Sufficient motion events in straight line observed"];
+
+  DCSMT_STATIC_CALIB_LOW = 0x00004000 [(sdv.sdvsidl.litteral_description) =
+    "Lot more stationary events on level ground needed"];
+
+  DCSMT_STATIC_CALIB_MED = 0x00008000 [(sdv.sdvsidl.litteral_description) =
+    "Some more stationary events on level ground needed"];
+
+  DCSMT_STATIC_CALIB_HIGH = 0x00010000 [(sdv.sdvsidl.litteral_description) =
+    "Sufficient stationary events on level ground observed"];
+}
+
+message LocationReportSvUsedInPositionT {
+  option (sdv.sdvsidl.description) =
+    "Specify the set of SVs that are used to calculate LocationReportT";
+
+  uint64 gps_sv_used_ids_mask = 1 [(sdv.sdvsidl.field_description) =
+    "Specify the set of SVs from GPS constellation that are used to compute the position. \n"
+    " Bit 0 to Bit 31 corresponds to GPS SV id 1 to 32."];
+
+  uint64 glo_sv_used_ids_mask = 2 [(sdv.sdvsidl.field_description) =
+    "Specify the set of SVs from GLONASS constellation that are used to compute the position. \n"
+    " Bit 0 to Bit 31 corresponds to GLO SV id 65 to 96."];
+
+  uint64 gal_sv_used_ids_mask = 3 [(sdv.sdvsidl.field_description) =
+    "Specify the set of SVs from GALILEO constellation that are used to compute the position. \n"
+    " Bit 0 to Bit 35 corresponds to GAL SV id 301 to 336."];
+
+  uint64 bds_sv_used_ids_mask = 4 [(sdv.sdvsidl.field_description) =
+    "Specify the set of SVs from BEIDOU constellation that are used to compute the position.\n"
+    " Bit 0 to Bit 62 corresponds to BDS SV id 201 to 263."];
+
+  uint64 qzss_sv_used_ids_mask = 5 [(sdv.sdvsidl.field_description) =
+    "Specify the set of SVs from QZSS constellation that are used to compute the position. \n"
+    " Bit 0 to Bit 4 corresponds to QZSS SV id 193 to 197."];
+
+  uint64 navic_sv_used_ids_mask = 6 [(sdv.sdvsidl.field_description) =
+    "Specify the set of SVs from NAVIC constellation that are used to compute the position. \n"
+    " Bit 0 to Bit 13 corresponds to NAVIC SV id 401 to 414."];
+}
+
+message GnssMeasUsageInfoT {
+  option (sdv.sdvsidl.description) =
+    "Specify the SV measurements that are used to calculate LocationReportT";
+
+  GnssConstellationTypeT gnss_constellation = 1 [(sdv.sdvsidl.field_description) =
+    "Specify GNSS Constellation Type for the SV."];
+
+  uint32 gnss_sv_id = 2 [(sdv.sdvsidl.field_description) =
+    "Specify satellite vehicle ID number."];
+
+  GnssSignalTypeT gnss_signal_type = 3 [(sdv.sdvsidl.field_description) =
+    "Specify the signal type mask of the SV."];
+}
+
+message LocationReportPositionDynamicsT {
+  option (sdv.sdvsidl.description) = "Specify device body frame parameters";
+
+  uint32 body_frame_data_mask = 1 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of LocationReportPosDataMaskT to specify the valid fields \n"
+    " in LocationReportPositionDynamicsT. Contains LocationReportPosDataMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationReportPosDataMaskT"];
+
+  float long_accel = 2 [(sdv.sdvsidl.field_description) =
+    "Forward acceleration in body frame, in unit of meters/second^2."];
+
+  float lat_accel = 3 [(sdv.sdvsidl.field_description) =
+    "Sideward acceleration in body frame, in unit of meters/second^2."];
+
+  float vert_accel = 4 [(sdv.sdvsidl.field_description) =
+    "Vertical acceleration in body frame, in unit of meters/second^2."];
+
+  float long_accel_unc = 5 [(sdv.sdvsidl.field_description) =
+    "Uncertainty of forward acceleration in body frame, in unit of meters/second^2. \n"
+    " Uncertainty is defined with 68% confidence level."];
+
+  float lat_accel_unc = 6 [(sdv.sdvsidl.field_description) =
+    "Uncertainty of side-ward acceleration in body frame, in unit of meters/second^2. \n"
+    " Uncertainty is defined with 68% confidence level."];
+
+  float vert_accel_unc = 7 [(sdv.sdvsidl.field_description) =
+  "Uncertainty of vertical acceleration in body frame, in unit of meters/second^2. \n"
+  " Uncertainty is defined with 68% confidence level."];
+
+  float pitch = 8 [(sdv.sdvsidl.field_description) =
+    "Body pitch, in unit of radians."];
+
+  float pitch_unc = 9 [(sdv.sdvsidl.field_description) =
+    "Uncertainty of body pitch, in unit of radians."
+    " Uncertainty is defined with 68% confidence level."];
+
+  float pitch_rate = 10 [(sdv.sdvsidl.field_description) =
+    "Body pitch rate, in unit of radians/second."];
+
+  float pitch_rate_unc = 11 [(sdv.sdvsidl.field_description) =
+    "Uncertainty of pitch rate, in unit of radians/second."
+    " Uncertainty is defined with 68% confidence level."];
+
+  float roll = 12 [(sdv.sdvsidl.field_description) =
+    "Roll of body frame, clockwise is positive, in unit of radian."];
+
+  float roll_unc = 13 [(sdv.sdvsidl.field_description) =
+    "Uncertainty of roll, in unit of radian. \n"
+    " Uncertainty is defined with 68% confidence level."];
+
+  float roll_rate = 14 [(sdv.sdvsidl.field_description) =
+    "Roll rate of body frame, clockwise is positive, in unit of radian/second."];
+
+  float roll_rate_unc = 15 [(sdv.sdvsidl.field_description) =
+    "Uncertainty of roll rate, in unit of radian/second."
+    " Uncertainty is defined with 68% confidence level."];
+
+  float yaw = 16 [(sdv.sdvsidl.field_description) =
+    "Yaw of body frame, clockwise is positive, in unit of radian."];
+
+  float yaw_unc = 17 [(sdv.sdvsidl.field_description) =
+    "Uncertainty of yaw, 68% confidence level, in unit of radian."
+    " Uncertainty is defined with 68% confidence level."];
+
+  float yaw_rate = 18 [(sdv.sdvsidl.field_description) =
+    "Heading rate, in unit of radians/second. Range: +/- pi (where pi is ~3.14159). \n"
+    " The positive value is clockwise and negative value is anti-clockwise."];
+
+  float yaw_rate_unc = 19 [(sdv.sdvsidl.field_description) =
+    "Uncertainty of heading rate, in unit of radians/second. \n"
+    " Uncertainty is defined with 68% confidence level."];
+}
+
+message GnssSystemTimeStructTypeT {
+  option (sdv.sdvsidl.description) = "Specify Non-Glonass GNSS system time info";
+
+  uint32 validity_mask = 1 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of GnssSystemTimeStructTypeFlagsT to specify valid fields \n"
+    " in GnssSystemTimeStructType. Contains GnssSystemTimeStructTypeFlagsT bits \n",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssSystemTimeStructTypeFlagsT"];
+
+  uint32 system_week = 2 [(sdv.sdvsidl.field_description) =
+    "Extended week number at reference tick, in unit of week. \n"
+    " Set to 65535 if week number is unknown. For GPS: calculated from midnight, Jan. 6, 1980. \n"
+    " OTA decoded 10 bit GPS week is extended to map between: [NV6264 to (NV6264 + 1023)] \n"
+    " For BDS: calculated from 00:00:00 on January 1, 2006 of Coordinated Universal Time (UTC). \n"
+    " For GAL: calculated from 00:00 UT on Sunday August 22, 1999 \n"
+    " (midnight between August 21 and August 22)."];
+
+  uint32 system_msec = 3 [(sdv.sdvsidl.field_description) =
+    "Time in to the current week at reference tick, in unit of milliseconds. \n"
+    " Range is 0 to 604799999."];
+
+  float system_clk_time_bias = 4 [(sdv.sdvsidl.field_description) =
+    "System clock time bias, in unit of milliseconds. \n"
+    " Note: System time (TOW Millisecond) = system_msec - system_clk_time_bias."];
+
+  float system_clk_time_unc_ms = 5 [(sdv.sdvsidl.field_description) =
+    "Single sided maximum time bias uncertainty, in unit of milliseconds."];
+
+  uint32 ref_fcount = 6 [(sdv.sdvsidl.field_description) =
+    "FCount (free running HW timer) value, in unit of milliseconds. \n"
+    " Don't use for relative time purpose due to possible discontinuities."];
+
+  uint32 num_clock_resets = 7 [(sdv.sdvsidl.field_description) =
+    "Number of clock resets/discontinuities detected, which affects the local hardware counter value."];
+}
+
+message GnssGloTimeStructTypeT {
+  option (sdv.sdvsidl.description) = "Specify Glonass system time info";
+
+  uint32 validity_mask = 1 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of GnssGloTimeStructTypeFlagsT to specify the valid fields in GnssGloTimeStructType. \n"
+    " Contains GnssGloTimeStructTypeFlagsT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssGloTimeStructTypeFlagsT"];
+
+  uint32 glo_four_year = 2 [(sdv.sdvsidl.field_description) =
+    "GLONASS four year number from 1996. \n"
+    " Refer to GLONASS ICD. Applicable only for GLONASS and shall be ignored \n"
+    " for other constellations."];
+
+  uint32 glo_days = 3 [(sdv.sdvsidl.field_description) =
+    "GLONASS day number in four years. Refer to GLONASS ICD. If unknown shall be set to 65535."];
+
+  uint32 glo_msec = 4 [(sdv.sdvsidl.field_description) =
+    "GLONASS time of day in unit of millisecond. Refer to GLONASS ICD."];
+
+  float glo_clk_time_bias = 5 [(sdv.sdvsidl.field_description) =
+    "GLONASS clock time bias, in unit of millisecond. \n"
+    " Note: GLO time (TOD Millisecond) = gloMsec - gloClkTimeBias. \n"
+    " Check for gloClkTimeUncMs before use."];
+
+  float glo_clk_time_unc_ms = 6 [(sdv.sdvsidl.field_description) =
+    "Single sided maximum time bias uncertainty, in unit of milliseconds."];
+
+  uint32 ref_f_count = 7 [(sdv.sdvsidl.field_description) =
+    "FCount (free running HW timer) value, in unit of milliseconds. \n"
+    " Don't use for relative time purpose due to possible discontinuities."];
+
+  uint32 num_clock_resets = 8 [(sdv.sdvsidl.field_description) =
+    "Number of clock resets/discontinuities detected, affecting the local hardware counter value."];
+}
+
+/** To hold GNSS system time from different
+     *  constellations in GnssSystemTimeT   */
+
+message SystemTimeStructT {
+  GnssSystemTimeStructTypeT gnss_system_time = 1 [(sdv.sdvsidl.field_description) =
+    "System time info from GPS/GAL/BDS/QZSS/NAVIC constellation."];
+  GnssGloTimeStructTypeT glo_system_time = 2 [(sdv.sdvsidl.field_description) =
+    "System time info from GALILEO constellation."];
+}
+
+
+message GnssSystemTimeT {
+  option (sdv.sdvsidl.description) = "GNSS system time in LocationReportT";
+
+  GnssLocSvSystemTypeT gnss_system_time_src = 1 [(sdv.sdvsidl.field_description) =
+    "Specify the source constellation for GNSS system time."];
+
+  SystemTimeStructT system_time = 2 [(sdv.sdvsidl.field_description) =
+    "Specify the GNSS system time corresponding to the source."];
+}
+
+
+/** Specify the set of engines whose position reports are
+    requested via startPositionSession(uint32_t,
+    LocReqEngineTypeMaskT, const EngineReport&, Response).
+*/
+enum LocReqEngineTypeMaskT {
+
+  option (sdv.sdvsidl.enum_byte_size) = PBS_TWO;
+
+  LRETM_UNKNOWN = 0x0000 [(sdv.sdvsidl.litteral_description) = "Engine Mask Unknown"];
+
+  LRETM_FUSED = 0x0001 [(sdv.sdvsidl.litteral_description) =
+    "Mask to indicate that client requests the fused/default \n"
+    " position via registering location_client::EngineLocations for the tracking session. \n"
+    " The default position is the propagated/aggregated reports from all engines running \n"
+    " on the system (e.g.: DR/SPE/PPE)."];
+
+  LRETM_SPE = 0x0002 [(sdv.sdvsidl.litteral_description) =
+    "Mask to indicate that client requests the unmodified SPE \n"
+    " position via registering location_client::EngineLocations \n"
+    " for the tracking session."];
+
+  LRETM_PPE = 0x0004 [(sdv.sdvsidl.litteral_description) =
+    "Mask to indicate that the client requests unmodified PPE \n"
+    " position via registering location_client::EngineLocations \n"
+    " for the tracking session."];
+
+  LRETM_VPE = 0x0008 [(sdv.sdvsidl.litteral_description) =
+    "Mask to indicate that the client requests unmodified VPE \n"
+    " position via registering location_client::EngineLocations for the tracking session."];
+}
+
+/** Specify the position engine type that produced GnssLocation. */
+enum LocOutputEngineTypeT {
+  option allow_alias = true;
+  option (sdv.sdvsidl.enum_byte_size) = PBS_ONE;
+  LOETT_UNKNOWN = 0 [(sdv.sdvsidl.litteral_description) =
+    "Unknown Engine Type"];
+
+  LOETT_FUSED = 1 [(sdv.sdvsidl.litteral_description) =
+    "This is the propagated/aggregated report from the fixes of \n"
+    " all engines running on the system (e.g.: DR/SPE/PPE)."];
+
+  LOETT_SPE = 2 [(sdv.sdvsidl.litteral_description) =
+    "This fix is the unmodified fix from modem GNSS engine."];
+
+  LOETT_PPE = 3 [(sdv.sdvsidl.litteral_description) =
+    "This is the unmodified fix from PPE engine."];
+
+  LOETT_VPE = 4 [(sdv.sdvsidl.litteral_description) =
+    "This is the unmodified fix from VPE engine."];
+
+  LOETT_COUNT = 4 [(sdv.sdvsidl.litteral_description) =
+    "This is the entry count of this enum."];
+}
+
+
+/** Specify the set of position engines supported by
+ *  Location.   */
+enum PositioningEngineMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_TWO;
+
+  PEMT_UNKNOWN = 0x0000 [(sdv.sdvsidl.litteral_description) =
+    "Position Engine Mask Unknown"];
+
+  PEMT_STANDARD_POSITIONING_ENGINE = 0x0001 [(sdv.sdvsidl.litteral_description) =
+    "Mask for standard GNSS position engine."];
+
+  PEMT_DEAD_RECKONING_ENGINE = 0x0002 [(sdv.sdvsidl.litteral_description) =
+    "Mask for dead reckoning position engine."];
+
+  PEMT_PRECISE_POSITIONING_ENGINE = 0x0004 [(sdv.sdvsidl.litteral_description) =
+    "Mask for precise position engine."];
+
+  PEMT_VP_POSITIONING_ENGINE = 0x0008 [(sdv.sdvsidl.litteral_description) =
+    "Mask for vpe engine."];
+}
+
+message LocationT {
+  uint32 flags = 1 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of LocationFlagsMaskT to specify the valid fields.",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationFlagsMaskT"];
+
+  uint64 timestamp = 2 [(sdv.sdvsidl.field_description) =
+    "UTC timestamp for location fix since January 1, 1970, in unit of milliseconds."];
+
+  double latitude = 3 [(sdv.sdvsidl.field_description) =
+    "Latitude, in unit of degrees, range [-90.0, 90.0]."];
+
+  double longitude = 4 [(sdv.sdvsidl.field_description) =
+    "Longitude, in unit of degrees, range [-180.0, 180.0]."];
+
+  double altitude = 5 [(sdv.sdvsidl.field_description) =
+    "Altitude above the WGS 84 reference ellipsoid, in unit of meters."];
+
+  float speed = 6 [(sdv.sdvsidl.field_description) =
+    "Horizontal speed, in meters/second."];
+
+  float bearing = 7 [(sdv.sdvsidl.field_description) =
+    "Bearing, in unit of degrees, range [0, 360)."];
+
+  float horizontal_accuracy = 8 [(sdv.sdvsidl.field_description) =
+    "Horizontal accuracy, in unit of meters. \n"
+    " Uncertainty is defined with 68% confidence level."];
+
+  float vertical_accuracy = 9 [(sdv.sdvsidl.field_description) =
+    "Vertical accuracy, in unit of meters. \n"
+    " Uncertainty is defined with 68% confidence level."];
+
+  float speed_accuracy = 10 [(sdv.sdvsidl.field_description) =
+    "Horizontal speed uncertainty, in unit meters/second. \n"
+    " Uncertainty is defined with 68% confidence level."];
+
+  float bearing_accuracy = 11 [(sdv.sdvsidl.field_description) =
+    "Bearing uncertainty, in unit of degrees, range (0 to 359.999).\n"
+    " Uncertainty is defined with 68% confidence level."];
+
+  uint32 tech_mask = 12 [(sdv.sdvsidl.field_description) =
+    "Sets of technology that contributed to the fix. \n"
+    " Contains LocationTechnologyMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationTechnologyMaskT"];
+
+  uint64 elapsed_real_time_ns = 13 [(sdv.sdvsidl.field_description) =
+    "Boot timestamp corresponding to the UTC timestamp for location fix. In unit of nanoseconds. \n"
+    " This field may not always be available."];
+
+  uint64 elapsed_real_time_unc_ns = 14 [(sdv.sdvsidl.field_description) =
+    "Uncertainty for the boot timestamp. In unit of nanoseconds. \n"
+    " This field may not always be available."];
+
+  float time_unc_ms = 15 [(sdv.sdvsidl.field_description) =
+    "Time uncertainty associated with this position. In unit of milliseconds. \n"
+    " This field may not always be available."];
+}
+
+message LlaInfoT {
+  option (sdv.sdvsidl.description) =
+  "Specify latitude, longitude and altitude info of location";
+
+  double latitude = 1 [(sdv.sdvsidl.field_description) =
+    "Latitude, in unit of degrees, range [-90.0, 90.0]"];
+
+  double longitude = 2 [(sdv.sdvsidl.field_description) =
+    "Longitude, in unit of degrees, range [-180.0, 180.0]"];
+
+  float altitude = 3 [(sdv.sdvsidl.field_description) =
+    "Altitude above the WGS 84 reference ellipsoid, in unit of meters"];
+}
+
+/** Specify various status that contributes to the DR position
+ *  engine. */
+enum DrSolutionStatusMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  DSSMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+    " DR Soultion Status Unknown "];
+  DSSMT_VEHICLE_SENSOR_SPEED_INPUT_DETECTED = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+    " Vehicle sensor speed input was detected by the DR position engine. "];
+  DSSMT_VEHICLE_SENSOR_SPEED_INPUT_USED = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+    " Vehicle sensor speed input was used by the DR position engine."];
+  DSSMT_WARNING_UNCALIBRATED = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due to insufficient calibration"];
+  DSSMT_WARNING_GNSS_QUALITY_INSUFFICIENT = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due to bad GNSS quality "];
+  DSSMT_WARNING_FERRY_DETECTED = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged as ferry condition detected "];
+  DSSMT_ERROR_6DOF_SENSOR_UNAVAILABLE = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged as 6DOF sensor inputs not available"];
+  DSSMT_ERROR_VEHICLE_SPEED_UNAVAILABLE = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged as vehicle speed inputs not available "];
+  DSSMT_ERROR_GNSS_EPH_UNAVAILABLE = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged as Ephemeris info not available "];
+  DSSMT_ERROR_GNSS_MEAS_UNAVAILABLE = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged as GNSS measurement info not available "];
+  DSSMT_WARNING_INIT_POSITION_INVALID = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due non-availability of"
+    " stored position from previous session "];
+  DSSMT_WARNING_INIT_POSITION_UNRELIABLE = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due to vehicle motion"
+    " detected at session start "];
+  DSSMT_WARNING_POSITON_UNRELIABLE = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due to unreliable position "];
+  DSSMT_ERROR_GENERIC = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due to a generic error "];
+  DSSMT_WARNING_SENSOR_TEMP_OUT_OF_RANGE = 0x00002000 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due to Sensor Temperature"
+    " being out of range "];
+  DSSMT_WARNING_USER_DYNAMICS_INSUFFICIENT = 0x00004000 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due to insufficient"
+    " user dynamics "];
+  DSSMT_WARNING_FACTORY_DATA_INCONSISTENT = 0x00008000 [(sdv.sdvsidl.litteral_description) =
+    " DRE solution disengaged due to inconsistent factory data "];
+  DSSMT_WARNING_MMF_UNAVAILABLE  = 0x00010000 [(sdv.sdvsidl.litteral_description) =
+    " DRE did not recieve any recent map matching feedback data "];
+  DSSMT_WARNING_MMF_NOT_USABLE  = 0x00020000 [(sdv.sdvsidl.litteral_description) =
+    " Map matching feedback is available for DRE but is not usable "];
+}
+
+/** Specify the session status. */
+enum LocSessionStatusT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_ONE;
+  LSS_UNKNOWN = 0 [(sdv.sdvsidl.litteral_description) =
+    " Session Status is unknown "];
+  LSS_SUCCESS = 1 [(sdv.sdvsidl.litteral_description) =
+    " Session is successful. "];
+  LSS_INTERMEDIATE = 2 [(sdv.sdvsidl.litteral_description) =
+    "Session is still in progress, the reported has not yet \n"
+    " achieved the needed criteria. "];
+  LSS_FAILURE = 3 [(sdv.sdvsidl.litteral_description) =
+    " Session has failed. "];
+}
+
+message LocationReportT {
+  option (sdv.sdvsidl.description) =
+    "Specify the location info received by client via \n"
+    " StartPositionSessionLocationReport() or \n "
+    " StartPositionSessionEngineSpecificLocation().";
+
+  LocationT loc_info = 1 [(sdv.sdvsidl.field_description) =
+    "Basic Location information structure"];
+
+  uint32 location_info_flags = 2 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of LocationReportFlagMaskT for param validity. \n"
+    " Contains LocationReportFlagMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationReportFlagMaskT"];
+
+  float altitude_mean_sea_level = 3 [(sdv.sdvsidl.field_description) =
+    "Altitude wrt mean sea level, in unit of meters"];
+
+  float pdop = 4 [(sdv.sdvsidl.field_description) =
+    "Position dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy)"];
+
+  float hdop = 5 [(sdv.sdvsidl.field_description) =
+    "Horizontal dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy)"];
+
+  float vdop = 6 [(sdv.sdvsidl.field_description) =
+    "Vertical dilution of precision, range: 0 (highest accuracy) to 50 (lowest accuracy)"];
+
+  float gdop = 7 [(sdv.sdvsidl.field_description) =
+    "Geometric dilution of precision range: 0 (highest accuracy) to 50 (lowest accuracy)"];
+
+  float tdop = 8 [(sdv.sdvsidl.field_description) =
+    "Time dilution of precision range: 0 (highest accuracy) to 50 (lowest accuracy)"];
+
+  float magnetic_deviation = 9 [(sdv.sdvsidl.field_description) =
+    "Difference between the bearing to true north and the bearing shown on a magnetic compass. \n"
+    " The deviation is positive when the magnetic north is east of true north"];
+
+  uint32 hor_reliability = 10 [(sdv.sdvsidl.field_description) =
+    "Horizontal reliability. Contains LocationReliabilityT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationReliabilityT"];
+
+  uint32 ver_reliability = 11 [(sdv.sdvsidl.field_description) =
+    "Vertical reliability. Contains LocationReliabilityT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationReliabilityT"];
+
+  float hor_unc_ellipse_semi_major = 12 [(sdv.sdvsidl.field_description) =
+    "Horizontal elliptical accuracy semi-major axis, in unit of meters. \n"
+    " Uncertainty is defined with 39% confidence level"];
+
+  float hor_unc_ellipse_semi_minor = 13 [(sdv.sdvsidl.field_description) =
+    "Horizontal elliptical accuracy semi-minor axis, in unit of meters. \n"
+    " Uncertainty is defined with 39% confidence level"];
+
+  float hor_unc_ellipse_orient_azimuth = 14 [(sdv.sdvsidl.field_description) =
+    "Horizontal elliptical accuracy azimuth, in unit of degrees, range [0, 180]. \n"
+    " Confidence for uncertainty is not specified"];
+
+  float north_std_deviation = 15 [(sdv.sdvsidl.field_description) =
+    "North standard deviation, in unit of meters. \n"
+    " Uncertainty is defined with 68% confidence level"];
+
+  float east_std_deviation = 16 [(sdv.sdvsidl.field_description) =
+    "East standard deviation, in unit of meters. \n"
+    " Uncertainty is defined with 68% confidence level"];
+
+  float north_velocity = 17 [(sdv.sdvsidl.field_description) =
+    "North velocity, in unit of meters/sec"];
+
+  float east_velocity = 18 [(sdv.sdvsidl.field_description) =
+    "East velocity, in unit of meters/sec"];
+
+  float up_velocity = 19 [(sdv.sdvsidl.field_description) =
+    "Up velocity, in unit of meters/sec"];
+
+  float north_velocity_std_deviation = 20 [(sdv.sdvsidl.field_description) =
+    "North velocity uncertainty, in unit of meters/sec. \n"
+    " Uncertainty is defined with 68% confidence level"];
+
+  float east_velocity_std_deviation = 21 [(sdv.sdvsidl.field_description) =
+    "East velocity uncertainty, in unit of meters/sec. \n"
+    " Uncertainty is defined with 68% confidence level"];
+
+  float up_velocity_std_deviation = 22 [(sdv.sdvsidl.field_description) =
+    "Up velocity uncertainty, in unit of meters/sec. \n"
+    " Uncertainty is defined with 68% confidence level"];
+
+  uint32 num_sv_used_in_position = 23 [(sdv.sdvsidl.field_description) =
+    "Number of SV used in position report. deployment to be mapped to Uint16"];
+
+  LocationReportSvUsedInPositionT sv_used_in_position = 24 [(sdv.sdvsidl.field_description) =
+    "GNSS SV used in position data"];
+
+  uint32 nav_solution_mask = 25 [(sdv.sdvsidl.field_description) =
+    "Navigation solutions that are used to calculate the position report. \n"
+    " contains LocationReportNavSolutionMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationReportNavSolutionMaskT"];
+
+  uint32 pos_tech_mask = 26 [(sdv.sdvsidl.field_description) =
+    "Position technology used in computing this fix. Contains LocationTechnologyMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationTechnologyMaskT"];
+
+  LocationReportPositionDynamicsT body_frame_data = 27 [(sdv.sdvsidl.field_description) =
+    "Body frame dynamics info"];
+
+  GnssSystemTimeT gnss_system_time = 28 [(sdv.sdvsidl.field_description) =
+    "GNSS system time when this position is calculated"];
+
+  repeated GnssMeasUsageInfoT meas_usage_info = 29 [
+    (sdv.vsidl.repeated_field_max_count) = 176,
+    (sdv.sdvsidl.field_description) = "GNSS measurement usage info"];
+
+  uint32 leap_seconds = 30 [(sdv.sdvsidl.field_description) =
+    "Number of leap Seconds at time when this position is generated"];
+
+  uint32 calibration_confidence_percent = 31 [(sdv.sdvsidl.field_description) =
+    "Sensor calibration confidence percent, range [0, 100]"];
+
+  uint32 calibration_status = 32 [(sdv.sdvsidl.field_description) =
+    "Sensor calibration status. Contains DrCalibrationStatusMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "DrCalibrationStatusMaskT"];
+
+  LocOutputEngineTypeT loc_output_eng_type = 33 [(sdv.sdvsidl.field_description) =
+    "Location engine type defined in LocOutputEngineTypeT"];
+
+  uint32 loc_output_eng_mask = 34 [(sdv.sdvsidl.field_description) =
+    "When loc output eng type is set to fused, \n"
+    " this field indicates the set of engines contribute to the fix. \n"
+    " Contains PositioningEngineMaskT bits"];
+    (sdv.sdvsidl.bitmask_enum_link) = "PositioningEngineMaskT"];
+
+  float conformity_index = 35 [(sdv.sdvsidl.field_description) =
+  "When robust location is enabled, this field will indicate how well \n"
+  " the various input data considered for GNSS navigation solution conforms to expectations. \n"
+  " Note that Conformity index is for GNSS only output, not including other engines. \n"
+  " Range: [0.0, 1.0], with 0.0 for least conforming and 1.0 for most conforming"];
+
+  LlaInfoT lla_vrp_based = 36 [(sdv.sdvsidl.field_description) =
+    "VRP-based latitude/longitude/altitude"];
+
+  repeated float enu_velocity_vrp_based = 37 [
+    (sdv.vsidl.repeated_field_max_count) = 3,
+    (sdv.sdvsidl.field_description) = "VRP-based east, north, and up velocity"];
+
+  uint32 dr_solution_status_mask = 38 [(sdv.sdvsidl.field_description) =
+    "Dead reckoning position engine status. Contains DrSolutionStatusMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "DrSolutionStatusMaskT"];
+
+  uint32 location_info_extended_flags = 39 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of LocationReportExtendedFlagMaskT for param validity starting \n"
+    " from altitude_assumed. Contains LocationReportExtendedFlagMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "LocationReportExtendedFlagMaskT"];
+
+  bool altitude_assumed = 40 [(sdv.sdvsidl.field_description) =
+    "When this field is valid, it will indicate whether altitude is assumed or calculated. \n"
+    " false: Altitude is calculated. \n"
+    " true: Altitude is assumed \n"
+    " there may not be enough satellites to determine the precise altitude"];
+
+  LocSessionStatusT session_status = 41 [(sdv.sdvsidl.field_description) =
+    "Indicates whether session is success, failure or intermediate"];
+
+  uint32 integrity_risk_used = 42 [(sdv.sdvsidl.field_description) =
+    "Integrity risk used for protection level parameters. Unit of 2.5e-10. \n"
+    " Valid range is [1 to (4e9-1)]. Other values means integrity risk is disabled \n"
+    " and LocationReportT::protectAlongTrack, LocationReportT::protectCrossTrack \n"
+    " and LocationReportT::protectVertical will not be available. \n"
+    " Note that integrityRiskUsed is for GNSS only output, not including other engines"];
+
+  float protect_along_track = 43 [(sdv.sdvsidl.field_description) =
+    "Along-track protection level at specified integrity risk, in unit of meter"];
+
+  float protect_cross_track = 44 [(sdv.sdvsidl.field_description) =
+    "Cross-track protection level at specified integrity risk, in unit of meter"];
+
+  float protect_vertical = 45 [(sdv.sdvsidl.field_description) =
+    "Vertical component protection level at specified integrity risk, in unit of meter"];
+
+  repeated uint32 dgnss_station_id = 46 [
+    (sdv.vsidl.repeated_field_max_count) = 3,
+    (sdv.sdvsidl.field_description) = "List of DGNSS station IDs providing corrections. \n"
+    "Range: - SBAS -- 120 to 158 and 183 to 191. \n"
+    " - Monitoring station -- 1000-2023 (Station ID biased by 1000). \n"
+    " - Other values reserved."];
+
+  uint64 elapsedg_ptp_time = 47 [(sdv.sdvsidl.field_description) =
+    "PTP time corresponding to the UTC timestamp for location fix. In unit in nanoseconds"];
+
+  uint64 elapsedg_ptp_time_unc = 48 [(sdv.sdvsidl.field_description) =
+    "GPTP time Unc"];
+
+  double base_line_length = 49 [(sdv.sdvsidl.field_description) =
+    "Distance between the base station and the receiver "
+    " Unit- meters"];
+  uint64 age_msec_of_corrections = 50 [(sdv.sdvsidl.field_description) =
+    "Difference in time between the fix timestamp using the \n"
+    " correction and the time of the correction \n"
+    " Unit: milli-seconds "];
+
+  uint32 pos_reporting_interval = 51 [(sdv.sdvsidl.field_description) =
+    "Current GNSS engine reporting interval \n"
+    " Time interval at which GNSS engine is delivering position reports \n"
+    " Unit: milli-seconds"];
+
+  int32 reporting_latency = 52  [(sdv.sdvsidl.field_description) =
+    " Time difference between packet generation time \n"
+    " and sending over SOMEIP \n"
+    " Unit: milli-seconds "];
+
+  uint32 leap_seconds_unc = 53[(sdv.sdvsidl.field_description) =
+    " Uncertainty for the GNSS leap second \n"
+    " Unit: Seconds"];
+}
+
+message GnssSvDataT {
+  option (sdv.sdvsidl.description) =
+    "GNSS SV report that comes when clients registers for \n"
+    "location_client::GnssSvCb";
+
+  uint32 sv_id = 1 [(sdv.sdvsidl.field_description) =
+    "Unique SV Identifier. This field is always valid. \n"
+    " SV Range for supported constellation is specified as below: \n"
+    " - For GPS:     1 to 32 \n"
+    " - For GLONASS: 65 to 96 or FCN+104 \n"
+    "                [65, 96] if orbital slot number(OSN) is known \n"
+    "                [97, 110] as frequency channel number(FCN) [-7, 6] + 104 \n"
+    "                i.e. encode FCN -7 as 97, 0 as 104, 6 as 110 \n"
+    " - For SBAS:    120 to 158 and 183 to 191 \n"
+    " - For QZSS:    193 to 197 \n"
+    " - For BDS:     201 to 263 \n"
+    " - For GAL:     301 to 336 \n"
+    " - For NAVIC:   401 to 414"];
+
+  GnssSvTypeT type = 2 [(sdv.sdvsidl.field_description) =
+    "Constellation type of the SV (GPS, SBAS, GLONASS, QZSS, BEIDOU, GALILEO). \n"
+    " This field is always valid."];
+
+  float c_n0_db_hz = 3 [(sdv.sdvsidl.field_description) =
+    "Carrier-to-noise ratio of the signal measured at antenna, in unit of dB-Hz. \n"
+    " cN0DbHz of 0.0 indicates that this field is unknown."];
+
+  float elevation = 4 [(sdv.sdvsidl.field_description) =
+    "Elevation of the SV, in unit of degrees. This field is always valid."];
+
+  float azimuth = 5 [(sdv.sdvsidl.field_description) =
+    "Azimuth of the SV, in unit of degrees. This field is always valid."];
+
+  uint32 gnss_sv_options_mask = 6 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of GnssSvOptionsMaskT to specify additional info and valid fields in GnssSvDataT. \n"
+    " This field is always valid.",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssSvOptionsMaskT"];
+
+  float carrier_frequency_hz = 7 [(sdv.sdvsidl.field_description) =
+    "Carrier frequency of the signal tracked. \n"
+    " This field is valid if gnssSvOptionsMask has GNSS_SV_OPTIONS_HAS_CARRIER_FREQUENCY_BIT set."];
+
+  GnssSignalTypeT gnss_signal_type = 8 [(sdv.sdvsidl.field_description) =
+    "GNSS signal type mask of the SV. This field is valid if gnssSvOptionsMask has \n"
+    " GNSS_SV_OPTIONS_HAS_GNSS_SIGNAL_TYPE_BIT. Contains GnssSignalTypeT bit"];
+
+  double baseband_carrier_to_noise_db_hz = 9 [(sdv.sdvsidl.field_description) =
+    "Carrier-to-noise ratio of the signal measured at baseband, in unit of dB-Hz. \n"
+    " This field is valid if gnssSvOptionsMask has \n"
+    " GNSS_SV_OPTIONS_HAS_BASEBAND_CARRIER_TO_NOISE_BIT set."];
+
+  uint32 glo_frequency = 10 [(sdv.sdvsidl.field_description) =
+    "GLONASS frequency channel number, range is [1, 14]. \n"
+    " This field is always valid if and only if sv is of GLONASS."];
+}
+
+/** Specify valid mask of data fields in
+ *  GnssDataT.    */
+enum GnssDataMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_TWO;
+  GDMT_UNKNOWN = 0x0000 [(sdv.sdvsidl.litteral_description) =
+    " Unknown Data indication "];
+  GDMT_JAMMER_IND_BIT = 0x0001 [(sdv.sdvsidl.litteral_description) =
+    " Jammer Indicator is available."];
+  GDMT_AGC_BIT = 0x0002 [(sdv.sdvsidl.litteral_description) =
+    " AGC is available. "];
+}
+
+message GnssDataT {
+  option (sdv.sdvsidl.description) =
+  "Specify the additional GNSS data that can be provided \n"
+  " during a tracking session, currently jammer and automatic \n"
+  " gain control data are available. \n"
+  "\n"
+  "To find out the jammer info and automatic gain control \n"
+  " metric for a particular GNSS signal type, refer to the array \n"
+  " element with index set to the interested RF band. \n"
+  "\n"
+  "For a particular RF band, user can determine \n"
+  " GnssDataT::jammerInd is valid or not by checking the element \n"
+  " at index of the specified RF band in \n"
+  " GnssDataT::gnssDataMask has \n"
+  " GDMT_JAMMER_IND_BIT set. \n"
+  " \n"
+  " For a particular RF band, user can determine GnssDataT::agc \n"
+  " is valid or not by checking the element at index of the \n"
+  " specified RF band in GnssDataT::gnssDataMask has \n"
+  " GDMT_AGC_BIT set.";
+
+  repeated uint32 gnss_data_mask = 1 [
+    (sdv.vsidl.repeated_field_max_count) = 25,
+    (sdv.sdvsidl.field_description) = "Bitwise OR of GnssDataMaskT to indicate \n"
+      " the valid data fields.",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssDataMaskT"];
+
+  repeated double jammer_ind = 2 [
+    (sdv.vsidl.repeated_field_max_count) = 25,
+    (sdv.sdvsidl.field_description) = "Jammer Indication for each GNSS signal. \n"
+      " GSTT_MAX_NUMBER_OF_SIGNAL_TYPES"];
+
+  repeated double agc = 3 [(sdv.vsidl.repeated_field_max_count) = 25,
+    (sdv.sdvsidl.field_description) = "Automatic gain control metric, in unit of dB. \n"
+      " GSTT_MAX_NUMBER_OF_SIGNAL_TYPES "];
+}
+
+/** Specify valid fields in
+  *  GnssMeasurementsData.  */
+enum GnssMeasurementsDataFlagsMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  GMDFMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+    " Unknown Measurement Data Flags"];
+  GMDFMT_SV_ID_BIT = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::svId."];
+  GMDFMT_SV_TYPE_BIT = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::svType"];
+  GMDFMT_STATE_BIT = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::stateMask."];
+  GMDFMT_RECEIVED_SV_TIME_BIT = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::receivedSvTimeNs and \n"
+    " GnssMeasurementsData::receivedSvTimeSubNs"];
+  GMDFMT_RECVD_SV_TIME_UNC_BIT = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::receivedSvTimeUncertaintyNs."];
+  GMDFMT_CARRIER_TO_NOISE_BIT = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::carrierToNoiseDbHz"];
+  GMDFMT_PR_RATE_BIT = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::pseudorangeRateMps"];
+  GMDFMT_PR_RATE_UNC_BIT = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::pseudorangeRateUncertaintyMps"];
+  GMDFMT_ADR_STATE_BIT = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::adrStateMask"];
+  GMDFMT_ADR_BIT = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::adrMeters"];
+  GMDFMT_ADR_UNC_BIT = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::adrUncertaintyMeters"];
+  GMDFMT_CARRIER_FREQ_BIT = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::carrierFrequencyHz"];
+  GMDFMT_CARRIER_CYCLES_BIT = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::carrierCycles"];
+  GMDFMT_CARRIER_PHASE_BIT = 0x00002000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::carrierPhase"];
+  GMDFMT_CARRIER_PHASE_UNC_BIT = 0x00004000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::carrierPhaseUncertainty"];
+  GMDFMT_MULTIPATH_IND_BIT = 0x00008000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::multipathIndicator."];
+  GMDFMT_SIGNAL_TO_NOISE_RATIO = 0x00010000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::signalToNoiseRatioDb"];
+  GMDFMT_AUTO_GAIN_CTRL_BIT = 0x00020000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::agcLevelDb"];
+  GMDFMT_FULL_ISB_BIT = 0x00040000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::fullInterSignalBiasNs"];
+  GMDFMT_FULL_ISB_UNC_BIT = 0x00080000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::fullInterSignalBiasUncertaintyNs"];
+  GMDFMT_CYCLE_SLIP_COUNT_BIT = 0x00100000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::cycleslipCount"];
+  GMDFMT_GNSS_SIGNAL_TYPE_BIT = 0x00200000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::gnssSignalType"];
+  GMDFMT_BASEBAND_CARRIER_TO_NOISE_BIT = 0x00400000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsDataT has valid GnssMeasurementsData::gnssSignalType"];
+}
+
+/** Specify GNSS measurement state in
+ *  GnssMeasurementsData::stateMask.     */
+enum GnssMeasurementsStateMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  GMSMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is unknown."];
+  GMSMT_CODE_LOCK = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"code lock\""];
+  GMSMT_BIT_SYNC = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"bit sync\""];
+  GMSMT_SUBFRAME_SYNC = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"subframe sync\""];
+  GMSMT_TOW_DECODED = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"tow decoded\""];
+  GMSMT_MSEC_AMBIGUOUS = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"msec ambiguous\""];
+  GMSMT_SYMBOL_SYNC = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"symbol sync\""];
+  GMSMT_GLO_STRING_SYNC = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"GLONASS string sync\""];
+  GMSMT_GLO_TOD_DECODED = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"GLONASS TOD decoded\""];
+  GMSMT_BDS_D2_BIT_SYNC = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"BDS D2 bit sync\""];
+  GMSMT_BDS_D2_SUBFRAME_SYNC = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"BDS D2 subframe sync\""];
+  GMSMT_GAL_E1BC_CODE_LOCK = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"Galileo E1BC code lock\""];
+  GMSMT_GAL_E1C_2ND_CODE_LOCK = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"Galileo E1C second code lock\""];
+  GMSMT_GAL_E1B_PAGE_SYNC = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"Galileo E1B page sync\""];
+  GMSMT_SBAS_SYNC = 0x00002000 [(sdv.sdvsidl.litteral_description) =
+    "GNSS measurement state is \"SBAS sync\""];
+}
+
+/** Specify accumulated delta range state in
+ *  GnssMeasurementsData::adrStateMask.     */
+enum GnssMeasurementsAdrStateMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_TWO;
+  GMASMT_STATE_UNKNOWN =   0x0000 [(sdv.sdvsidl.litteral_description) =
+    "Accumulated delta range state is unknown"];
+  GMASMT_STATE_VALID_BIT = 0x0001 [(sdv.sdvsidl.litteral_description) =
+    "Accumulated delta range state is valid"];
+  GMASMT_STATE_RESET_BIT = 0x0002 [(sdv.sdvsidl.litteral_description) =
+    "Accumulated delta range state is reset"];
+  GMASMT_STATE_CYCLE_SLIP_BIT = 0x0004 [(sdv.sdvsidl.litteral_description) =
+    "Accumulated delta range state is cycle slip"];
+  GMASMT_STATE_HALF_CYCLE_RESOLVED_BIT = 0x0008 [(sdv.sdvsidl.litteral_description) =
+    "Accumulated delta range state is half cycle resolved"];
+}
+
+/** Specify the GNSS multipath indicator state in
+ *  GnssMeasurementsData::multipathIndicator.    */
+enum GnssMeasurementsMultipathIndicatorT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_TWO;
+  GMMIT_UNKNOWN =     0x0000 [(sdv.sdvsidl.litteral_description) =
+    "Multipath indicator is unknown"];
+  GMMIT_PRESENT =     0x0001 [(sdv.sdvsidl.litteral_description) =
+    "Multipath indicator is present"];
+  GMMIT_NOT_PRESENT = 0x0002 [(sdv.sdvsidl.litteral_description) =
+    "Multipath indicator is not present"];
+}
+
+/** Specify the valid fields in
+ *  GnssMeasurementsClock.
+ */
+enum GnssMeasurementsClockFlagsMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  GMCFMT_UNKNOWN = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+    "Unknown Measurement Clock Flags"];
+  GMCFMT_LEAP_SECOND_BIT = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::leapSecond"];
+  GMCFMT_TIME_BIT = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::timeNs"];
+  GMCFMT_TIME_UNCERTAINTY_BIT = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::timeUncertaintyNs"];
+  GMCFMT_FULL_BIAS_BIT = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::fullBiasNs"];
+  GMCFMT_BIAS_BIT = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::biasNs"];
+  GMCFMT_BIAS_UNCERTAINTY_BIT = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::biasUncertaintyNs"];
+  GMCFMT_DRIFT_BIT = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::driftNsps"];
+  GMCFMT_DRIFT_UNCERTAINTY_BIT = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::driftUncertaintyNsps"];
+  GMCFMT_HW_CLOCK_DISCONTINUITY_COUNT_BIT = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::hwClockDiscontinuityCount"];
+  GMCFMT_ELAPSED_REAL_TIME_BIT = 0x00000200 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::elapsedRealTime"];
+  GMCFMT_ELAPSED_REAL_TIME_UNC_BIT = 0x00000400 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClockT has valid GnssMeasurementsClock::elapsedRealTimeUnc"];
+  GMCFMT_ELAPSED_GPTP_TIME_BIT = 0x00000800 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClock:: has valid GnssMeasurementsClock::elapsedgPTPTime"];
+  GMCFMT_ELAPSED_GPTP_TIME_UNC_BIT = 0x00001000 [(sdv.sdvsidl.litteral_description) =
+    "GnssMeasurementsClock:: has valid GnssMeasurementsClock::elapsedgPTPTimeUnc"];
+}
+
+message GnssMeasurementsDataT {
+  uint32 flags = 1 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of GnssMeasurementsDataFlagsMaskT to specify the \n"
+    " valid fields in GnssMeasurementsData. \n"
+    " Contains GnssMeasurementsDataFlagsMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssMeasurementsDataFlagsMaskT"];
+  uint32 sv_id = 2 [(sdv.sdvsidl.field_description) =
+    "Specify satellite vehicle ID number. \n"
+    " For SV id range of each supported constellations, refer to \n"
+    " documentation in GnssSv::svId."];
+  GnssSvTypeT sv_type = 3 [(sdv.sdvsidl.field_description) =
+    "SV constellation type"];
+  double time_offset_ns = 4 [(sdv.sdvsidl.field_description) =
+    "Time offset when the measurement was taken in unit of nanoseconds"];
+  uint32 state_mask = 5 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of GnssMeasurementsStateMaskT to specify the \n"
+    " GNSS measurement state. \n"
+    " Contains GnssMeasurementsStateMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssMeasurementsStateMaskT"];
+  int64 received_sv_time_ns = 6 [(sdv.sdvsidl.field_description) =
+    "Received GNSS time of the week in nanoseconds when the \n"
+    " measurement was taken. \n"
+    " For sub nanoseconds part of the time, please refer to \n"
+    " of GnssMeasurementsData::receivedSvTimeSubNs. \n"
+    " Total time is: receivedSvTimeNs+receivedSvTimeSubNs"];
+  float received_sv_time_sub_ns = 7 [(sdv.sdvsidl.field_description) =
+    "Sub nanoseconds portion of the received GNSS time of the \n"
+    " week when the measurement was taken. \n"
+    " For nanoseconds portion of the time, please refer to field \n"
+    " of GnssMeasurementsData::receivedSvTimeSubNs. \n"
+    " Total time is: receivedSvTimeNs+receivedSvTimeSubNs"];
+  int64 received_sv_time_uncertainty_ns = 8 [(sdv.sdvsidl.field_description) =
+    "Satellite time. \n"
+    " All SV times in the current measurement block are already \n"
+    " propagated to a common reference time epoch, in unit of \n"
+    " nanoseconds."];
+  double carrier_to_noise_db_hz = 9 [(sdv.sdvsidl.field_description) =
+    "Signal strength, carrier to noise ratio, in unit of dB-Hz"];
+  double pseudorange_rate_mps = 10 [(sdv.sdvsidl.field_description) =
+    "Uncorrected pseudorange rate, in unit of meters/second"];
+  double pseudorange_rate_uncertainty_mps = 11 [(sdv.sdvsidl.field_description) =
+    "Uncorrected pseudorange rate uncertainty, in unit of meters/second"];
+  uint32 adr_state_mask = 12 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of GnssMeasurementsAdrStateMask. \n"
+    " Contains GnssMeasurementsAdrStateMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssMeasurementsAdrStateMaskT"];
+  double adr_meters = 13 [(sdv.sdvsidl.field_description) =
+    "Accumulated delta range, in unit of meters"];
+  double adr_uncertainty_meters = 14 [(sdv.sdvsidl.field_description) =
+    "Accumulated delta range uncertainty, in unit of meters"];
+  float carrier_frequency_hz = 15 [(sdv.sdvsidl.field_description) =
+    "Carrier frequency of the tracked signal, in unit of Hertz"];
+  int64 carrier_cycles = 16 [(sdv.sdvsidl.field_description) =
+    "The number of full carrier cycles between the receiver and the satellite"];
+  double carrier_phase = 17 [(sdv.sdvsidl.field_description) =
+    "The RF carrier phase that the receiver has detected"];
+  double carrier_phase_uncertainty = 18 [(sdv.sdvsidl.field_description) =
+    "The RF carrier phase uncertainty"];
+  uint32 multipath_indicator = 19 [(sdv.sdvsidl.field_description) =
+    "Multipath indicator, could be unknown, present or not present. \n"
+    " Contains GnssMeasurementsMultipathIndicatorT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssMeasurementsMultipathIndicatorT"];
+  double signal_to_noise_ratio_db = 20 [(sdv.sdvsidl.field_description) =
+    "Signal to noise ratio, in unit of dB"];
+  double agc_level_db = 21 [(sdv.sdvsidl.field_description) =
+    "Automatic gain control level, in unit of dB"];
+  double baseband_carrier_to_noise_db_hz = 22 [(sdv.sdvsidl.field_description) =
+    "Baseband signal strength, in unit of dB Hz. \n"
+    " Should always be available in measurement report"];
+  GnssSignalTypeT gnss_signal_type = 23 [(sdv.sdvsidl.field_description) =
+    "GNSS signal type mask of the SV. \n"
+    " Should always be available in measurement report. \n"
+    " Contains GnssSignalTypeT bit"];
+  double full_inter_signal_bias_ns = 24 [(sdv.sdvsidl.field_description) =
+    "The full inter-signal bias (ISB) in nanoseconds. \n"
+    " This value is the sum of the estimated receiver-side and the \n"
+    " space-segment-side inter-system bias, inter-frequency bias \n"
+    " and inter-code bias"];
+  double full_inter_signal_bias_uncertainty_ns = 25 [(sdv.sdvsidl.field_description) =
+    "1-sigma uncertainty associated with the full inter-signal bias in nanoseconds"];
+  uint32 cycle_slip_count = 26 [(sdv.sdvsidl.field_description) =
+    "Increments when a cycle slip is detected."];
+}
+
+message GnssMeasurementsClockT {
+  option (sdv.sdvsidl.description) =
+    "Specify GNSS measurements clock. \n"
+    " The main equation describing the relationship between \n"
+    " various components is: \n"
+    " utcTimeNs = timeNs - (fullBiasNs + biasNs) - leapSecond * \n"
+    " 1,000,000,000";
+  uint32 flags = 1 [(sdv.sdvsidl.field_description) =
+    "Bitwise OR of GnssMeasurementsClockFlagsMask. \n"
+    " Contains GnssMeasurementsClockFlagsMaskT bits",
+    (sdv.sdvsidl.bitmask_enum_link) = "GnssMeasurementsClockFlagsMaskT"];
+  int32 leap_second = 2 [(sdv.sdvsidl.field_description) =
+    "Leap second, in unit of seconds. \n"
+    " deployment to be mapped to int16"];
+  int64 time_ns = 3 [(sdv.sdvsidl.field_description) =
+    "Time, monotonically increasing as long as the power is on, \n"
+    " in unit of nanoseconds"];
+  double time_uncertainty_ns = 4 [(sdv.sdvsidl.field_description) =
+    "Time uncertainty (one sigma), in unit of nanoseconds"];
+  int64 full_bias_ns = 5 [(sdv.sdvsidl.field_description) =
+    "Full bias, in uint of nanoseconds"];
+  double bias_ns = 6 [(sdv.sdvsidl.field_description) =
+    "Sub-nanoseconds bias, in unit of nonoseconds"];
+  double bias_uncertainty_ns = 7 [(sdv.sdvsidl.field_description) =
+    "Bias uncertainty (one sigma), in unit of nanoseconds"];
+  double drift_nsps = 8 [(sdv.sdvsidl.field_description) =
+    "Clock drift, in unit of nanoseconds/second"];
+  double drift_uncertainty_nsps = 9 [(sdv.sdvsidl.field_description) =
+    "Clock drift uncertainty (one sigma), in unit of nanoseconds/second"];
+  uint32 hw_clock_discontinuity_count = 10 [(sdv.sdvsidl.field_description) =
+    "HW clock discontinuity count - incremented for each discontinuity in HW clock"];
+  uint64 elapsed_real_time = 11 [(sdv.sdvsidl.field_description) =
+    "elapsed time since boot, in unit of nonoseconds"];
+  uint64 elapsed_real_time_unc = 12 [(sdv.sdvsidl.field_description) =
+    "uncertainty of elapsedRealTime, in unit of nonoseconds"];
+  uint64 elapsedg_ptp_time = 13  [(sdv.sdvsidl.field_description) =
+    "gPTP since boot, in unit of nonoseconds"];
+  uint64 elapsedg_ptp_time_unc = 14 [(sdv.sdvsidl.field_description) =
+    "uncertainty of elapsedgPTPTime, in unit of nonoseconds"];
+}
+
+message GnssMeasurementsT {
+  option (sdv.sdvsidl.description) =
+    "Specify GNSS measurements clock and data";
+
+  GnssMeasurementsClockT clock = 1 [(sdv.sdvsidl.field_description) =
+    "GNSS measurements clock info"];
+
+  repeated GnssMeasurementsDataT measurements = 2 [
+    (sdv.sdvsidl.field_description) = "GNSS measurements data",
+    (sdv.vsidl.repeated_field_max_count) = 176];
+
+  bool is_n_hz = 3 [(sdv.sdvsidl.field_description) =
+    "NHz measurements indicator"];
+
+  int32 reporting_latency = 4 [(sdv.sdvsidl.field_description) =
+    "Time difference between packet generation time \n"
+    "and sending over SOMEIP \n"
+    "Unit- milli-seconds "];
+}
+
+/**
+ *  Mask used to specify the set of aiding data that can be
+ *  deleted via deleteAidingData(). <br/> */
+enum AidingDataDeletionMaskT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_TWO;
+  ADDMT_UNKNOWN = 0x0000 [(sdv.sdvsidl.litteral_description) =
+    "Aiding Mask Unknown"];
+  ADDMT_ALL = 0x0001 [(sdv.sdvsidl.litteral_description) =
+    "Mask to delete all aiding data from all position \n"
+    " engines on the device"];
+  ADDMT_EPHEMERIS = 0x0002 [(sdv.sdvsidl.litteral_description) =
+    "Mask to delete ephemeris aiding data"];
+  ADDMT_DR_SENSOR_CALIBRATION = 0x0004 [(sdv.sdvsidl.litteral_description) =
+    "Mask to delete calibration data"
+    "from dead reckoning position engine."];
+}
+
+enum GnssConstellationTypeT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_ONE;
+  option allow_alias = true;
+  GCTT_UNKNOWN = 0 [(sdv.sdvsidl.litteral_description) =
+     "Unknown SV system"];
+  GCTT_GLONASS = 1 [(sdv.sdvsidl.litteral_description) =
+     "GLONASS SV system"];
+  GCTT_QZSS = 2 [(sdv.sdvsidl.litteral_description) =
+     "QZSS SV system"];
+  GCTT_BEIDOU = 3 [(sdv.sdvsidl.litteral_description) =
+     "BEIDOU SV system"];
+  GCTT_GALILEO = 4 [(sdv.sdvsidl.litteral_description) =
+     "GALILEO SV system"];
+  GCTT_SBAS = 5 [(sdv.sdvsidl.litteral_description) =
+     "SBAS SV system"];
+  GCTT_NAVIC = 6 [(sdv.sdvsidl.litteral_description) =
+     "NAVIC SV system "];
+  GCTT_GPS = 7 [(sdv.sdvsidl.litteral_description) =
+     "GPS SV system"];
+  GCTT_MAX = 7 [(sdv.sdvsidl.litteral_description) =
+     "Maximum constellatoin system "];
+}
+
+message GnssSvIdInfoT {
+  GnssConstellationTypeT constellation = 1 [(sdv.sdvsidl.field_description) =
+    "constellation for the sv"];
+  uint32 sv_id = 2 [(sdv.sdvsidl.field_description) =
+    "sv id range for the constellation: \n"
+    " GLONASS SV id range: 65 to 96 \n"
+    " QZSS SV id range: 193 to 197 \n"
+    " BDS SV id range: 201 to 263 \n"
+    " GAL SV id range: 301 to 336 \n"
+    " SBAS SV id range: 120 to 158 and 183 to 191 \n"
+    " NAVIC SV id range: 401 to 414"];
+}
+
+/** Map Matched data validity flags */
+enum MapMatchingFeedbackDataValidityT {
+  option (sdv.sdvsidl.enum_byte_size) = PBS_FOUR;
+  MMFDVT_INVALID      = 0x00000000 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT is invalid "];
+  MMFDVT_UTC_TIME     = 0x00000001 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  utcTimestampMs "];
+  MMFDVT_LAT_DIFF     = 0x00000002 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  mapMatchedLatitudeDifference "];
+  MMFDVT_LONG_DIFF    = 0x00000004 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  mapMatchedLongitudeDifference "];
+  MMFDVT_TUNNEL       = 0x00000008 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  isTunnel value "];
+  MMFDVT_BEARING      = 0x00000010 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  bearing "];
+  MMFDVT_ALTITUDE     = 0x00000020 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  altitude "];
+  MMFDVT_HOR_ACC      = 0x00000040 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  horizontalAccuracy "];
+  MMFDVT_ALT_ACC      = 0x00000080 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  altitudeAccuracy "];
+  MMFDVT_BEARING_ACC  = 0x00000100 [(sdv.sdvsidl.litteral_description) =
+    "MapMatchingFeedbackDataT has valid  bearingAccuracy "];
+}
+
+message MapMatchingFeedbackDataT {
+
+  uint32 validity_mask = 1 [(sdv.sdvsidl.field_description) =
+    "Validity fields for MMF data fields to follow \n"
+    " Flags defined using enum MapMatchingFeedbackDataValidityT ",
+    (sdv.sdvsidl.bitmask_enum_link) = "MapMatchingFeedbackDataValidityT"];
+
+  uint64 utc_timestamp_ms = 2 [(sdv.sdvsidl.field_description) =
+    "Unix epoch time of the location fix for which map-match \n"
+    " feedback is being sent, since the start of the Unix epoch"
+    " (00:00:00 January 1, 1970 UTC)."
+    "  Unit: Milli-seconds "];
+
+  double map_matched_latitude_difference = 3  [(sdv.sdvsidl.field_description) =
+    "Latitude difference = map matched latitude - reported latitude \n"
+    " Unit: Degrees "
+    " Range: [-90.0, 90.0] "];
+
+  double map_matched_longitude_difference = 4 [(sdv.sdvsidl.field_description) =
+    "Longitude difference = map matched longitude - reported longitude \n"
+    "  Unit: Degrees "
+    "  Range: [-180.0, 180.0] "];
+
+  float bearing = 5 [(sdv.sdvsidl.field_description) =
+    "Bearing: The horizontal direction of travel of the device with \n"
+    " respect to north and is unrelated to the device orientation. \n"
+    "  Unit: Degrees \n"
+    "  range: [0, 360) "];
+
+  double altitude = 6 [(sdv.sdvsidl.field_description) =
+    "Absolute Altitude above the WGS 84 reference ellipsoid \n"
+    "  Unit: meters "];
+
+  float horizontal_accuracy = 7 [(sdv.sdvsidl.field_description) =
+    "Horizontal accuracy radius defined with the \n"
+    "  68th percentile confidence level \n"
+    "  Unit: meter \n"
+    "  Range: 0 or greater "];
+
+  float altitude_accuracy = 8 [(sdv.sdvsidl.field_description) =
+    "Altitude accuracy. Defined with 68% confidence level. \n"
+    "  Unit:meter \n"
+    "  Range: 0 or greater "];
+
+  float bearing_accuracy = 9 [(sdv.sdvsidl.field_description) =
+    "Estimated bearing accuracy defined with \n"
+    "  68 percentile confidence level (1 sigma) \n"
+    "  Unit: Degrees \n"
+    "  Range [0, 360) "];
+
+  bool is_tunnel = 10 [(sdv.sdvsidl.field_description) =
+    "Road Type. Decision to use the MMF data depends on isTunnel \n"
+    "  Value: True or False"];
+}

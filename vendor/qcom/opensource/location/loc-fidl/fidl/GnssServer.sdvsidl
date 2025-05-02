@@ -1,0 +1,160 @@
+# Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+#    SPDX-License-Identifier: BSD-3-Clause-Clear */
+
+# proto-file: //system/software_defined_vehicle/core_services/vsidl/syntax/sdvsidl.proto
+# proto-message: VsidlEntry
+
+package: "com.qualcomm.qti.location"
+
+sdv_service_bundle {
+  name: "GnssServer"
+  asil: QM
+  exec_env: {os: LINUX_TELAF, env: IVC}
+
+  # Define both offered and consumed_interface
+  offered_interface {
+    interface_name: "Location"
+    interface_version: "1.0"
+    interface_instance_name: "IvcLocation"
+    interface_instance_id: 1
+    service_id: 60928
+
+    event {
+      event_name: "GnssCapabilities"
+      event_id: 33008
+      event_group: 33000
+      topic {
+        topic_name: "sdv.connectivity.location.GnssCapabilities"
+        attribute_mapping {key: "capabilities_mask", value: "capabilitiesMask"}
+      }
+    }
+
+    event {
+      event_name: "GnssMeasurementReport"
+      event_id: 33001
+      event_group: 33000
+      topic {
+        topic_name: "sdv.connectivity.location.GnssMeasurementReport"
+        attribute_mapping {key: "gnss_measurements", value: "gnssMeasurements"}
+      }
+    }
+
+    event {
+      event_name: "GnssLocationReport"
+      event_id: 33002
+      event_group: 33000
+      topic {
+        topic_name: "sdv.connectivity.location.GnssLocationReport"
+        attribute_mapping {key: "location_report", value: "locationReport"}
+      }
+    }
+
+    event {
+      event_name: "GnssEngineLocationsReport"
+      event_id: 33003
+      event_group: 33000
+      topic {
+        topic_name: "sdv.connectivity.location.EngineLocationsReport"
+        attribute_mapping {key: "location_report", value: "locationReport"}
+      }
+    }
+
+    event {
+      event_name: "GnssSvReport"
+      event_id: 33004
+      event_group: 33000
+      topic {
+        topic_name: "sdv.connectivity.location.GnssSvReport"
+        attribute_mapping {key: "gnss_sv", value: "gnssSv"}
+      }
+    }
+
+    event {
+      event_name: "GnssNmea"
+      event_id: 33005
+      event_group: 33000
+      topic {
+        topic_name: "sdv.connectivity.location.GnssNmea"
+        attribute_mapping {key: "timestamp", value: "timestamp"}
+        attribute_mapping {key: "nmea", value: "nmea"}
+      }
+    }
+
+    event {
+      event_name: "EngineNmea"
+      event_id: 33006
+      event_group: 33000
+      topic {
+        topic_name: "sdv.connectivity.location.EngineNmea"
+        attribute_mapping {key: "timestamp", value: "timestamp"}
+        attribute_mapping {key: "nmea", value: "nmea"}
+      }
+    }
+
+    event {
+      event_name: "GnssDataReport"
+      event_id: 33007
+      event_group: 33000
+      topic {
+        topic_name: "sdv.connectivity.location.GnssDataReport"
+        attribute_mapping {key: "gnss_data", value: "gnssData"}
+      }
+    }
+
+    method_fire_forget {
+      method_name: "InjectMapMatchedFeedbackData"
+      method_id: 32006
+      topic {
+        topic_name: "sdv.connectivity.location.InjectMapMatchedFeedbackData"
+        attribute_mapping {key: "mmf_data", value: "mmfData"}
+      }
+    }
+
+    rpc_definition {
+      rpc_service_name: "sdv.connectivity.location.Location"
+      method_definition {
+        method_vsidl_name: "StartPositionSessionLocationReport"
+        method_someip_name: "StartPositionSessionLocationReport"
+        method_id: 32001
+        input_attribute {key: "interval_in_ms", value: "intervalInMs"}
+        input_attribute {key: "gnss_report_callback_mask", value: "gnssReportCallbackMask"}
+        output_attribute {key: "status", value: "status"}
+      }
+
+      method_definition {
+        method_vsidl_name: "StartPositionSessionEngineSpecificLocation"
+        method_someip_name: "StartPositionSessionEngineSpecificLocation"
+        method_id: 32002
+        input_attribute {key: "interval_in_ms", value: "intervalInMs"}
+        input_attribute {key: "loc_req_eng_mask", value: "locReqEngMask"}
+        input_attribute {key: "eng_report_callback_mask", value: "engReportCallbackMask"}
+        output_attribute {key: "status", value: "status"}
+      }
+
+      method_definition {
+        method_vsidl_name: "StopPositionSession"
+        method_someip_name: "StopPositionSession"
+        method_id: 32003
+        output_attribute {key: "status", value: "status"}
+      }
+
+      method_definition {
+        method_vsidl_name: "DeleteAidingData"
+        method_someip_name: "DeleteAidingData"
+        method_id: 32004
+        input_attribute {key: "delete_mask", value: "deleteMask"}
+        output_attribute {key: "status", value: "status"}
+      }
+
+      method_definition {
+        method_vsidl_name: "ConfigConstellations"
+        method_someip_name: "ConfigConstellations"
+        method_id: 32005
+        input_attribute {key: "sv_list", value: "svList"}
+        output_attribute {key: "status", value: "status"}
+      }
+    }
+  }
+}
+
+
